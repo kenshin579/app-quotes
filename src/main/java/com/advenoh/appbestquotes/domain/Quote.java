@@ -1,5 +1,7 @@
 package com.advenoh.appbestquotes.domain;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.annotation.Transient;
 
 import java.text.ParseException;
@@ -8,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Quote {
+    private static final Logger LOG = LoggerFactory.getLogger(Quote.class);
 
     //    private Long id;
     private String quote;
@@ -17,7 +20,7 @@ public class Quote {
     private List<String> tags;
 
     @Transient
-    private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     public Quote() {
     }
