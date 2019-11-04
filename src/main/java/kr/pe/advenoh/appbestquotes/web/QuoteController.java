@@ -1,7 +1,7 @@
-package com.advenoh.appbestquotes.web;
+package kr.pe.advenoh.appbestquotes.web;
 
-import com.advenoh.appbestquotes.domain.Quote;
-import com.advenoh.appbestquotes.repository.QuoteRepository;
+import kr.pe.advenoh.appbestquotes.domain.Quote;
+import kr.pe.advenoh.appbestquotes.repository.QuoteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +23,7 @@ public class QuoteController {
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public List<Quote> getAllQuotes() {
+        //todo: 이건 제공하면 안됨. 모든 quotes가 오픈되기 때문에
         return repo.findAll();
     }
 
@@ -42,5 +43,14 @@ public class QuoteController {
     public List<Quote> getQuotesByAuthor(
             @RequestParam(value = "author") String author) {
         return repo.findByAuthor(author);
+    }
+
+    @RequestMapping(value = "/random", method = RequestMethod.GET)
+    public Quote getRandomQuote() {
+//        SampleOperation sampleStage = Aggregation.sample(5);
+//        Aggregation aggregation = Aggregation.newAggregation(sampleStage);
+//        AggregationResults<Quote> output = repo.aggregate(aggregation, "collectionName", Quote.class);
+
+        return null;
     }
 }

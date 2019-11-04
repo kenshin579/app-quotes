@@ -1,18 +1,22 @@
-package com.advenoh.appbestquotes.domain;
+package kr.pe.advenoh.appbestquotes.domain;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+@Document(collection = "app-best-quotes")
 public class Quote {
     private static final Logger LOG = LoggerFactory.getLogger(Quote.class);
 
-    //    private Long id;
+    @Id
+    private Long id;
     private String quote;
     private String author;
     private Date created;

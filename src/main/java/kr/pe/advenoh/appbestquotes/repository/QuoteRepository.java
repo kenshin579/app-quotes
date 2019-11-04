@@ -1,6 +1,6 @@
-package com.advenoh.appbestquotes.repository;
+package kr.pe.advenoh.appbestquotes.repository;
 
-import com.advenoh.appbestquotes.domain.Quote;
+import kr.pe.advenoh.appbestquotes.domain.Quote;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

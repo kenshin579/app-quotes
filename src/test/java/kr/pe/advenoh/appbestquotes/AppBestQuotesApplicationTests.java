@@ -1,4 +1,4 @@
-package com.advenoh.appbestquotes;
+package kr.pe.advenoh.appbestquotes;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

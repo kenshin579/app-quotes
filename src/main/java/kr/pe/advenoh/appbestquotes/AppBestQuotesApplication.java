@@ -1,6 +1,6 @@
-package com.advenoh.appbestquotes;
+package kr.pe.advenoh.appbestquotes;
 
-import com.advenoh.appbestquotes.repository.QuoteRepository;
+import kr.pe.advenoh.appbestquotes.repository.QuoteRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
