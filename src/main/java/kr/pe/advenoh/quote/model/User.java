@@ -29,13 +29,15 @@ public class User extends DateAudit {
     @Column(name = "user_id", unique = true, nullable = false)
     private Long id;
 
-    private String name;
-
     private String username;
 
     private String email;
 
+    private String name;
+
     private String password;
+
+    private boolean enabled;
 
     @ManyToMany
     @JoinTable(name = "users_roles",
@@ -43,7 +45,7 @@ public class User extends DateAudit {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
-    public User(String name, String username, String email, String password) {
+    public User(String username, String email, String name, String password) {
         this.name = name;
         this.username = username;
         this.email = email;

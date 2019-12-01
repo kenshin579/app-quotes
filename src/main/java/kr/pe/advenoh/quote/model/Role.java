@@ -20,7 +20,7 @@ public class Role {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private RoleType name;
+    private RoleType roleType;
 
 //    @ManyToMany(mappedBy = "roles")
 //    private Collection<User> users;
@@ -30,4 +30,8 @@ public class Role {
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "privilege_id"))
     private Collection<Privilege> privileges;
+
+    public Role(RoleType roleType) {
+        this.roleType = roleType;
+    }
 }

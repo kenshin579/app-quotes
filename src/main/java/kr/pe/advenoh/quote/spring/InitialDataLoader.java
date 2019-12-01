@@ -39,19 +39,19 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
         log.debug("[springdebug] initial data load...");
 
-        //create initial privileges
+        //최소 Privilege
         final Privilege readPrivilege = createPrivilegeIfNotFound(PrivilegeType.READ_PRIVILEGE);
         final Privilege writePrivilege = createPrivilegeIfNotFound(PrivilegeType.WRITE_PRIVILEGE);
         final Privilege passwordPrivilege = createPrivilegeIfNotFound(PrivilegeType.CHANGE_PASSWORD_PRIVILEGE);
 
-        //create initial roles
+        //초기 Role
         final List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege);
         final List<Privilege> userPrivileges = Arrays.asList(readPrivilege, passwordPrivilege);
 
         final Role adminRole = createRoleIfNotFound(RoleType.ROLE_ADMIN, adminPrivileges);
         createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
 
-        //create initial test user
+        //테스트 사용자 생성
         createUserIfNotFound("testuser", "test@test.com", "TestName", "testpass", Arrays.asList(adminRole));
     }
 

@@ -29,8 +29,12 @@ public class Privilege {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private PrivilegeType name;
+    private PrivilegeType privilegeType;
 
     @ManyToMany(mappedBy = "privileges")
     private Collection<Role> roles;
+
+    public Privilege(PrivilegeType privilegeType) {
+        this.privilegeType = privilegeType;
+    }
 }
