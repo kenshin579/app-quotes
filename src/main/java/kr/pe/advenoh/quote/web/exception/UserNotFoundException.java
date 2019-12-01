@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.exception;
+package kr.pe.advenoh.quote.web.exception;
 
 public final class UserNotFoundException extends RuntimeException {
 
