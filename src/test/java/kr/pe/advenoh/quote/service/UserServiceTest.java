@@ -63,6 +63,7 @@ public class UserServiceTest extends DefaultMockitoConfig {
 
         verify(userRepository).save(userArgumentCaptor.capture());
         assertThat(userArgumentCaptor.getValue().getUsername()).isEqualTo(signUpRequest.getUsername());
+        assertThat(userArgumentCaptor.getValue().isEnabled()).isTrue();
     }
 
     @Test

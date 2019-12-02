@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
 import java.net.URI;
 
 @Slf4j
@@ -29,12 +28,10 @@ public class AuthController {
     private IUserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-        log.info("[FRANK] registerUser :: signUpRequest : {}", signUpRequest);
+    public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
+        log.debug("[signupdebug] registerUser :: signUpRequest : {}", signUpRequest);
 
         final User registeredUser = userService.registerNewUserAccount(signUpRequest);
-
-        //로그인 history에 담기
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")
