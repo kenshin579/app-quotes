@@ -1,6 +1,8 @@
 package kr.pe.advenoh.quote.service;
 
+import kr.pe.advenoh.quote.model.Role;
 import kr.pe.advenoh.quote.model.User;
+import kr.pe.advenoh.quote.model.enums.RoleType;
 import kr.pe.advenoh.quote.repository.RoleRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
 import kr.pe.advenoh.quote.util.DefaultMockitoConfig;
@@ -8,7 +10,6 @@ import kr.pe.advenoh.quote.web.dto.request.SignUpRequest;
 import kr.pe.advenoh.quote.web.exception.QuoteExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -18,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -45,7 +46,6 @@ public class UserServiceTest extends DefaultMockitoConfig {
     }
 
     @Test
-    @Ignore("not working")
     public void registerNewUserAccount_저장() {
         SignUpRequest signUpRequest = new SignUpRequest();
         signUpRequest.setUsername(username);
@@ -56,8 +56,8 @@ public class UserServiceTest extends DefaultMockitoConfig {
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn(password);
-        when(roleRepository.findByRoleType(anyObject())).thenReturn(anyObject());
-        when(userRepository.save(anyObject())).thenReturn(anyObject());
+        when(roleRepository.findByRoleType(RoleType.ROLE_USER)).thenReturn(new Role());
+        when(userRepository.save(any())).thenReturn(any());
 
         userService.registerNewUserAccount(signUpRequest);
 
