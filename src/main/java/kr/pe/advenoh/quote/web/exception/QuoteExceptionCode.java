@@ -3,7 +3,7 @@ package kr.pe.advenoh.quote.web.exception;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum QuoteExceptionCode implements MessageCode {
+public enum QuoteExceptionCode implements ExceptionCode {
     /*
     account : 10000
 

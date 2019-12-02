@@ -20,7 +20,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@ToString
+@ToString(exclude = "password")
 @NoArgsConstructor
 @Table(name = "users")
 public class User extends DateAudit {
