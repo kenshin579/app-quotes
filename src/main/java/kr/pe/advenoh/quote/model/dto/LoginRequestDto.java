@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.web.dto.request;
+package kr.pe.advenoh.quote.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class LoginRequest {
+public class LoginRequestDto {
     @NotBlank
     private String usernameOrEmail;
 

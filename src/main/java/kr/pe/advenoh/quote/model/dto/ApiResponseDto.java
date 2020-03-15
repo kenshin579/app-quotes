@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.web.dto.response;
+package kr.pe.advenoh.quote.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ApiResponse {
+public class ApiResponseDto {
     private Boolean success;
     private String message;
 }

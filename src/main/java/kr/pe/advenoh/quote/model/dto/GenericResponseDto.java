@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.web.dto.response;
+package kr.pe.advenoh.quote.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,22 +12,22 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @Slf4j
-public class GenericResponse {
+public class GenericResponseDto {
     private String message;
     private String error;
 
-    public GenericResponse(final String message) {
+    public GenericResponseDto(final String message) {
         super();
         this.message = message;
     }
 
-    public GenericResponse(final String message, final String error) {
+    public GenericResponseDto(final String message, final String error) {
         super();
         this.message = message;
         this.error = error;
     }
 
-    public GenericResponse(List<ObjectError> allErrors, String error) {
+    public GenericResponseDto(List<ObjectError> allErrors, String error) {
         this.error = error;
         String temp = allErrors.stream().map(e -> {
             if (e instanceof FieldError) {
