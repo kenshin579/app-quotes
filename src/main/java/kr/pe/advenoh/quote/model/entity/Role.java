@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.model;
+package kr.pe.advenoh.quote.model.entity;
 
 import kr.pe.advenoh.quote.model.enums.RoleType;
 import lombok.Getter;

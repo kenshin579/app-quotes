@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.model;
+package kr.pe.advenoh.quote.model.entity;
 
 import kr.pe.advenoh.quote.model.audit.DateAudit;
 import lombok.Getter;
