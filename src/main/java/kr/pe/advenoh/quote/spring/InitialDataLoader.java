@@ -1,8 +1,8 @@
 package kr.pe.advenoh.quote.spring;
 
-import kr.pe.advenoh.quote.model.Privilege;
-import kr.pe.advenoh.quote.model.Role;
-import kr.pe.advenoh.quote.model.User;
+import kr.pe.advenoh.quote.model.entity.Privilege;
+import kr.pe.advenoh.quote.model.entity.Role;
+import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.model.enums.PrivilegeType;
 import kr.pe.advenoh.quote.model.enums.RoleType;
 import kr.pe.advenoh.quote.repository.PrivilegeRepository;
@@ -40,19 +40,19 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
         log.debug("[springdebug] initial data load...");
 
         //최소 Privilege
-        final Privilege readPrivilege = createPrivilegeIfNotFound(PrivilegeType.READ_PRIVILEGE);
-        final Privilege writePrivilege = createPrivilegeIfNotFound(PrivilegeType.WRITE_PRIVILEGE);
-        final Privilege passwordPrivilege = createPrivilegeIfNotFound(PrivilegeType.CHANGE_PASSWORD_PRIVILEGE);
+        Privilege readPrivilege = createPrivilegeIfNotFound(PrivilegeType.READ_PRIVILEGE);
+        Privilege writePrivilege = createPrivilegeIfNotFound(PrivilegeType.WRITE_PRIVILEGE);
+        Privilege passwordPrivilege = createPrivilegeIfNotFound(PrivilegeType.CHANGE_PASSWORD_PRIVILEGE);
 
         //초기 Role
-        final List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege);
-        final List<Privilege> userPrivileges = Arrays.asList(readPrivilege, passwordPrivilege);
+        List<Privilege> adminPrivileges = Arrays.asList(readPrivilege, writePrivilege, passwordPrivilege);
+        List<Privilege> userPrivileges = Arrays.asList(readPrivilege, passwordPrivilege);
 
-        final Role adminRole = createRoleIfNotFound(RoleType.ROLE_ADMIN, adminPrivileges);
-        createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
+        Role adminRole = createRoleIfNotFound(RoleType.ROLE_ADMIN, adminPrivileges);
+        this.createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
 
         //테스트 사용자 생성
-        createUserIfNotFound("testuser", "test@test.com", "TestName", "testpass", Arrays.asList(adminRole));
+        this.createUserIfNotFound("testuser", "test@test.com", "TestName", "testpass", Arrays.asList(adminRole));
     }
 
     @Transactional
@@ -66,23 +66,19 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
     }
 
     @Transactional
-    public Role createRoleIfNotFound(final RoleType roleType, final Collection<Privilege> privileges) {
-        Role role = roleRepository.findByRoleType(roleType);
-        if (role == null) {
-            role = new Role(roleType);
+    public Role createRoleIfNotFound(RoleType roleType, Collection<Privilege> privileges) {
+        return roleRepository.findByRoleType(roleType).orElseGet(() -> {
+            Role role = new Role(roleType);
             role.setPrivileges(privileges);
-            role = roleRepository.save(role);
-        }
-        return role;
+            return roleRepository.save(role);
+        });
     }
 
     @Transactional
-    public Privilege createPrivilegeIfNotFound(final PrivilegeType privilegeType) {
-        Privilege privilege = privilegeRepository.findByPrivilegeType(privilegeType);
-        if (privilege == null) {
-            privilege = new Privilege(privilegeType);
-            privilege = privilegeRepository.save(privilege);
-        }
-        return privilege;
+    public Privilege createPrivilegeIfNotFound(PrivilegeType privilegeType) {
+        return privilegeRepository.findByPrivilegeType(privilegeType).orElseGet(() -> {
+            Privilege privilege = new Privilege(privilegeType);
+            return privilegeRepository.save(privilege);
+        });
     }
 }

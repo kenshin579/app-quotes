@@ -1,8 +1,8 @@
 package kr.pe.advenoh.quote.service;
 
-import kr.pe.advenoh.quote.model.User;
-import kr.pe.advenoh.quote.web.dto.request.SignUpRequest;
+import kr.pe.advenoh.quote.model.dto.SignUpRequestDto;
+import kr.pe.advenoh.quote.model.entity.User;
 
 public interface IUserService {
-    User registerNewUserAccount(SignUpRequest signUpRequest);
+    User registerNewUserAccount(SignUpRequestDto signUpRequestDto);
 }
