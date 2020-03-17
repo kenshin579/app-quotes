@@ -2,10 +2,12 @@ package kr.pe.advenoh.quote.controller;
 
 import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.dto.ApiResponseDto;
+import kr.pe.advenoh.quote.model.dto.JwtAuthenticationResponseDto;
 import kr.pe.advenoh.quote.model.dto.LoginRequestDto;
 import kr.pe.advenoh.quote.model.dto.SignUpRequestDto;
 import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.service.IUserService;
+import kr.pe.advenoh.quote.spring.security.JwtTokenProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,21 +35,24 @@ public class AuthController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    JwtTokenProvider tokenProvider;
+
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Valid SignUpRequestDto signUpRequestDto) {
-        log.debug("[signupdebug] registerUser :: signUpRequest : {}", signUpRequestDto);
+        log.debug("[authdebug] registerUser :: signUpRequest : {}", signUpRequestDto);
         User registeredUser = userService.registerNewUserAccount(signUpRequestDto);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/users/{username}")
                 .buildAndExpand(registeredUser.getUsername()).toUri();
 
-        log.info("[signupdebug] location : {}", location);
+        log.info("[authdebug] location : {}", location);
         return ResponseEntity.created(location).body(new ApiResponseDto(true, QuoteExceptionCode.ACCOUNT_USER_REGISTERED_SUCCESS.getMessage()));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<?> authenticateUser(@RequestBody @Valid LoginRequestDto loginRequestDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDto.getUsernameOrEmail(),
@@ -55,7 +60,7 @@ public class AuthController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
-//        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
-        return null;
+        String jwt = tokenProvider.generateToken(authentication);
+        return ResponseEntity.ok(new JwtAuthenticationResponseDto(jwt));
     }
 }
