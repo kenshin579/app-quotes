@@ -1,13 +1,13 @@
 package kr.pe.advenoh.quote.service;
 
-import kr.pe.advenoh.quote.model.Role;
-import kr.pe.advenoh.quote.model.User;
+import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
+import kr.pe.advenoh.quote.model.dto.SignUpRequestDto;
+import kr.pe.advenoh.quote.model.entity.Role;
+import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.model.enums.RoleType;
 import kr.pe.advenoh.quote.repository.RoleRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
 import kr.pe.advenoh.quote.util.DefaultMockitoConfig;
-import kr.pe.advenoh.quote.web.dto.request.SignUpRequest;
-import kr.pe.advenoh.quote.web.exception.QuoteExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +16,8 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -47,45 +49,45 @@ public class UserServiceTest extends DefaultMockitoConfig {
 
     @Test
     public void registerNewUserAccount_저장() {
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUsername(username);
-        signUpRequest.setEmail(email);
-        signUpRequest.setName(name);
-        signUpRequest.setPassword(password);
+        SignUpRequestDto signUpRequestDto = new SignUpRequestDto();
+        signUpRequestDto.setUsername(username);
+        signUpRequestDto.setEmail(email);
+        signUpRequestDto.setName(name);
+        signUpRequestDto.setPassword(password);
 
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn(password);
-        when(roleRepository.findByRoleType(RoleType.ROLE_USER)).thenReturn(new Role());
+        when(roleRepository.findByRoleType(RoleType.ROLE_USER)).thenReturn(Optional.of(new Role()));
         when(userRepository.save(any())).thenReturn(any());
 
-        userService.registerNewUserAccount(signUpRequest);
+        userService.registerNewUserAccount(signUpRequestDto);
 
         verify(userRepository).save(userArgumentCaptor.capture());
-        assertThat(userArgumentCaptor.getValue().getUsername()).isEqualTo(signUpRequest.getUsername());
+        assertThat(userArgumentCaptor.getValue().getUsername()).isEqualTo(signUpRequestDto.getUsername());
         assertThat(userArgumentCaptor.getValue().isEnabled()).isTrue();
     }
 
     @Test
     public void registerNewUserAccount_username이_존재하는_경우() {
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setUsername(username);
+        SignUpRequestDto signUpRequestDto = new SignUpRequestDto();
+        signUpRequestDto.setUsername(username);
 
-        when(userRepository.existsByUsername(signUpRequest.getUsername())).thenReturn(true);
+        when(userRepository.existsByUsername(signUpRequestDto.getUsername())).thenReturn(true);
 
-        assertThatThrownBy(() -> userService.registerNewUserAccount(signUpRequest))
+        assertThatThrownBy(() -> userService.registerNewUserAccount(signUpRequestDto))
                 .hasMessageContaining(QuoteExceptionCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST.getMessage());
 
     }
 
     @Test
     public void registerNewUserAccount_email이_존재하는_경우() {
-        SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setEmail(email);
+        SignUpRequestDto signUpRequestDto = new SignUpRequestDto();
+        signUpRequestDto.setEmail(email);
 
-        when(userRepository.existsByEmail(signUpRequest.getEmail())).thenReturn(true);
+        when(userRepository.existsByEmail(signUpRequestDto.getEmail())).thenReturn(true);
 
-        assertThatThrownBy(() -> userService.registerNewUserAccount(signUpRequest))
+        assertThatThrownBy(() -> userService.registerNewUserAccount(signUpRequestDto))
                 .hasMessageContaining(QuoteExceptionCode.ACCOUNT_EMAIL_IS_ALREADY_EXIST.getMessage());
     }
 
