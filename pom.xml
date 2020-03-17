@@ -68,6 +68,12 @@
             <artifactId>modelmapper</artifactId>
             <version>2.3.5</version>
         </dependency>
+        <!-- For Working with Json Web Tokens (JWT) -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.1</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
