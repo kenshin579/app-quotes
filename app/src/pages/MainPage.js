@@ -1,10 +1,14 @@
 import React from 'react';
+import PageTemplate from "../components/common/PageTemplate";
+import SearchPage from "./SearchPage";
+import ListTodayPage from "./ListTodayPage";
 
 const MainPage = () => {
     return (
-        <div>
-            MainPage
-        </div>
+        <PageTemplate>
+            <SearchPage/>
+            <ListTodayPage/>
+        </PageTemplate>
     );
 };
 
