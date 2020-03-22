@@ -5,7 +5,6 @@ import {MainPage, SearchPage, SignUpPage, LoginPage, ProfilePage, NotFoundPage} 
 const App = () => {
     return (
         <div>
-            QuoteApps
             <Switch>
                 <Route exact path="/" component={MainPage}/>
                 <Route path="/search" component={SearchPage}/>
