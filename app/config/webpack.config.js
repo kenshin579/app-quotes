@@ -25,6 +25,9 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
+const lessToJs = require('less-vars-to-js');
+const themeVariables = lessToJs(fs.readFileSync(path.join(__dirname, '../src/styles/ant-theme-vars.less'), 'utf8'));
+
 const postcssNormalize = require('postcss-normalize');
 
 const appPackageJson = require(paths.appPackageJson);
@@ -448,6 +451,24 @@ module.exports = function(webpackEnv) {
                   getLocalIdent: getCSSModuleLocalIdent,
                 },
               }),
+            },
+            {
+              test: /\.less$/,
+              use: [
+                {
+                  loader: 'style-loader' // creates style nodes from JS strings
+                },
+                {
+                  loader: 'css-loader', // translates CSS into CommonJs
+                },
+                {
+                  loader: 'less-loader', // compiles Less to CSS
+                  options: {
+                    modifyVars: themeVariables,
+                    javascriptEnabled: true
+                  }
+                }
+              ]
             },
             // Opt-in support for SASS (using .scss or .sass extensions).
             // By default we support SASS Modules with the

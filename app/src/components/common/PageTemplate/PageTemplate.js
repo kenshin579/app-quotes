@@ -1,10 +1,11 @@
 import React from 'react';
+import Header from "../AppHeader";
 
 const PageTemplate = ({children}) => (
     <div>
+        <Header/>
         <main>
-            PageTemplate
-            {children}
+            {/*{children}*/}
         </main>
     </div>
 );
