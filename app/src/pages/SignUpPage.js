@@ -1,10 +1,12 @@
 import React from 'react';
+import PageTemplate from "../components/common/PageTemplate";
+import SignUp from "../components/user/SignUp/SignUp";
 
 const SignUpPage = () => {
     return (
-        <div>
-            SignUpPage
-        </div>
+        <PageTemplate>
+            <SignUp/>
+        </PageTemplate>
     );
 };
 
