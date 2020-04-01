@@ -1,13 +1,12 @@
 import React from 'react';
 import {Route, Switch} from 'react-router-dom';
-import {MainPage, SearchPage, SignUpPage, LoginPage, ProfilePage, NotFoundPage} from 'pages';
+import {LoginPage, MainPage, NotFoundPage, ProfilePage, SignUpPage} from 'pages';
 
 const App = () => {
     return (
         <div>
             <Switch>
                 <Route exact path="/" component={MainPage}/>
-                <Route path="/search" component={SearchPage}/>
                 <Route path="/signup" component={SignUpPage}/>
                 <Route path="/login" component={LoginPage}/>
                 <Route path="/profiles/:id" component={ProfilePage}/>
