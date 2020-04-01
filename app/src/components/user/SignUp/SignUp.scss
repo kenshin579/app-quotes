@@ -1,54 +1,23 @@
-.app-title {
-  float: left;
+.signup-container {
+  max-width: 420px;
+  margin: 0 auto;
+  margin-top: 40px;
+}
 
-  a {
-    text-decoration: none;
-    line-height: 64px;
-    font-size: 21px;
-    display: inline-block;
+.signup-form-button {
+  width: 100%;
+  margin-top: 15px;
+}
 
-    &:hover {
-      text-decoration: none;
-    }
+.signup-form-button[disabled], .signup-form-button[disabled]:hover, .signup-form-button[disabled]:focus {
+  opacity: 0.6;
+  color: #fff;
+  background-color: #1890ff;
+  border-color: #1890ff;
+}
+
+.signup-form {
+  input {
+    margin-bottom: 3px;
   }
 }
-
-.app-header {
-  position: fixed;
-  width: 100%;
-  box-shadow: 0 2px 8px #f0f1f2;
-  z-index: 10;
-  padding: 0;
-}
-
-.app-menu {
-  float: right;
-
-  //> li {
-  //  padding: 0 20px;
-  //
-  //  > a {
-  //    padding: 0 20px;
-  //    margin: 0 -20px;
-  //
-  //    > i {
-  //      margin-right: 0 !important;
-  //    }
-  //  }
-  //}
-}
-//
-//@media (max-width: 768px) {
-//  .app-title a {
-//    font-size: 20px;
-//  }
-//
-//  .app-menu > li {
-//    padding: 0 15px;
-//  }
-//
-//  .app-menu > li > a {
-//    padding: 0 15px;
-//    margin: 0 -15px;
-//  }
-//}
