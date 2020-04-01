@@ -11,29 +11,27 @@ class AppHeader extends Component {
     render() {
         let menuItems = [
             <Menu.Item key="/login">
-                <Link to="/login">Login</Link>
+                <Link to="/login">로그인</Link>
             </Menu.Item>,
             <Menu.Item key="/signup">
-                <Link to="/signup">Signup</Link>
+                <Link to="/signup">회원가입</Link>
             </Menu.Item>
         ];
 
         return (
-            <Layout>
-                <Header className={cx('app-header')}>
-                    <div className={cx('container')}>
-                        <div className={cx('app-title')}>
-                            <Link to="/">Best Quotes</Link>
-                        </div>
-                        <Menu
-                            className={cx('app-menu')}
-                            mode="horizontal"
-                            style={{lineHeight: '64px'}}>
-                            {menuItems}
-                        </Menu>
+            <Header className={cx('app-header')}>
+                <div className={cx('container')}>
+                    <div className={cx('app-title')}>
+                        <Link to="/">Best Quotes</Link>
                     </div>
-                </Header>
-            </Layout>
+                    <Menu
+                        className={cx('app-menu')}
+                        mode="horizontal"
+                        style={{lineHeight: '64px'}}>
+                        {menuItems}
+                    </Menu>
+                </div>
+            </Header>
         );
     }
 }
