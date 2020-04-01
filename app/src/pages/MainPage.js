@@ -1,13 +1,11 @@
 import React from 'react';
 import PageTemplate from "../components/common/PageTemplate";
-import SearchPage from "./SearchPage";
-import ListTodayPage from "./ListTodayPage";
 
 const MainPage = () => {
     return (
         <PageTemplate>
-            <SearchPage/>
-            <ListTodayPage/>
+            <div>검색 창</div>
+            <div>오늘 명언 목록</div>
         </PageTemplate>
     );
 };
