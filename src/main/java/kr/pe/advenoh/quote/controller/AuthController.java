@@ -55,7 +55,7 @@ public class AuthController {
     public ResponseEntity<?> authenticateUser(@RequestBody @Valid LoginRequestDto loginRequestDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequestDto.getUsernameOrEmail(),
+                        loginRequestDto.getUsername(),
                         loginRequestDto.getPassword()
                 )
         );
