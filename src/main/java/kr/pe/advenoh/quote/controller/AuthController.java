@@ -36,7 +36,7 @@ public class AuthController {
     private IUserService userService;
 
     @Autowired
-    JwtTokenProvider tokenProvider;
+    private JwtTokenProvider tokenProvider;
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Valid SignUpRequestDto signUpRequestDto) {
@@ -61,6 +61,7 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
+        log.debug("[authdebug] generated jwt : {}", jwt);
         return ResponseEntity.ok(new JwtAuthenticationResponseDto(jwt));
     }
 }
