@@ -5,6 +5,7 @@ import kr.pe.advenoh.quote.spring.security.JwtAuthenticationEntryPoint;
 import kr.pe.advenoh.quote.spring.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -72,7 +73,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js")
                 .permitAll()
                 .antMatchers("/api/auth/**")
-                .permitAll();
+                .permitAll()
+                .anyRequest()
+                .authenticated();
 
         //UsernamePasswordAuthenticationFilter 호출전에 jwtAuthenticationFilter가 실행됨
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
