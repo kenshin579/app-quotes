@@ -3,14 +3,14 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import {withRouter} from "react-router-dom";
-import Profile from "../../../components/user/Profile";
+import Setting from "../../../components/user/Profile";
 
 
-class ProfileContainer extends Component {
+class SettingContainer extends Component {
 
     render() {
         return (
-            <Profile/>
+            <Setting/>
         )
     }
 }
@@ -22,4 +22,4 @@ export default connect(
     (dispatch) => ({
         BaseActions: bindActionCreators(baseActions, dispatch)
     })
-)(withRouter(ProfileContainer));
+)(withRouter(SettingContainer));

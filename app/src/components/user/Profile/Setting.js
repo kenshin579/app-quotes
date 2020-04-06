@@ -1,16 +1,16 @@
 import React from 'react';
-import styles from './Profile.scss';
+import styles from './Setting.scss';
 import classNames from 'classnames/bind';
 
 const cx = classNames.bind(styles);
 
-const Profile = () => {
+const Setting = () => {
 
     return (
         <div>
-            profile
+            Setting
         </div>
     );
 };
 
-export default Profile;
+export default Setting;

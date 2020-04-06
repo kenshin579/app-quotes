@@ -54,8 +54,11 @@ const AppHeader = ({isAuthenticated, currentUser, onClick}) => {
 const ProfileDropdownMenu = ({currentUser, onClick}) => {
     const dropDownMenu = (
         <Menu onClick={onClick} className="profile-dropdown-menu">
+            <Menu.Item key="myquote" className="dropdown-item">
+                <Link to={`/quotes`}>내 명언</Link>
+            </Menu.Item>
             <Menu.Item key="profile" className="dropdown-item">
-                <Link to={`/users/${currentUser.username}`}>프로필</Link>
+                <Link to='/settings'>설정</Link>
             </Menu.Item>
             <Menu.Item key="logout" className="dropdown-item">
                 로그아웃
