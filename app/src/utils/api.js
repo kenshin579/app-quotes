@@ -24,13 +24,13 @@ const request = (options) => {
         );
 };
 
-export const login = (loginData) => {
-    console.log('loginData', loginData);
+export const login = (loginRequest) => {
+    console.log('loginRequest', loginRequest);
 
     return request({
         url: '/api/auth/login',
         method: 'POST',
-        body: JSON.stringify(loginData)
+        body: JSON.stringify(loginRequest)
     });
 };
 
@@ -45,7 +45,15 @@ export const getCurrentUser = () => {
     });
 };
 
-export const signup = () => console.log('signup');
+export const signup = (signUpRequest) => {
+    console.log('signUpRequest', signUpRequest);
+    return request({
+        url: "/api/auth/signup",
+        method: 'POST',
+        body: JSON.stringify(signUpRequest)
+    });
+};
+
 export const logout = () => {
     console.log('logout');
 

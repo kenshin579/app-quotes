@@ -6,6 +6,7 @@ import {pender} from "redux-pender";
 // action types
 const SHOW_MODAL = 'base/SHOW_MODAL';
 const HIDE_MODAL = 'base/HIDE_MODAL';
+const SIGNUP = 'base/SIGNUP';
 const LOGIN = 'base/LOGIN';
 const LOGOUT = 'base/LOGOUT';
 const GET_CURRENT_USER = 'base/GET_CURRENT_USER';
@@ -13,6 +14,7 @@ const GET_CURRENT_USER = 'base/GET_CURRENT_USER';
 // action creators
 export const showModal = createAction(SHOW_MODAL);
 export const hideModal = createAction(HIDE_MODAL);
+export const signup = createAction(SIGNUP, api.signup);
 export const login = createAction(LOGIN, api.login);
 export const logout = createAction(LOGOUT, api.logout);
 export const getCurrentUser = createAction(GET_CURRENT_USER, api.getCurrentUser);

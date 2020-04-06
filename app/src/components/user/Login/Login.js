@@ -3,7 +3,7 @@ import styles from './Login.scss';
 import classNames from 'classnames/bind';
 import {Button, Form, Input} from "antd";
 import {Link} from "react-router-dom";
-import { UserOutlined } from '@ant-design/icons';
+import {UserOutlined} from '@ant-design/icons';
 
 const cx = classNames.bind(styles);
 
@@ -26,7 +26,7 @@ const Login = ({onFinish}) => {
                         <Input
                             prefix={<UserOutlined />}
                             size="large"
-                            name="usernameOrEmail"
+                            name="username"
                             placeholder="Username or Email"/>
                     </Form.Item>
                     <Form.Item

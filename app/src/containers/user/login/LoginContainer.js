@@ -28,7 +28,7 @@ class LoginContainer extends Component {
             } else {
                 notification.error({
                     message: 'Quote App',
-                    description: '서버 오류가 발생했습니다. 사디 시도해주세요',
+                    description: '서버 오류가 발생했습니다. 다시 시도해주세요',
                 });
             }
         }
