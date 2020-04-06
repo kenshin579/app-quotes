@@ -23,6 +23,7 @@ const request = (options) => {
             })
         );
 };
+
 export const login = (loginData) => {
     console.log('loginData', loginData);
 
@@ -32,5 +33,24 @@ export const login = (loginData) => {
         body: JSON.stringify(loginData)
     });
 };
+
+export const getCurrentUser = () => {
+    if (!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: '/api/user/me',
+        method: 'GET'
+    });
+};
+
 export const signup = () => console.log('signup');
-export const logout = () => console.log('logout');
+export const logout = () => {
+    console.log('logout');
+
+    return request({
+        url: '/api/auth/logout',
+        method: 'POST'
+    });
+};

@@ -5,16 +5,18 @@ import * as baseActions from 'store/modules/base';
 import Login from "../../../components/user/Login";
 import {ACCESS_TOKEN} from "../../../constants";
 import {notification} from 'antd';
+import {withRouter} from "react-router-dom";
+
 
 class LoginContainer extends Component {
     handleFinish = async (values) => {
-        console.log('values', values);
-
-        const {BaseActions} = this.props;
+        const {BaseActions, history} = this.props;
 
         try {
             const response = await BaseActions.login(values);
             localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+            await BaseActions.getCurrentUser();
+            history.push('/');
 
         } catch (err) {
             console.error('err', err);
@@ -46,4 +48,4 @@ export default connect(
     (dispatch) => ({
         BaseActions: bindActionCreators(baseActions, dispatch)
     })
-)(LoginContainer);
+)(withRouter(LoginContainer));

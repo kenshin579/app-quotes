@@ -29,7 +29,7 @@ class SignUpContainer extends Component {
         //     .then(response => {
         //         notification.success({
         //             message: 'Polling App',
-        //             description: "Thank you! You're successfully registered. Please Login to continue!",
+        //             description: "Thank you! You're successfully registered. Please Profile to continue!",
         //         });
         //         this.props.history.push("/login");
         //     }).catch(error => {
