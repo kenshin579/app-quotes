@@ -8,16 +8,12 @@ const {Content} = Layout;
 const cx = classNames.bind(styles);
 
 const PageTemplate = ({children}) => (
-    <div>
-        <Layout>
-            <AppHeaderContainer/>
-            <Content className={cx('page-template-content')}>
-                <div className={cx('container')}>
-                    {children}
-                </div>
-            </Content>
-        </Layout>
-    </div>
+    <Layout>
+        <AppHeaderContainer/>
+        <Content>
+            {children}
+        </Content>
+    </Layout>
 );
 
 export default PageTemplate;
