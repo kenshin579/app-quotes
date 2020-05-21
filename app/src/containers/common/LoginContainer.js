@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
-import Login from "../../../components/user/Login";
-import {ACCESS_TOKEN} from "../../../constants";
+import Login from "../../components/user/Login";
+import {ACCESS_TOKEN} from "../../constants";
 import {notification} from 'antd';
 import {withRouter} from "react-router-dom";
 
