@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://www.ehcache.org/ehcache.xsd"
+         updateCheck="true"
+         monitoring="autodetect"
+         dynamicConfig="true">
+
+    <!-- 사용하고자 하는 캐시 별 설정 -->
+    <cache name="10secondCache"
+           eternal="false"
+           maxBytesLocalHeap="200M"
+           timeToIdleSeconds="0"
+           timeToLiveSeconds="10"
+           overflowToDisk="false"
+           diskPersistent="false"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+</ehcache>
