@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 @Slf4j
@@ -52,11 +51,11 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
         this.createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
 
         //테스트 사용자 생성
-        this.createUserIfNotFound("testuser", "test@test.com", "TestName", "testpass", Arrays.asList(adminRole));
+        this.createUserIfNotFound("testuser", "test@test.com", "Test", "testpass", Arrays.asList(adminRole));
     }
 
     @Transactional
-    public User createUserIfNotFound(String username, String email, String name, String password, Collection<Role> roles) {
+    public User createUserIfNotFound(String username, String email, String name, String password, List<Role> roles) {
         return userRepository.findByUsername(username).orElseGet(() -> {
             User user = new User(username, email, name, passwordEncoder.encode(password));
             user.setEnabled(true);
@@ -66,7 +65,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
     }
 
     @Transactional
-    public Role createRoleIfNotFound(RoleType roleType, Collection<Privilege> privileges) {
+    public Role createRoleIfNotFound(RoleType roleType, List<Privilege> privileges) {
         return roleRepository.findByRoleType(roleType).orElseGet(() -> {
             Role role = new Role(roleType);
             role.setPrivileges(privileges);
