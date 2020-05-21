@@ -1,12 +1,12 @@
 import React from 'react';
-import PageTemplate from "../components/common/PageTemplate";
-import SettingContainer from "../containers/user/profile/SettingContainer";
+import SettingContainer from "../containers/user/SettingContainer";
+import UserTemplate from "../components/user/UserTemplate";
 
 const SettingPage = () => {
     return (
-        <PageTemplate>
+        <UserTemplate>
             <SettingContainer/>
-        </PageTemplate>
+        </UserTemplate>
     );
 };
 
