@@ -14,7 +14,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,7 +33,7 @@ public class Privilege {
     private PrivilegeType privilegeType;
 
     @ManyToMany(mappedBy = "privileges")
-    private Collection<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     public Privilege(PrivilegeType privilegeType) {
         this.privilegeType = privilegeType;

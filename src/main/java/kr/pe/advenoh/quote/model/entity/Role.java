@@ -1,12 +1,14 @@
 package kr.pe.advenoh.quote.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kr.pe.advenoh.quote.model.enums.RoleType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,14 +24,12 @@ public class Role {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
-//    @ManyToMany(mappedBy = "roles")
-//    private Collection<User> users;
-
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "roles_privileges",
             joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "privilege_id"))
-    private Collection<Privilege> privileges;
+    private List<Privilege> privileges = new ArrayList<>();
 
     public Role(RoleType roleType) {
         this.roleType = roleType;
