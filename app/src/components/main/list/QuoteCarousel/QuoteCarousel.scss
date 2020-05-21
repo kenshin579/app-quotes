@@ -1,0 +1,90 @@
+.ant-carousel {
+  .slick-slide {
+    margin-top: 30px;
+    text-align: center;
+    width: 100px;
+    height: 170px;
+    //line-height: 50px;
+    //background: #364d79;
+    //overflow: hidden;
+
+    .quote-item {
+      //width: 100px;
+      //text-align: center;
+
+      blockquote {
+        //border-left: none;
+        width : 70%;
+        margin: 0 110px;
+        //padding: 10px 20px;
+        font-size: 25px;
+        //font-family: 'Jua', sans-serif;
+        //font-family: 'Gaegu', cursive;
+        //font-family: 'Gugi', cursive;
+        //font-family: 'Stylish', sans-serif;
+        //font-family: 'Poor Story', cursive;
+        font-family: 'Nanum Myeongjo', serif;
+
+        p {
+          display: block;
+          //margin-block-start: 1em;
+          //margin-block-end: 1em;
+          //margin-inline-start: 0px;
+          //margin-inline-end: 0px;
+
+          &:before {
+            content: "\f10d";
+            font-family: 'Fontawesome';
+            //float: left;
+            margin-right: 10px;
+          }
+        }
+
+        small {
+          display: block;
+          font-size: 80%;
+          //line-height : 1.42857413;
+          color: #777;
+          text-align: right;
+          margin-right : 30px;
+
+          &:before {
+            content: "\2014 \00A0";
+          }
+        }
+      }
+    }
+  }
+
+  .slick-dots {
+    li {
+      background: #c0c0c0;
+    }
+
+    li.slick-active {
+      button {
+        background: #333333;
+      }
+    }
+  }
+}
+
+.custom-slick-arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 70%;
+  font-size: 25px;
+  margin-top: 250px;
+  background: none;
+  color: #747171;
+  opacity: 0.3;
+
+  &:before {
+    display: none;
+  }
+
+  &:hover {
+    color: #333;
+  }
+}
