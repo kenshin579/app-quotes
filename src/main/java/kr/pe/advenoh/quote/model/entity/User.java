@@ -1,26 +1,21 @@
 package kr.pe.advenoh.quote.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import kr.pe.advenoh.quote.model.audit.DateAudit;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import java.util.Collection;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@ToString(exclude = "password")
+@ToString(exclude = {"password", "roles", "quotes", "likes", "folderUserMappingList"})
 @NoArgsConstructor
 @Table(name = "users")
 public class User extends DateAudit {
@@ -39,12 +34,33 @@ public class User extends DateAudit {
 
     private boolean enabled;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Collection<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
+//    @ManyToMany(fetch = FetchType.LAZY)
+//    @JoinTable(name = "quotes_tags",
+//            joinColumns = @JoinColumn(name = "quote_id"),
+//            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+//    private Set<Tag> tags = new HashSet<>();
+//
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Quote> quotes = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<FolderUserMapping> folderUserMappingList = new ArrayList<>();
+
+    @Builder
     public User(String username, String email, String name, String password) {
         this.name = name;
         this.username = username;
