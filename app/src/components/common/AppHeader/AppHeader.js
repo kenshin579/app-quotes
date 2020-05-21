@@ -8,13 +8,10 @@ import {DownOutlined, UserOutlined} from '@ant-design/icons';
 const cx = classNames.bind(styles);
 const Header = Layout.Header;
 
-const AppHeader = ({isAuthenticated, currentUser, onClick}) => {
-    console.log('isAuthenticated2', isAuthenticated);
-    console.log('currentUser2', currentUser);
-
+const AppHeader = ({authenticated, currentUser, onClick}) => {
     let headerMenuItems;
 
-    if (isAuthenticated) {
+    if (authenticated) {
         headerMenuItems = [
             <Menu.Item key="/profile" className="profile-menu">
                 <ProfileDropdownMenu
@@ -36,29 +33,26 @@ const AppHeader = ({isAuthenticated, currentUser, onClick}) => {
 
     return (
         <Header className={cx('app-header')}>
-            <div className={cx('container')}>
-                <div className={cx('app-title')}>
-                    <Link to="/">Best Quotes</Link>
-                </div>
-                <Menu
-                    className={cx('app-menu')}
-                    mode="horizontal"
-                    style={{lineHeight: '64px'}}>
-                    {headerMenuItems}
-                </Menu>
+            <div className={cx('app-title')}>
+                <Link to="/">Best Quotes</Link>
             </div>
+            <Menu
+                className={cx('app-menu')}
+                mode="horizontal">
+                {headerMenuItems}
+            </Menu>
         </Header>
     );
 };
 
 const ProfileDropdownMenu = ({currentUser, onClick}) => {
     const dropDownMenu = (
-        <Menu onClick={onClick} className="profile-dropdown-menu">
-            <Menu.Item key="myquote" className="dropdown-item">
-                <Link to={`/quotes`}>내 명언</Link>
+        <Menu  className={cx('profile-dropdown-menu')} onClick={onClick}>
+            <Menu.Item key="myquote">
+                <Link to={`/users/${currentUser}/quotes`}>내 명언</Link>
             </Menu.Item>
-            <Menu.Item key="profile" className="dropdown-item">
-                <Link to='/settings'>설정</Link>
+            <Menu.Item key="profile">
+                <Link to={`/users/${currentUser}/settings`}>설정</Link>
             </Menu.Item>
             <Menu.Item key="logout" className="dropdown-item">
                 로그아웃
@@ -69,7 +63,7 @@ const ProfileDropdownMenu = ({currentUser, onClick}) => {
     return (
         <Dropdown overlay={dropDownMenu}>
             <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                <UserOutlined/>{currentUser.username}<DownOutlined/>
+                <UserOutlined/>{currentUser}<DownOutlined/>
             </a>
         </Dropdown>
     );
