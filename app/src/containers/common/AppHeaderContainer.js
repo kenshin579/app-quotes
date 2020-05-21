@@ -5,12 +5,28 @@ import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import {withRouter} from "react-router-dom";
 import {ACCESS_TOKEN} from "../../constants";
+import LoadingIndicator from "../../components/common/LoadingIndicator";
 
 class AppHeaderContainer extends Component {
-    handleClickProfileMenu = async ({key}) => {
-        const {BaseActions, isAuthenticated, history} = this.props;
+    componentDidMount() {
+        this.getCurrentUser();
+    }
 
-        if (key === 'logout' && isAuthenticated) {
+    getCurrentUser = async () => {
+        const {BaseActions} = this.props;
+
+        try {
+            const response = await BaseActions.getCurrentUser();
+            console.log('response', response);
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    handleClickProfileMenu = async ({key}) => {
+        const {BaseActions, authenticated, history} = this.props;
+
+        if (key === 'logout' && authenticated) {
             try {
                 await BaseActions.logout();
             } catch (err) {
@@ -23,11 +39,14 @@ class AppHeaderContainer extends Component {
 
     render() {
         const {handleClickProfileMenu} = this;
-        const {isAuthenticated, currentUser} = this.props;
+        const {authenticated, currentUser, loading} = this.props;
+        if (loading) {
+            return <LoadingIndicator tip="Loading..."/>;
+        }
 
         return (
             <AppHeader
-                isAuthenticated={isAuthenticated}
+                authenticated={authenticated}
                 currentUser={currentUser}
                 onClick={handleClickProfileMenu}
             />
@@ -37,8 +56,9 @@ class AppHeaderContainer extends Component {
 
 export default connect(
     (state) => ({
-        isAuthenticated: state.base.get('authenticated'),
-        currentUser: state.base.get('user').toJS()
+        authenticated: state.base.get('authenticated'),
+        currentUser: state.base.getIn(['user', 'username']),
+        loading: state.pender.pending['base/GET_CURRENT_USER']
     }),
     (dispatch) => ({
         BaseActions: bindActionCreators(baseActions, dispatch)

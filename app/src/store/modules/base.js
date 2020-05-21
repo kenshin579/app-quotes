@@ -21,7 +21,11 @@ export const getCurrentUser = createAction(GET_CURRENT_USER, api.getCurrentUser)
 
 // initial state
 const initialState = Map({
-    modal: Map({}),
+    modal: Map({
+        quoteCreate: false,
+        quoteDelete: false,
+        quoteEdit: false
+    }),
     authenticated: false,
     user: Map({
         name: '',
@@ -58,7 +62,8 @@ export default handleActions({
         onSuccess: (state, action) => {
             const {id, username, name} = action.payload;
             return state.setIn(['user', 'username'], username)
-                .setIn(['user', 'name'], name);
+                .setIn(['user', 'name'], name)
+                .set('authenticated', true);
         }
     }),
 }, initialState)
