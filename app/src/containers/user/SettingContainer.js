@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import {withRouter} from "react-router-dom";
-import Setting from "../../../components/user/Profile";
+import Setting from "../../components/user/Setting";
 
 
 class SettingContainer extends Component {
