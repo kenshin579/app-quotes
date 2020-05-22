@@ -8,7 +8,7 @@ import {QUOTE_TODAY_SIZE} from "../../constants";
 import QuoteCarousel from "../../components/main/list/QuoteCarousel";
 import QuoteTimelineList from "../../components/main/list/QuoteTimelineList";
 
-class RandomListContainer extends Component {
+class TodayQuoteListContainer extends Component {
 
     componentDidMount() {
         const {pagination} = this.props;
@@ -89,4 +89,4 @@ export default connect(
     (dispatch) => ({
         MainActions: bindActionCreators(mainActions, dispatch)
     })
-)(RandomListContainer);
+)(TodayQuoteListContainer);
