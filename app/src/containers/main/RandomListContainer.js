@@ -24,11 +24,11 @@ class RandomListContainer extends Component {
             console.error(e);
         }
 
-        // this.handleScrollPosition();
+        this.handleScrollPosition();
     };
 
     onLoadMore = () => {
-        // this.setCurrentScrollPosition();
+        this.setCurrentScrollPosition();
         const {pagination} = this.props;
         pagination.pageSize += QUOTE_TODAY_SIZE;
         this.loadData(pagination);
