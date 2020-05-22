@@ -12,8 +12,8 @@ const QuoteCarousel = ({quotes}) => {
 
     _(quotes).forEach(quoteInfo => {
         quoteView.push(
-            <div key={quoteInfo.quoteId} className={cx('quote-item')}>
-                <blockquote>
+            <div key={quoteInfo.quoteId}>
+                <blockquote className={cx('blockquote')}>
                     <p>{quoteInfo.quoteText}</p>
                     <small>{quoteInfo.authorName}</small>
                 </blockquote>
@@ -23,7 +23,7 @@ const QuoteCarousel = ({quotes}) => {
 
     const carouselRef = React.createRef();
     const settings = {
-        dots: true,
+        dots: false,
         infinite: true,
         autoplaySpeed: 10000,
         autoplay: true,
@@ -44,6 +44,7 @@ const QuoteCarousel = ({quotes}) => {
                     onClick={() => {
                         carouselRef.current.prev()
                     }}/>
+            {/*<br />*/}
             <Button type="link"
                     className={cx('custom-slick-arrow')}
                     style={{right: '10px'}}

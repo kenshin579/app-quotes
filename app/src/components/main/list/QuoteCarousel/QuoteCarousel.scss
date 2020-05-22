@@ -1,58 +1,79 @@
 .ant-carousel {
   .slick-slide {
-    margin-top: 30px;
-    text-align: center;
-    width: 100px;
-    height: 170px;
+    //margin-top: 50px;
+    //text-align: center;
+    //width: 100%;
+    //height: 170px;
     //line-height: 50px;
     //background: #364d79;
     //overflow: hidden;
 
-    .quote-item {
-      //width: 100px;
-      //text-align: center;
+    .blockquote {
+      padding: 60px 80px 40px;
+      position: relative;
 
-      blockquote {
-        //border-left: none;
-        width : 70%;
-        margin: 0 110px;
-        //padding: 10px 20px;
+      //border-left: none;
+      //width : 70%;
+      //margin: 0 110px;
+      //padding: 10px 20px;
+      //font-size: 25px;
+      //font-family: 'Jua', sans-serif;
+      //font-family: 'Gaegu', cursive;
+      //font-family: 'Gugi', cursive;
+      //font-family: 'Stylish', sans-serif;
+      //font-family: 'Poor Story', cursive;
+      //font-family: 'Nanum Myeongjo', serif;
+      //font-family: 'Black Han Sans', sans-serif;
+      //font-family: 'Yeon Sung', cursive;
+      font-family: 'Poor Story', cursive;
+
+      p {
+        //display: block;
+        //margin-block-start: 1em;
+        //margin-block-end: 1em;
+        //margin-inline-start: 0px;
+        //margin-inline-end: 0px;
+
         font-size: 25px;
-        //font-family: 'Jua', sans-serif;
-        //font-family: 'Gaegu', cursive;
-        //font-family: 'Gugi', cursive;
-        //font-family: 'Stylish', sans-serif;
-        //font-family: 'Poor Story', cursive;
-        font-family: 'Nanum Myeongjo', serif;
+        text-align: center;
 
-        p {
-          display: block;
-          //margin-block-start: 1em;
-          //margin-block-end: 1em;
-          //margin-inline-start: 0px;
-          //margin-inline-end: 0px;
+        &:before {
+          content: "\f10d";
+          font-family: 'Fontawesome';
+          //float: left;
+          //margin-right: 10px;
 
-          &:before {
-            content: "\f10d";
-            font-family: 'Fontawesome';
-            //float: left;
-            margin-right: 10px;
-          }
+          top: 0;
+          position: absolute;
+          font-size: 100px;
+          color: rgba(0, 0, 0, 0.1);
         }
 
-        small {
-          display: block;
-          font-size: 80%;
-          //line-height : 1.42857413;
-          color: #777;
-          text-align: right;
-          margin-right : 30px;
-
-          &:before {
-            content: "\2014 \00A0";
-          }
+        &::after {
+          content: "";
+          top: 20px;
+          left: 50%;
+          margin-left: -100px;
+          position: absolute;
+          border-bottom: 3px solid #bf0024;
+          height: 3px;
+          width: 200px;
         }
       }
+
+      small {
+        display: block;
+        font-size: 100%;
+        //line-height : 1.42857413;
+        color: #777;
+        text-align: right;
+        margin-right: 30px;
+
+        &:before {
+          content: "\2014 \00A0";
+        }
+      }
+
     }
   }
 
@@ -73,9 +94,9 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 70%;
-  font-size: 25px;
-  margin-top: 250px;
+  //width: 70%;
+  //font-size: 50px;
+  margin-top: 100px;
   background: none;
   color: #747171;
   opacity: 0.3;
@@ -88,3 +109,4 @@
     color: #333;
   }
 }
+
