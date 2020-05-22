@@ -48,6 +48,8 @@ const MyQuoteMain = () => {
         )
     });
 
+
+    //todo : 최근 활동은 나중에 작업하는 걸로 함
     let activityList = [
         {
             '20190614': [
@@ -67,10 +69,11 @@ const MyQuoteMain = () => {
                 <div className={cx('content-title')}>내 폴더</div>
                 <FolderList folderList={folderList}/>
             </Content>
-            <Content style={{margin: '16px'}}>
-                <div className={cx('content-title')}>최근 활동</div>
-                {/*<QuoteTimelineList activityList={activityList}/>*/}
-            </Content>
+
+            {/*<Content style={{margin: '16px'}}>*/}
+            {/*    <div className={cx('content-title')}>최근 활동</div>*/}
+            {/*    /!*<QuoteTimelineList activityList={activityList}/>*!/*/}
+            {/*</Content>*/}
         </Layout>
     );
 };
