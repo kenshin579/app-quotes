@@ -7,6 +7,7 @@ import {List} from "antd";
 
 const cx = classNames.bind(styles);
 
+//todo : 현재 사용하지 않음
 const RandomList = ({initLoading, loadMoreButton, numOfVisible, quotes}) => {
     const quoteView = [];
 

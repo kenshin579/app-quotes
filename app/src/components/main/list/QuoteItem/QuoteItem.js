@@ -7,6 +7,7 @@ import {HeartOutlined} from "@ant-design/icons";
 const cx = classNames.bind(styles);
 const Header = Layout.Header;
 
+//todo : 현재 사용하지 않음
 const QuoteItem = ({key, quoteText, authorName}) => {
     return (
         <div className={cx('quote-card')}>
