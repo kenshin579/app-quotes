@@ -8,7 +8,7 @@ import FolderItem from "../FolderItem";
 const cx = classNames.bind(styles);
 const Header = Layout.Header;
 
-const FolderList = ({folderList}) => {
+const FolderList = ({folderList, dropMenu}) => {
     const folderView = [];
 
     _(folderList).forEach(folderInfo => {

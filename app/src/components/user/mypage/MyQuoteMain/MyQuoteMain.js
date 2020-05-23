@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './MyQuoteMain.scss';
 import classNames from 'classnames/bind';
 import {Layout, Menu} from "antd";
-import {FolderOutlined, HomeOutlined, SettingOutlined} from '@ant-design/icons';
+import {FolderOutlined, UserOutlined, HomeOutlined, SettingOutlined} from '@ant-design/icons';
 import StatisticList from "../../list/StatisticList";
 import FolderList from "../../list/FolderList";
 import _ from "lodash";
@@ -38,6 +38,27 @@ const MyQuoteMain = () => {
         },
     ];
 
+
+    function handleMenuClick(e) {
+        // message.info('Click on menu item.');
+        console.log('click', e);
+    }
+
+    const menu = (
+        <Menu onClick={handleMenuClick}>
+            <Menu.Item key="1" icon={<UserOutlined />}>
+                1st menu item
+            </Menu.Item>
+            <Menu.Item key="2" icon={<UserOutlined />}>
+                2nd menu item
+            </Menu.Item>
+            <Menu.Item key="3" icon={<UserOutlined />}>
+                3rd item
+            </Menu.Item>
+        </Menu>
+    );
+
+
     let folderView = [];
     _(folderList).forEach(folderInfo => {
         folderView.push(
@@ -61,8 +82,8 @@ const MyQuoteMain = () => {
     ];
 
     return (
-        <Layout className="layout-background">
-            <Header className="stat-header">
+        <Layout className={cx("layout-background")}>
+            <Header className={cx("stat-header")}>
                 <StatisticList statisticInfo={statisticInfo}/>
             </Header>
             <Content style={{margin: '16px'}}>

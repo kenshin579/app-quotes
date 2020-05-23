@@ -41,8 +41,8 @@ const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal
     const hasSelected = rowSelection.selectedRowKeys.length > 0;
 
     return (
-        <Layout className="layout-background">
-            <Header className="toolbar">
+        <Layout className={cx('layout-background')}>
+            <Header className={cx('toolbar')}>
                 <Button type="link" icon={<PlusOutlined/>} onClick={onCreateModal}>새 명언 추가</Button>
                 {hasSelected ? <Button type="link" icon={<DeleteOutlined />} onClick={onDeleteModal}>명언 삭제</Button> : null}
             </Header>
