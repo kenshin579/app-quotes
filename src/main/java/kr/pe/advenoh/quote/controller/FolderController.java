@@ -1,6 +1,7 @@
 package kr.pe.advenoh.quote.controller;
 
 import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
+import kr.pe.advenoh.quote.model.dto.FolderStatsResponseDto;
 import kr.pe.advenoh.quote.service.FolderService;
 import kr.pe.advenoh.quote.spring.security.CurrentUser;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,11 @@ public class FolderController {
     public Object getFolders(@CurrentUser Principal currentUser) {
         Map<String, Object> result = new HashMap<>();
         List<FolderResponseDto> folders = folderService.getFolders(currentUser);
-        result.put("totalNumOfQuotes", folders.stream().mapToLong(FolderResponseDto::getNumOfQuotes).sum());
+        FolderStatsResponseDto folderStatsResponseDto = FolderStatsResponseDto.builder()
+                .totalNumOfQuotes(folders.stream().mapToLong(FolderResponseDto::getNumOfQuotes).sum())
+                .totalNumOfLikes(0L)
+                .build();
+        result.put("folderStatInfo", folderStatsResponseDto);
         result.put("folderList", folders);
         return result;
     }
