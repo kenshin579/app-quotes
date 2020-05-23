@@ -10,7 +10,7 @@ const StatisticItem = ({title, data}) => {
         <>
             <Divider type='vertical' style={{marginLeft: '30px', color: '#b6b7ab', width: '2px', height: '70px', }}>
             </Divider>
-            <Col span={6}>
+            <Col span={2}>
                 <div className={cx('stat-title')}>{title}</div>
                 <div className={cx('stat-data')}>{data}</div>
             </Col>
