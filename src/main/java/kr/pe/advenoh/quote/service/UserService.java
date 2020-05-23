@@ -10,6 +10,7 @@ import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.model.enums.RoleType;
 import kr.pe.advenoh.quote.repository.RoleRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +22,16 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class UserService implements IUserService {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Override
     public User registerNewUserAccount(SignUpRequestDto signUpRequestDto) {

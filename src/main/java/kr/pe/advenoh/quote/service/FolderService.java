@@ -8,6 +8,7 @@ import kr.pe.advenoh.quote.repository.FolderQuoteMappingRepository;
 import kr.pe.advenoh.quote.repository.FolderRepository;
 import kr.pe.advenoh.quote.repository.FolderUserMappingRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +19,18 @@ import java.security.Principal;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class FolderService {
-    @Autowired
-    private FolderRepository folderRepository;
+    private final FolderRepository folderRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private FolderUserMappingRepository folderUserMappingRepository;
+    private final FolderUserMappingRepository folderUserMappingRepository;
 
-    @Autowired
-    private FolderQuoteMappingRepository folderQuoteMappingRepository;
+    private final FolderQuoteMappingRepository folderQuoteMappingRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public List<FolderResponseDto> getFolders(Principal currentUser) {
         log.info("[debug] currentUser : {}", currentUser);

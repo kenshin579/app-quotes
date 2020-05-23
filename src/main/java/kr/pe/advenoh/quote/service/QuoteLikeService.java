@@ -7,6 +7,7 @@ import kr.pe.advenoh.quote.model.enums.YN;
 import kr.pe.advenoh.quote.repository.LikeRepository;
 import kr.pe.advenoh.quote.repository.QuoteRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,16 +16,14 @@ import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class QuoteLikeService {
-    @Autowired
-    private QuoteRepository quoteRepository;
+    private final QuoteRepository quoteRepository;
 
-    @Autowired
-    private LikeRepository likeRepository;
+    private final LikeRepository likeRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public YN registerAndGetQuoteLikeInfo(Long quoteId, String username) {

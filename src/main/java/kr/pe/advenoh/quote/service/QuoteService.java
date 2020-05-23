@@ -19,6 +19,7 @@ import kr.pe.advenoh.quote.repository.QuoteRepository;
 import kr.pe.advenoh.quote.repository.QuoteTagMappingRepository;
 import kr.pe.advenoh.quote.repository.TagRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,34 +36,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@RequiredArgsConstructor
 @Service
 public class QuoteService {
-    @Autowired
-    private QuoteRepository quoteRepository;
+    private final QuoteRepository quoteRepository;
 
-    @Autowired
-    private AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private TagRepository tagRepository;
+    private final TagRepository tagRepository;
 
-    @Autowired
-    private QuoteTagMappingRepository quoteTagMappingRepository;
+    private final QuoteTagMappingRepository quoteTagMappingRepository;
 
-    @Autowired
-    private QuoteHistoryRepository quoteHistoryRepository;
+    private final QuoteHistoryRepository quoteHistoryRepository;
 
-    @Autowired
-    private FolderRepository folderRepository;
+    private final FolderRepository folderRepository;
 
-    @Autowired
-    private FolderQuoteMappingRepository folderQuoteMappingRepository;
+    private final FolderQuoteMappingRepository folderQuoteMappingRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @Transactional
     public QuoteResponseDto createQuote(QuoteRequestDto quoteRequestDto, Principal currentUser) {
