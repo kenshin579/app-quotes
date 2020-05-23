@@ -1,21 +1,38 @@
 import React from 'react';
 import styles from './FolderList.scss';
 import classNames from 'classnames/bind';
-import {Layout, Row} from 'antd';
+import {Col, Dropdown, Layout, Menu, Row} from 'antd';
 import _ from 'lodash';
 import FolderItem from "../FolderItem";
+import {UserOutlined, DownOutlined, FolderOutlined, DeleteOutlined} from "@ant-design/icons";
 
 const cx = classNames.bind(styles);
-const Header = Layout.Header;
 
-const FolderList = ({folderList, dropMenu}) => {
+const FolderList = ({folders, dropDownMenuNames, onMenuClick}) => {
     const folderView = [];
+    const menuItems = [];
 
-    _(folderList).forEach(folderInfo => {
+
+    const dropMenu = (
+        <Menu onClick={onMenuClick}>
+           {menuItems}
+        </Menu>
+    );
+
+    _(dropDownMenuNames).forEach((value, key) => {
+        menuItems.push(
+            <Menu.Item key={key}>
+                {value}
+            </Menu.Item>
+        )
+    });
+
+    _(folders).forEach(folder => {
         folderView.push(
-            <FolderItem key={folderInfo.folderName}
-                        folderName={folderInfo.folderName}
-                        numOfQuotes={folderInfo.numOfQuotes}/>
+            <FolderItem key={folder.folderName}
+                        folderName={folder.folderName}
+                        numOfQuotes={folder.numOfQuotes}
+                        dropMenu={dropMenu}/>
         )
     });
 

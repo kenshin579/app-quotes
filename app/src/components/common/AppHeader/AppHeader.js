@@ -13,7 +13,7 @@ const AppHeader = ({authenticated, currentUser, onClick}) => {
 
     if (authenticated) {
         headerMenuItems = [
-            <Menu.Item key="/profile" className="profile-menu">
+            <Menu.Item key="/profile" className={cx('profile-menu')}>
                 <ProfileDropdownMenu
                     currentUser={currentUser}
                     onClick={onClick}
@@ -62,7 +62,7 @@ const ProfileDropdownMenu = ({currentUser, onClick}) => {
 
     return (
         <Dropdown overlay={dropDownMenu}>
-            <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+            <a className={cx('ant-dropdown-link')} onClick={e => e.preventDefault()}>
                 <UserOutlined/>{currentUser}<DownOutlined/>
             </a>
         </Dropdown>

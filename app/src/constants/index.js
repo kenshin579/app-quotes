@@ -16,3 +16,9 @@ export const QUOTE_PAGE_SIZE = 10;
 
 export const QUOTE_TODAY_INDEX = 1;
 export const QUOTE_TODAY_SIZE = 3;
+
+export const FOLDER_STAT_INFO_NAME_MAPPING = {
+    totalNumOfQuotes : '명언',
+    totalNumOfLikes : '좋아요',
+    totalNumOfTags : '태그'
+};

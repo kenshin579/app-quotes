@@ -11,7 +11,11 @@ export const getFolderList = createAction(GET_FOLDER_LIST, api.getFolderList);
 
 // initial state
 const initialState = Map({
-    folders: List()
+    folders: List(),
+    folderStatInfo: Map({
+        totalNumOfQuotes: 0,
+        totalNumOfLikes: 0
+    })
 });
 
 // reducer
@@ -19,7 +23,9 @@ export default handleActions({
     ...pender({
         type: GET_FOLDER_LIST,
         onSuccess: (state, action) => {
-            return state.set('folders', fromJS(action.payload));
+            const {folderList, folderStatInfo} = action.payload;
+            return state.set('folders', fromJS(folderList))
+                .set('folderStatInfo', fromJS(folderStatInfo));
         }
     })
 }, initialState)
