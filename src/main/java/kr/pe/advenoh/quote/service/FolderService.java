@@ -33,13 +33,11 @@ public class FolderService {
     private ModelMapper modelMapper;
 
     public List<FolderResponseDto> getFolders(Principal currentUser) {
+        log.info("[debug] currentUser : {}", currentUser);
         User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> {
             throw new RuntimeException("not found");
         });
-
-        List<Folder> folders = folderRepository.findAllByUsername(user.getUsername());
-        return modelMapper.map(folders, new TypeToken<List<FolderResponseDto>>() {
-        }.getType());
+        return folderRepository.findAllByUsername(user.getUsername());
     }
 
     @Transactional
@@ -51,11 +49,7 @@ public class FolderService {
         Folder folder = new Folder(folderTitle);
         FolderUserMapping folderUserMapping = new FolderUserMapping(folder, user);
         FolderUserMapping saveFolderUserMapping = folderUserMappingRepository.save(folderUserMapping);
-
-        return FolderResponseDto.builder()
-                .folderId(saveFolderUserMapping.getFolder().getId())
-                .folderName(saveFolderUserMapping.getFolder().getFolderName())
-                .build();
+        return new FolderResponseDto(saveFolderUserMapping.getFolder().getId(), saveFolderUserMapping.getFolder().getFolderName(), 0L);
     }
 
     @Transactional

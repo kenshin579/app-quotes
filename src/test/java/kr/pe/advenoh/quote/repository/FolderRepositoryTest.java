@@ -1,5 +1,6 @@
 package kr.pe.advenoh.quote.repository;
 
+import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
 import kr.pe.advenoh.quote.model.entity.Folder;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
@@ -39,7 +40,7 @@ public class FolderRepositoryTest {
 
     @Test
     public void findAllByUsername() {
-        List<Folder> testuser = folderRepository.findAllByUsername("testuser");
+        List<FolderResponseDto> testuser = folderRepository.findAllByUsername("testuser");
         log.info("[quotedebug] testuser : {}", testuser);
     }
 }

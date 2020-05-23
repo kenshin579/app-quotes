@@ -24,7 +24,6 @@ public class FolderController {
     @Autowired
     private FolderService folderService;
 
-    //todo : 폴더 별로 몇개의 명언이 있는지에 대한 통계로 내려주도록 함
     @GetMapping
     public Object getFolders(@CurrentUser Principal currentUser) {
         return folderService.getFolders(currentUser);
