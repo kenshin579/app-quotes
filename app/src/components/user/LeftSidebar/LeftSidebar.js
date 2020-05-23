@@ -34,7 +34,7 @@ const LeftSidebar = ({folders, location, authenticated, currentUser, onCreateMod
                 <div className={cx('folder-add')} onClick={onCreateModal}><FolderAddOutlined /></div>
                 <Menu.ItemGroup title="내 폴더">
                     {folderView}
-                    {/*<div style={{border: '0.5px solid lightgray'}}></div>*/}
+                    <div style={{border: '0.5px solid lightgray'}}></div>
                     <Menu.Item key={`/users/${currentUser}/settings`}>
                         <SettingOutlined/>
                         <Link to={`/users/${currentUser}/settings`}/>
