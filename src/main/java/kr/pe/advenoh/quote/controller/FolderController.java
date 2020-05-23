@@ -1,5 +1,6 @@
 package kr.pe.advenoh.quote.controller;
 
+import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
 import kr.pe.advenoh.quote.service.FolderService;
 import kr.pe.advenoh.quote.spring.security.CurrentUser;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -26,7 +28,11 @@ public class FolderController {
 
     @GetMapping
     public Object getFolders(@CurrentUser Principal currentUser) {
-        return folderService.getFolders(currentUser);
+        Map<String, Object> result = new HashMap<>();
+        List<FolderResponseDto> folders = folderService.getFolders(currentUser);
+        result.put("totalNumOfQuotes", folders.stream().mapToLong(FolderResponseDto::getNumOfQuotes).sum());
+        result.put("folderList", folders);
+        return result;
     }
 
     @PostMapping

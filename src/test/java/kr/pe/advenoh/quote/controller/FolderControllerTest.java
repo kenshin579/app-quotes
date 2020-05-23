@@ -31,9 +31,10 @@ public class FolderControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[*].folderId").exists())
-                .andExpect(jsonPath("$[*].folderName").exists())
-                .andExpect(jsonPath("$[*].numOfQuotes").exists());
+                .andExpect(jsonPath("$.totalNumOfQuotes").exists())
+                .andExpect(jsonPath("$.folderList").isArray())
+                .andExpect(jsonPath("$.folderList[*].folderId").exists())
+                .andExpect(jsonPath("$.folderList[*].folderName").exists())
+                .andExpect(jsonPath("$.folderList[*].numOfQuotes").exists());
     }
 }
