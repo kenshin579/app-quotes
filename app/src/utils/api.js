@@ -96,6 +96,15 @@ export const getFolderList = () => {
     });
 };
 
+export const createFolder = (folderName) => {
+    console.log('folderName', folderName);
+
+    return request({
+        url: '/api/folders?folderName=' + folderName,
+        method: 'POST'
+    });
+};
+
 export const createQuote = (folderId, quoteData) => {
     const formData = new FormData();
     for (const name in quoteData) {
