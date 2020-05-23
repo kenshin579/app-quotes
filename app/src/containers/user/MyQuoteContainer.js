@@ -82,7 +82,7 @@ class MyQuoteContainer extends Component {
 
 export default connect(
     (state) => ({
-        visible: state.base.getIn(['modal', 'quoteAdd']),
+        visible: state.base.getIn(['modal', 'quoteCreate']),
         quotes: state.quote.get('quotes').toJS(),
         pagination: {
             current: state.quote.getIn(['pagination', 'page']),
@@ -93,7 +93,7 @@ export default connect(
         loading: state.pender.pending['quote/GET_QUOTE_LIST']
     }),
     (dispatch) => ({
-        QuoteActions: bindActionCreators(quoteActions, dispatch),
         BaseActions: bindActionCreators(baseActions, dispatch),
+        QuoteActions: bindActionCreators(quoteActions, dispatch),
     })
 )(MyQuoteContainer);
