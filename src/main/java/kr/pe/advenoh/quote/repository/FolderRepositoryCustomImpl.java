@@ -38,7 +38,7 @@ public class FolderRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 .from(qFolder)
                 .innerJoin(qFolderUserMapping).on(qFolder.id.eq(qFolderUserMapping.folder.id))
                 .innerJoin(qUser).on(qFolderUserMapping.user.id.eq(qUser.id))
-                .innerJoin(qFolderQuoteMapping).on(qFolder.id.eq(qFolderQuoteMapping.folder.id))
+                .leftJoin(qFolderQuoteMapping).on(qFolder.id.eq(qFolderQuoteMapping.folder.id))
                 .where(qUser.username.eq(username))
                 .groupBy(qFolder.id)
                 .fetch();

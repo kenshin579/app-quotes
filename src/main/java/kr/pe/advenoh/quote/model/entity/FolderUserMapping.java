@@ -30,7 +30,7 @@ public class FolderUserMapping extends DateAudit {
     @Column(name = "folder_user_id", unique = true, nullable = false)
     private Long id;
 
-    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne
     @JoinColumn(name = "folder_id")
     private Folder folder;
 

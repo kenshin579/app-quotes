@@ -57,10 +57,10 @@ public class FolderController {
         return result;
     }
 
-    @DeleteMapping("/{folderId}")
-    public Object deleteFolder(@PathVariable Long folderId) {
+    @DeleteMapping
+    public Object deleteFolders(@RequestParam(value = "folderIds") List<Long> folderIds) {
         Map<String, Object> result = new HashMap<>();
-        result.put("succeed", 1 == folderService.deleteFolder(folderId));
+        result.put("succeed", folderIds.size() == folderService.deleteFolders(folderIds));
         return result;
     }
 }
