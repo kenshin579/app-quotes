@@ -24,7 +24,8 @@ const initialState = Map({
     modal: Map({
         quoteCreate: false,
         quoteDelete: false,
-        quoteEdit: false
+        quoteEdit: false,
+        folderCreate: false
     }),
     authenticated: false,
     user: Map({

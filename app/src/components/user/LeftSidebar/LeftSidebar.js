@@ -4,11 +4,11 @@ import classNames from 'classnames/bind';
 import {Link} from 'react-router-dom';
 import {Layout, Menu, Sider} from 'antd';
 import _ from "lodash";
-import {FolderOutlined, HomeOutlined, SettingOutlined} from '@ant-design/icons';
+import {FolderOutlined, HomeOutlined, SettingOutlined, FolderAddOutlined} from '@ant-design/icons';
 
 const cx = classNames.bind(styles);
 
-const LeftSidebar = ({folders, location, authenticated, currentUser}) => {
+const LeftSidebar = ({folders, location, authenticated, currentUser, onCreateModal}) => {
     const {Sider} = Layout;
 
     let folderView = [];
@@ -31,9 +31,10 @@ const LeftSidebar = ({folders, location, authenticated, currentUser}) => {
                     <Link to={`/users/${currentUser}/quotes`}/>
                     <span>내 명언 모음</span>
                 </Menu.Item>
+                <div className={cx('folder-add')} onClick={onCreateModal}><FolderAddOutlined /></div>
                 <Menu.ItemGroup title="내 폴더">
                     {folderView}
-                    <div style={{border: '0.5px solid lightgray'}}></div>
+                    {/*<div style={{border: '0.5px solid lightgray'}}></div>*/}
                     <Menu.Item key={`/users/${currentUser}/settings`}>
                         <SettingOutlined/>
                         <Link to={`/users/${currentUser}/settings`}/>

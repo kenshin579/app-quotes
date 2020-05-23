@@ -52,7 +52,7 @@ export default handleActions({
     ...pender({
         type: CREATE_QUOTE,
         onSuccess: (state, action) => {
-            console.log('action.payload', action.payload);
+            console.log('successfully created a quote :: action.payload', action.payload);
         }
     })
 }, initialState)
