@@ -44,6 +44,8 @@ class MyQuoteMainContainer extends Component {
     handleMenuClick = (e) => {
         // message.info('Click on menu item.');
         console.log('click', e);
+        // console.log('event', e.target["data-folder-id"]);
+        console.log('event', e.target);
     };
 
     render() {

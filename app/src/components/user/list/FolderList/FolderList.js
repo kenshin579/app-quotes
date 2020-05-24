@@ -29,7 +29,8 @@ const FolderList = ({folders, dropDownMenuNames, onMenuClick}) => {
 
     _(folders).forEach(folder => {
         folderView.push(
-            <FolderItem key={folder.folderName}
+            <FolderItem key={folder.folderId}
+                        folderId={folder.folderId}
                         folderName={folder.folderName}
                         numOfQuotes={folder.numOfQuotes}
                         dropMenu={dropMenu}/>
