@@ -4,10 +4,11 @@ import classNames from 'classnames/bind';
 import {Button, Input, Layout, Table} from "antd";
 import {PlusOutlined, DeleteOutlined} from '@ant-design/icons';
 import _ from 'lodash';
+import MyQuoteHeader from "../MyQuoteHeader";
 
 const cx = classNames.bind(styles);
 
-const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal, onDeleteModal}) => {
+const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal, onDeleteModal, onMoveModal}) => {
     const {Header, Content} = Layout;
     const Search = Input.Search;
 
@@ -42,10 +43,10 @@ const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal
 
     return (
         <Layout className={cx('layout-background')}>
-            <Header className={cx('toolbar')}>
-                <Button type="link" icon={<PlusOutlined/>} onClick={onCreateModal}>새 명언 추가</Button>
-                {hasSelected ? <Button type="link" icon={<DeleteOutlined />} onClick={onDeleteModal}>명언 삭제</Button> : null}
-            </Header>
+            <MyQuoteHeader hasSelected={hasSelected}
+                           onCreateModal={onCreateModal}
+                           onDeleteModal={onDeleteModal}
+                           onMoveModal={onMoveModal}/>
             <Content style={{margin: 20, background: '#fff', padding: 24}}>
                 {/*<div className={cx('content-title')}>내 명언</div>*/}
                 <header className={cx('header')}>

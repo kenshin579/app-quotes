@@ -10,12 +10,14 @@ const CREATE_QUOTE = 'quote/CREATE_QUOTE';
 const SELECT_QUOTE = 'quote/SELECT_QUOTE';
 const DELETE_QUOTE = 'quote/DELETE_QUOTE';
 const EDIT_QUOTE = 'quote/EDIT_QUOTE';
+const MOVE_QUOTE = 'quote/MOVE_QUOTE';
 
 // action creators
 export const getQuoteList = createAction(GET_QUOTE_LIST, api.getQuoteList);
 export const createQuote = createAction(CREATE_QUOTE, api.createQuote);
 export const selectQuote = createAction(SELECT_QUOTE);
-export const deleteQuote = createAction(DELETE_QUOTE, api.deleteQuotes);
+export const deleteQuotes = createAction(DELETE_QUOTE, api.deleteQuotes);
+export const moveQuotes = createAction(MOVE_QUOTE, api.moveQuotes);
 
 // initial state
 const initialState = Map({
@@ -53,6 +55,12 @@ export default handleActions({
         type: CREATE_QUOTE,
         onSuccess: (state, action) => {
             console.log('successfully created a quote :: action.payload', action.payload);
+        }
+    }),
+    ...pender({
+        type: MOVE_QUOTE,
+        onSuccess: (state, action) => {
+            console.log('successfully moved quotes :: action.payload', action.payload);
         }
     })
 }, initialState)

@@ -25,6 +25,7 @@ const initialState = Map({
         quoteCreate: false,
         quoteDelete: false,
         quoteEdit: false,
+        quoteMove: false,
         folderCreate: false
     }),
     authenticated: false,

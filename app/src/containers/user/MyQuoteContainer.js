@@ -49,6 +49,11 @@ class MyQuoteContainer extends Component {
         BaseActions.showModal('quoteDelete');
     };
 
+    handleMoveModal = () => {
+        const {BaseActions} = this.props;
+        BaseActions.showModal('quoteMove');
+    };
+
     handleSelectChange = selectedRowKeys => {
         console.log('MyQuoteContainer :: selectedRowKeys changed: ', selectedRowKeys);
         const {QuoteActions} = this.props;
@@ -57,7 +62,7 @@ class MyQuoteContainer extends Component {
 
     render() {
         const {quotes, pagination, selectedRowKeys, loading} = this.props;
-        const {handleTableChange, handleCreateModal, handleDeleteModal} = this;
+        const {handleTableChange, handleCreateModal, handleDeleteModal, handleMoveModal} = this;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.handleSelectChange,
@@ -72,10 +77,10 @@ class MyQuoteContainer extends Component {
                 quotes={quotes}
                 rowSelection={rowSelection}
                 pagination={pagination}
+                onTableChange={handleTableChange}
                 onCreateModal={handleCreateModal}
                 onDeleteModal={handleDeleteModal}
-                onTableChange={handleTableChange}
-            />
+                onMoveModal={handleMoveModal}/>
         )
     }
 }
@@ -89,7 +94,7 @@ export default connect(
             pageSize: state.quote.getIn(['pagination', 'size']),
             total: state.quote.getIn(['pagination', 'totalElements']),
         },
-        selectedRowKeys : state.quote.get('selectedRowKeys').toJS(),
+        selectedRowKeys: state.quote.get('selectedRowKeys').toJS(),
         loading: state.pender.pending['quote/GET_QUOTE_LIST']
     }),
     (dispatch) => ({

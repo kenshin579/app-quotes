@@ -128,6 +128,15 @@ export const deleteQuotes = (selectedRowKeys) => {
     });
 };
 
+export const moveQuotes = (folderId, selectedRowKeys) => {
+    const quoteIds = selectedRowKeys.join(',');
+
+    return request({
+        url: `/api/quotes/move/${folderId}?quoteIds=${quoteIds}`,
+        method: 'PUT',
+    });
+};
+
 export const getRandomList = (pagination) => {
     console.log('getRandomList :: pagination', pagination);
 
