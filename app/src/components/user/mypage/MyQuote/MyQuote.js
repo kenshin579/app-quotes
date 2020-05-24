@@ -8,7 +8,7 @@ import MyQuoteHeader from "../MyQuoteHeader";
 
 const cx = classNames.bind(styles);
 
-const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal, onDeleteModal, onMoveModal}) => {
+const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal, onEditModal, onDeleteModal, onMoveModal}) => {
     const {Header, Content} = Layout;
     const Search = Input.Search;
 
@@ -39,12 +39,13 @@ const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal
     ];
 
     console.log('rowSelection', rowSelection);
-    const hasSelected = rowSelection.selectedRowKeys.length > 0;
+    const selectedSize = rowSelection.selectedRowKeys.length;
 
     return (
         <Layout className={cx('layout-background')}>
-            <MyQuoteHeader hasSelected={hasSelected}
+            <MyQuoteHeader selectedSize={selectedSize}
                            onCreateModal={onCreateModal}
+                           onEditModal={onEditModal}
                            onDeleteModal={onDeleteModal}
                            onMoveModal={onMoveModal}/>
             <Content style={{margin: 20, background: '#fff', padding: 24}}>

@@ -39,6 +39,7 @@ class MyQuoteContainer extends Component {
         this.loadData(pagination);
     };
 
+    //todo: modal refactoring하기
     handleCreateModal = () => {
         const {BaseActions} = this.props;
         BaseActions.showModal('quoteCreate');
@@ -47,6 +48,11 @@ class MyQuoteContainer extends Component {
     handleDeleteModal = () => {
         const {BaseActions} = this.props;
         BaseActions.showModal('quoteDelete');
+    };
+
+    handleEditModal = () => {
+        const {BaseActions} = this.props;
+        BaseActions.showModal('quoteEdit');
     };
 
     handleMoveModal = () => {
@@ -62,7 +68,7 @@ class MyQuoteContainer extends Component {
 
     render() {
         const {quotes, pagination, selectedRowKeys, loading} = this.props;
-        const {handleTableChange, handleCreateModal, handleDeleteModal, handleMoveModal} = this;
+        const {handleTableChange, handleCreateModal, handleDeleteModal, handleEditModal, handleMoveModal} = this;
         const rowSelection = {
             selectedRowKeys,
             onChange: this.handleSelectChange,
@@ -79,6 +85,7 @@ class MyQuoteContainer extends Component {
                 pagination={pagination}
                 onTableChange={handleTableChange}
                 onCreateModal={handleCreateModal}
+                onEditModal={handleEditModal}
                 onDeleteModal={handleDeleteModal}
                 onMoveModal={handleMoveModal}/>
         )
