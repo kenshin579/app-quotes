@@ -29,10 +29,13 @@ class QuoteMoveModalContainer extends Component {
     };
 
     render() {
-        const {visible, folders} = this.props;
+        const {visible, folders, location} = this.props;
+
+        let currentFolderId = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
 
         return (
             <QuoteMoveModal visible={visible}
+                            currentFolderId={currentFolderId}
                             folders={folders}
                             onMove={this.handleMove}
                             onCancel={this.handleCancel}

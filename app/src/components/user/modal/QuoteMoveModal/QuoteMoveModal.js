@@ -8,16 +8,18 @@ const cx = classNames.bind(styles);
 
 const {Option} = Select;
 
-const QuoteMoveModal = ({visible, folders, onMove, onCancel}) => {
+const QuoteMoveModal = ({visible, currentFolderId, folders, onMove, onCancel}) => {
     const [form] = Form.useForm();
     let selectOptionListView = [];
 
-    //todo: 현재 폴더는 제외하고 보여줘야 함
+    //todo: filter & map로 합치기 (underscore가 낫나?)
     _(folders).forEach(folder => {
-        selectOptionListView.push(
-            <Option value={`${folder.folderId}`}>{folder.folderName}</Option>
-        )
-    });
+            if (folder.folderId != currentFolderId) {
+                selectOptionListView.push(
+                    <Option value={`${folder.folderId}`}>{folder.folderName}</Option>
+                )
+            }
+        });
 
     return (
         <Modal
