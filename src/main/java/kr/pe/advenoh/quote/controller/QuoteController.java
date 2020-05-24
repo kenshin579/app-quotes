@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -82,6 +83,15 @@ public class QuoteController {
 
         int status = quoteService.deleteQuotes(quoteIds);
         result.put("succeed", status == quoteIds.size());
+        return result;
+    }
+
+
+    @PutMapping("/move/{folderId}")
+    public Object moveQuotes(@RequestParam(value = "quoteIds") List<Long> quoteIds,
+                             @PathVariable(name = "folderId") Long folderId) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("succeed", quoteService.moveQuotes(quoteIds, folderId));
         return result;
     }
 

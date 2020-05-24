@@ -2,6 +2,7 @@ package kr.pe.advenoh.quote.controller;
 
 import kr.pe.advenoh.quote.service.QuoteService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,9 @@ public class QuoteControllerTest {
     private QuoteService quoteService;
 
     @Test
+    @Ignore
     public void createQuote() throws Exception {
-        mvc.perform(post(BASE_PATH + "/job")
+        this.mvc.perform(post(BASE_PATH + "/job")
                 .param("jobName", "job1")
                 .param("groupName", "testGroup"))
                 .andDo(print())

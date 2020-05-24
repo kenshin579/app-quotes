@@ -99,6 +99,7 @@ public class QuoteService {
         return null;
     }
 
+    //todo: readOnly는 왜 옵션이 없나?
     //todo : 좋아요 & 공유수에 대한 정보도 내려주면 좋을 듯함
     public QuoteResponseDto getQuote(Long quoteId) {
         Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
@@ -131,9 +132,21 @@ public class QuoteService {
     @Transactional
     public Integer deleteQuotes(List<Long> quoteIds) {
         //todo : 삭제 호출이 안되는 이슈가 있음 (해당 폴더에서 명언을 삭제해야 함)
+        //todo : 명언 삭제시 다른 table로 이동하고 batch 작업으로 migratino 하는 작업이 별도로 필요함
         quoteTagMappingRepository.deleteAllByIdInQuery(quoteIds);
         folderQuoteMappingRepository.deleteByQuoteIdQuery(quoteIds);
         return quoteRepository.deleteAllByIdInQuery(quoteIds);
+    }
+
+    @Transactional
+    public boolean moveQuotes(List<Long> quoteIds, Long folderId) {
+        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> {
+            throw new RuntimeException("not found");
+        });
+
+        List<FolderQuoteMapping> folderQuoteMappings = folderQuoteMappingRepository.findAllById(quoteIds);
+        folderQuoteMappings.forEach(it -> it.setFolder(folder));
+        return true;
     }
 
     public PagedResponseDto<QuoteResponseDto> getTodayQuotes(Integer pageIndex, Integer pageSize) {

@@ -24,13 +24,13 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 
     @Override
     public Page<Quote> findAllByFolderId(Long folderId, Pageable pageable) {
-        QQuote quote = QQuote.quote;
-        QFolderQuoteMapping folderQuoteMapping = QFolderQuoteMapping.folderQuoteMapping;
+        QQuote qQuote = QQuote.quote;
+        QFolderQuoteMapping qFolderQuoteMapping = QFolderQuoteMapping.folderQuoteMapping;
 
-        JPQLQuery query = from(quote)
-                .innerJoin(folderQuoteMapping)
-                .on(quote.id.eq(folderQuoteMapping.quote.id))
-                .where(folderQuoteMapping.folder.id.eq(folderId));
+        JPQLQuery query = from(qQuote)
+                .innerJoin(qFolderQuoteMapping)
+                .on(qQuote.id.eq(qFolderQuoteMapping.quote.id))
+                .where(qFolderQuoteMapping.folder.id.eq(folderId));
 
         final List<Quote> quotes = getQuerydsl().applyPagination(pageable, query).fetch();
         return new PageImpl<>(quotes, pageable, query.fetchCount());

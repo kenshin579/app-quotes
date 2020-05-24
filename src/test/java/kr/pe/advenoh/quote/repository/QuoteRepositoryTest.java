@@ -8,10 +8,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,5 +59,14 @@ public class QuoteRepositoryTest {
         assertThat(quotes.get(0).getUseYn()).isEqualTo(YN.N);
 
         assertThat(quotes.get(0).getAuthor().getId()).isEqualTo(saveAuthor.getId());
+    }
+
+    @Test
+    @Transactional
+    public void findAllByFolderId() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createDt");
+        Long folderId = 2L;
+        Page<Quote> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
+        log.info("quotes : {}", quotes.getContent());
     }
 }
