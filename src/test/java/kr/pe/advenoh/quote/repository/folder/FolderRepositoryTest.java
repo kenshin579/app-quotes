@@ -1,7 +1,8 @@
-package kr.pe.advenoh.quote.repository;
+package kr.pe.advenoh.quote.repository.folder;
 
 import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
-import kr.pe.advenoh.quote.model.entity.Folder;
+import kr.pe.advenoh.quote.repository.folder.FolderRepository;
+import kr.pe.advenoh.quote.repository.folder.FolderUserMappingRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package kr.pe.advenoh.quote.service;
 
 import kr.pe.advenoh.quote.model.entity.Tag;
-import kr.pe.advenoh.quote.repository.QuoteRepository;
+import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

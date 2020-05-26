@@ -4,14 +4,15 @@ import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
 import kr.pe.advenoh.quote.model.entity.Folder;
 import kr.pe.advenoh.quote.model.entity.FolderUserMapping;
 import kr.pe.advenoh.quote.model.entity.User;
-import kr.pe.advenoh.quote.repository.FolderQuoteMappingRepository;
-import kr.pe.advenoh.quote.repository.FolderRepository;
-import kr.pe.advenoh.quote.repository.FolderUserMappingRepository;
+import kr.pe.advenoh.quote.repository.folder.FolderQuoteMappingRepository;
+import kr.pe.advenoh.quote.repository.folder.FolderRepository;
+import kr.pe.advenoh.quote.repository.folder.FolderUserMappingRepository;
+import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
+import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,6 +30,10 @@ public class FolderService {
     private final FolderUserMappingRepository folderUserMappingRepository;
 
     private final FolderQuoteMappingRepository folderQuoteMappingRepository;
+
+    private final QuoteRepository quoteRepository;
+
+    private final QuoteTagMappingRepository quoteTagMappingRepository;
 
     private final ModelMapper modelMapper;
 
@@ -55,7 +60,7 @@ public class FolderService {
     }
 
     @Transactional
-    public void updateFolder(Long folderId, String folderName) {
+    public void renameFolder(Long folderId, String folderName) {
         Folder folder = folderRepository.getOne(folderId);
         folder.setFolderName(folderName);
     }
@@ -68,8 +73,17 @@ public class FolderService {
      */
     @Transactional
     public Integer deleteFolders(List<Long> folderIds) {
-        folderUserMappingRepository.deleteAllByIdInQuery(folderIds);
-        folderQuoteMappingRepository.deleteByQuoteIdQuery(folderIds);
-        return folderRepository.deleteAllByIdInQuery(folderIds);
+//        quoteRepository.deleteAllByIdInQuery(folderIds);
+        //todo: quotes_tags에 있는 것도 삭제해야 함
+        //todo: quotes도 삭제해야 함
+
+        List<Long> quoteIds = folderQuoteMappingRepository.getAllQuoteIdsByFolderIds(folderIds);
+        log.info("quoteIds : {}", quoteIds);
+
+        quoteTagMappingRepository.deleteAllByQuoteIds(quoteIds);
+        folderQuoteMappingRepository.deleteAllByFolderIds(folderIds);
+        quoteRepository.deleteAllByQuoteIds(quoteIds);
+        folderUserMappingRepository.deleteAllByFolderIds(folderIds);
+        return folderRepository.deleteAllByFolderIds(folderIds);
     }
 }

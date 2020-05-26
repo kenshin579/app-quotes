@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.repository;
+package kr.pe.advenoh.quote.repository.folder;
 
 import kr.pe.advenoh.quote.model.entity.Folder;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,5 +13,5 @@ import java.util.List;
 public interface FolderRepository extends JpaRepository<Folder, Long>, FolderRepositoryCustom {
     @Modifying
     @Query("DELETE FROM Folder f WHERE f.id IN :folderIds")
-    Integer deleteAllByIdInQuery(@Param("folderIds") List<Long> folderIds);
+    Integer deleteAllByFolderIds(@Param("folderIds") List<Long> folderIds);
 }

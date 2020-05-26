@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.repository;
+package kr.pe.advenoh.quote.repository.quote;
 
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -49,7 +49,6 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 //        on ml.live_seqno = j.live_seqno and j.use_yn = 'Y'
 //        left join tmon_media.media_owner o
 //        on o.owner_seqno = m.owner_seqno
-//
 //        JPQLQuery subQuery = from(qQuote)
 //                .;
 

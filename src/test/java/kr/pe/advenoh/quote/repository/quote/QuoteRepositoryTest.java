@@ -1,8 +1,10 @@
-package kr.pe.advenoh.quote.repository;
+package kr.pe.advenoh.quote.repository.quote;
 
 import kr.pe.advenoh.quote.model.entity.Author;
 import kr.pe.advenoh.quote.model.entity.Quote;
 import kr.pe.advenoh.quote.model.enums.YN;
+import kr.pe.advenoh.quote.repository.AuthorRepository;
+import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -12,17 +12,16 @@ import kr.pe.advenoh.quote.model.entity.QuoteTagMapping;
 import kr.pe.advenoh.quote.model.entity.Tag;
 import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.repository.AuthorRepository;
-import kr.pe.advenoh.quote.repository.FolderQuoteMappingRepository;
-import kr.pe.advenoh.quote.repository.FolderRepository;
-import kr.pe.advenoh.quote.repository.QuoteHistoryRepository;
-import kr.pe.advenoh.quote.repository.QuoteRepository;
-import kr.pe.advenoh.quote.repository.QuoteTagMappingRepository;
+import kr.pe.advenoh.quote.repository.folder.FolderQuoteMappingRepository;
+import kr.pe.advenoh.quote.repository.folder.FolderRepository;
+import kr.pe.advenoh.quote.repository.quote.QuoteHistoryRepository;
+import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
+import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
 import kr.pe.advenoh.quote.repository.TagRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -133,9 +132,9 @@ public class QuoteService {
     public Integer deleteQuotes(List<Long> quoteIds) {
         //todo : 삭제 호출이 안되는 이슈가 있음 (해당 폴더에서 명언을 삭제해야 함)
         //todo : 명언 삭제시 다른 table로 이동하고 batch 작업으로 migratino 하는 작업이 별도로 필요함
-        quoteTagMappingRepository.deleteAllByIdInQuery(quoteIds);
-        folderQuoteMappingRepository.deleteByQuoteIdQuery(quoteIds);
-        return quoteRepository.deleteAllByIdInQuery(quoteIds);
+        quoteTagMappingRepository.deleteAllByQuoteIds(quoteIds);
+        folderQuoteMappingRepository.deleteByQuoteIds(quoteIds);
+        return quoteRepository.deleteAllByQuoteIds(quoteIds);
     }
 
     @Transactional

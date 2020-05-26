@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.repository;
+package kr.pe.advenoh.quote.repository.quote;
 
 import kr.pe.advenoh.quote.model.entity.Quote;
 import org.springframework.data.domain.Page;

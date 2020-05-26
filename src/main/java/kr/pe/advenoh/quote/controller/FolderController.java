@@ -47,12 +47,12 @@ public class FolderController {
         return folderService.createFolder(folderName, currentUser);
     }
 
-    @PutMapping("/{folderId}")
-    public Object updateFolder(
+    @PutMapping("/{folderId}/rename")
+    public Object renameFolder(
             @PathVariable(name = "folderId") Long folderId,
             @RequestParam(value = "folderName") String folderName) {
         Map<String, Object> result = new HashMap<>();
-        folderService.updateFolder(folderId, folderName);
+        folderService.renameFolder(folderId, folderName);
         result.put("succeed", true);
         return result;
     }

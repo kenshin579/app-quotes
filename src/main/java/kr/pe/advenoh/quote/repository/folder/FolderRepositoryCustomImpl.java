@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.repository;
+package kr.pe.advenoh.quote.repository.folder;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;

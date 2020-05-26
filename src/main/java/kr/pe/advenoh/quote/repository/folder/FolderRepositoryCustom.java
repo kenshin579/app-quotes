@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.repository;
+package kr.pe.advenoh.quote.repository.folder;
 
 import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
 

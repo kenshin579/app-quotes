@@ -1,4 +1,4 @@
-package kr.pe.advenoh.quote.repository;
+package kr.pe.advenoh.quote.repository.folder;
 
 import kr.pe.advenoh.quote.model.entity.Folder;
 import kr.pe.advenoh.quote.model.entity.FolderUserMapping;
@@ -16,5 +16,5 @@ public interface FolderUserMappingRepository extends JpaRepository<FolderUserMap
 
     @Modifying
     @Query("DELETE FROM FolderUserMapping fu WHERE fu.folder.id IN :folderIds")
-    Integer deleteAllByIdInQuery(@Param("folderIds") List<Long> folderIds);
+    Integer deleteAllByFolderIds(@Param("folderIds") List<Long> folderIds);
 }

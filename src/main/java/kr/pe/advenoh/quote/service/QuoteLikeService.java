@@ -5,11 +5,10 @@ import kr.pe.advenoh.quote.model.entity.Quote;
 import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.model.enums.YN;
 import kr.pe.advenoh.quote.repository.LikeRepository;
-import kr.pe.advenoh.quote.repository.QuoteRepository;
+import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
