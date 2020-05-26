@@ -34,7 +34,8 @@ public class FolderRepositoryCustomImpl extends QuerydslRepositorySupport implem
         NumberPath<Long> aliasNumOfQuotes = Expressions.numberPath(Long.class, "numOfQuotes");
 
         List<FolderResponseDto> result = queryFactory
-                .select(Projections.constructor(FolderResponseDto.class, qFolder.id, qFolder.folderName, qFolder.id.count().as(aliasNumOfQuotes)))
+                .select(Projections.constructor(FolderResponseDto.class,
+                        qFolder.id, qFolder.folderName, qFolder.id.count().as(aliasNumOfQuotes)))
                 .from(qFolder)
                 .innerJoin(qFolderUserMapping).on(qFolder.id.eq(qFolderUserMapping.folder.id))
                 .innerJoin(qUser).on(qFolderUserMapping.user.id.eq(qUser.id))

@@ -1,5 +1,6 @@
 package kr.pe.advenoh.quote.repository.quote;
 
+import kr.pe.advenoh.quote.model.dto.QuoteResponseDto;
 import kr.pe.advenoh.quote.model.entity.Author;
 import kr.pe.advenoh.quote.model.entity.Quote;
 import kr.pe.advenoh.quote.model.enums.YN;
@@ -70,5 +71,11 @@ public class QuoteRepositoryTest {
         Long folderId = 2L;
         Page<Quote> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
         log.info("quotes : {}", quotes.getContent());
+    }
+
+    @Test
+    public void findAllByQuoteId() {
+        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(60L).get();
+        log.info("quoteResponseDto : {}", quoteResponseDto);
     }
 }

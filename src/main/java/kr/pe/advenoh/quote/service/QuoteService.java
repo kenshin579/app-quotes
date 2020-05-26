@@ -12,13 +12,13 @@ import kr.pe.advenoh.quote.model.entity.QuoteTagMapping;
 import kr.pe.advenoh.quote.model.entity.Tag;
 import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.repository.AuthorRepository;
+import kr.pe.advenoh.quote.repository.TagRepository;
+import kr.pe.advenoh.quote.repository.UserRepository;
 import kr.pe.advenoh.quote.repository.folder.FolderQuoteMappingRepository;
 import kr.pe.advenoh.quote.repository.folder.FolderRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteHistoryRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
-import kr.pe.advenoh.quote.repository.TagRepository;
-import kr.pe.advenoh.quote.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -93,19 +93,19 @@ public class QuoteService {
 
 
     @Transactional
-    public Object updateQuote(Long quoteId, QuoteRequestDto quoteRequestDto, Principal currentUser) {
-
+    public QuoteResponseDto updateQuote(Long quoteId, QuoteRequestDto quoteRequestDto, Principal currentUser) {
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
+            throw new RuntimeException("not found");
+        });
         return null;
     }
 
     //todo : 좋아요 & 공유수에 대한 정보도 내려주면 좋을 듯함
     @Transactional(readOnly = true)
     public QuoteResponseDto getQuote(Long quoteId) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
+        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(quoteId).orElseThrow(() -> {
             throw new RuntimeException("not found");
         });
-
-        QuoteResponseDto quoteResponseDto = modelMapper.map(quote, QuoteResponseDto.class);
         return quoteResponseDto;
     }
 

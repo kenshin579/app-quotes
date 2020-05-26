@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-
 public class QuoteResponseDto {
     private Long quoteId;
     private String quoteText;
@@ -21,7 +22,7 @@ public class QuoteResponseDto {
 //    private UserDto user;
     private YN useYn;
 
-    //todo : tags도 포함해야 할까?
+    private List<String> tags;
     //todo : 좋아요의 수도 포함해야 하지 않을까?
 
     @Builder

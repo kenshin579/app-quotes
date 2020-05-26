@@ -1,10 +1,15 @@
 package kr.pe.advenoh.quote.repository.quote;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import kr.pe.advenoh.quote.model.dto.QuoteResponseDto;
 import kr.pe.advenoh.quote.model.entity.QFolderQuoteMapping;
 import kr.pe.advenoh.quote.model.entity.QQuote;
+import kr.pe.advenoh.quote.model.entity.QQuoteTagMapping;
+import kr.pe.advenoh.quote.model.entity.QTag;
 import kr.pe.advenoh.quote.model.entity.Quote;
+import kr.pe.advenoh.quote.model.entity.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -12,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport implements QuoteRepositoryCustom {
@@ -62,5 +69,39 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
         final List<Quote> quotes = getQuerydsl().applyPagination(pageable, query).fetch();
         return new PageImpl<>(quotes, pageable, query.fetchCount());
 //        return null;
+    }
+
+    /**
+     * todo : query 한번에 실행하도록 변경하기
+     *
+     * http://www.querydsl.com/static/querydsl/3.4.3/reference/html/ch03s02.html
+     * https://adunhansa.tistory.com/225
+     *
+     * @param quoteId
+     * @return
+     */
+    @Override
+    public Optional<QuoteResponseDto> findAllByQuoteId(Long quoteId) {
+        QQuote qQuote = QQuote.quote;
+        QTag qTag = QTag.tag;
+        QQuoteTagMapping qQuoteTagMapping = QQuoteTagMapping.quoteTagMapping;
+
+        List<Tag> tags = queryFactory.select(Projections.constructor(Tag.class, qTag.tagName))
+                .from(qTag)
+                .innerJoin(qQuoteTagMapping).on(qTag.id.eq(qQuoteTagMapping.tag.id))
+                .where(qQuoteTagMapping.quote.id.eq(quoteId))
+                .fetch();
+
+        log.info("tags : {}", tags);
+
+        QuoteResponseDto result = queryFactory.select(Projections.constructor(QuoteResponseDto.class,
+                qQuote.id, qQuote.quoteText, qQuote.author.name.as("authorName"), qQuote.useYn))
+                .from(qQuote)
+//                .leftJoin(qQuoteTagMapping).on(qQuote.id.eq(qQuoteTagMapping.quote.id))
+                .where(qQuote.id.eq(quoteId))
+                .fetchOne();
+
+        result.setTags(tags.stream().map(Tag::getTagName).collect(Collectors.toList()));
+        return Optional.ofNullable(result);
     }
 }
