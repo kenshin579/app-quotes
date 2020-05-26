@@ -4,7 +4,6 @@ import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import * as quoteActions from 'store/modules/quote';
 import {withRouter} from "react-router-dom";
-import QuoteDeleteModal from "components/user/modal/QuoteDeleteModal";
 import QuoteEditModal from "../../components/user/modal/QuoteEditModal";
 
 

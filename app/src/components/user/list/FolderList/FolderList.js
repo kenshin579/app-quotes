@@ -10,30 +10,15 @@ const cx = classNames.bind(styles);
 
 const FolderList = ({folders, dropDownMenuNames, onMenuClick}) => {
     const folderView = [];
-    const menuItems = [];
-
-
-    const dropMenu = (
-        <Menu onClick={onMenuClick}>
-           {menuItems}
-        </Menu>
-    );
-
-    _(dropDownMenuNames).forEach((value, key) => {
-        menuItems.push(
-            <Menu.Item key={key}>
-                {value}
-            </Menu.Item>
-        )
-    });
 
     _(folders).forEach(folder => {
         folderView.push(
             <FolderItem key={folder.folderId}
                         folderId={folder.folderId}
+                        dropDownMenuNames={dropDownMenuNames}
                         folderName={folder.folderName}
                         numOfQuotes={folder.numOfQuotes}
-                        dropMenu={dropMenu}/>
+                        onMenuClick={onMenuClick}/>
         )
     });
 

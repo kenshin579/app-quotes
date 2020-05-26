@@ -4,17 +4,15 @@ import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import * as folderActions from 'store/modules/folder';
 import MyQuoteMain from "../../components/user/mypage/MyQuoteMain";
-import {Menu} from "antd";
-import {UserOutlined} from "@ant-design/icons";
 
 
 class MyQuoteMainContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            dropDownMenuNames : {
-                folderNameChange : '폴더 이름 변경',
-                folderDelete : '폴더 삭제'
+            dropDownMenuNames: {
+                folderRename: '폴더 이름 변경',
+                folderDelete: '폴더 삭제'
             }
         }
     }
@@ -41,11 +39,24 @@ class MyQuoteMainContainer extends Component {
     };
 
 
-    handleMenuClick = (e) => {
-        // message.info('Click on menu item.');
-        console.log('click', e);
-        // console.log('event', e.target["data-folder-id"]);
-        console.log('event', e.target);
+    handleMenuClick = async (folderId, e) => {
+        console.log('e.key', e.key);
+        console.log('folderId', folderId);
+        const {BaseActions} = this.props;
+        BaseActions.updateFolderModalInfo(folderId);
+
+        try {
+            switch (e.key) {
+                case "folderRename" :
+                    BaseActions.showModal('folderRename');
+                    break;
+                case "folderDelete":
+                    BaseActions.showModal('folderDelete');
+                    break;
+            }
+        } catch (e) {
+            console.error(e);
+        }
     };
 
     render() {

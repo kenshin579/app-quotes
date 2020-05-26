@@ -16,7 +16,7 @@ const QuoteMoveModal = ({visible, currentFolderId, folders, onMove, onCancel}) =
     _(folders).forEach(folder => {
             if (folder.folderId != currentFolderId) {
                 selectOptionListView.push(
-                    <Option value={`${folder.folderId}`}>{folder.folderName}</Option>
+                    <Option key={folder.folderId} value={`${folder.folderId}`}>{folder.folderName}</Option>
                 )
             }
         });

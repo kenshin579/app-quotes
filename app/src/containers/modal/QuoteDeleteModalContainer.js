@@ -4,7 +4,8 @@ import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import * as quoteActions from 'store/modules/quote';
 import {withRouter} from "react-router-dom";
-import QuoteDeleteModal from "components/user/modal/QuoteDeleteModal";
+import DeleteModal from "../../components/user/modal/DeleteModal";
+import {DELETE_MODAL_TYPE} from "../../constants";
 
 
 class QuoteCreateModalContainer extends Component {
@@ -32,9 +33,10 @@ class QuoteCreateModalContainer extends Component {
         const {visible} = this.props;
 
         return (
-            <QuoteDeleteModal visible={visible}
-                              onDelete={this.handleDelete}
-                              onCancel={this.handleCancel}/>
+            <DeleteModal visible={visible}
+                         itemType={DELETE_MODAL_TYPE.QUOTE}
+                         onDelete={this.handleDelete}
+                         onCancel={this.handleCancel}/>
         )
     }
 }

@@ -10,6 +10,7 @@ const SIGNUP = 'base/SIGNUP';
 const LOGIN = 'base/LOGIN';
 const LOGOUT = 'base/LOGOUT';
 const GET_CURRENT_USER = 'base/GET_CURRENT_USER';
+const UPDATE_FOLDER_MODAL_INFO = 'base/UPDATE_FOLDER_MODAL_INFO';
 
 // action creators
 export const showModal = createAction(SHOW_MODAL);
@@ -18,6 +19,7 @@ export const signup = createAction(SIGNUP, api.signup);
 export const login = createAction(LOGIN, api.login);
 export const logout = createAction(LOGOUT, api.logout);
 export const getCurrentUser = createAction(GET_CURRENT_USER, api.getCurrentUser);
+export const updateFolderModalInfo = createAction(UPDATE_FOLDER_MODAL_INFO);
 
 // initial state
 const initialState = Map({
@@ -26,7 +28,12 @@ const initialState = Map({
         quoteDelete: false,
         quoteEdit: false,
         quoteMove: false,
-        folderCreate: false
+        folderCreate: false,
+        folderRename: false,
+        folderDelete: false,
+    }),
+    folderModal: Map({
+       folderId: ''
     }),
     authenticated: false,
     user: Map({
@@ -44,6 +51,10 @@ export default handleActions({
     [HIDE_MODAL]: (state, action) => {
         const {payload: modalName} = action;
         return state.setIn(['modal', modalName], false);
+    },
+    [UPDATE_FOLDER_MODAL_INFO]: (state, action) => {
+        const {payload: folderId} = action;
+        return state.setIn(['folderModal', 'folderId'], folderId);
     },
     ...pender({
         type: LOGIN,

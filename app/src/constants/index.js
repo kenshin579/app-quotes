@@ -22,3 +22,8 @@ export const FOLDER_STAT_INFO_NAME_MAPPING = {
     totalNumOfLikes : '좋아요',
     totalNumOfTags : '태그'
 };
+
+export const DELETE_MODAL_TYPE = {
+    QUOTE : '명언',
+    FOLDER : '폴더'
+};

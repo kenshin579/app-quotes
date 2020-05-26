@@ -105,6 +105,23 @@ export const createFolder = (folderName) => {
     });
 };
 
+export const renameFolder = (folderId, folderName) => {
+    console.log('folderId', folderId);
+    console.log('folderName', folderName);
+
+    return request({
+        url: `/api/folders/${folderId}/rename?folderName=${folderName}`,
+        method: 'PUT'
+    });
+};
+
+export const deleteFolder = (folderId) => {
+    return request({
+        url: '/api/folders?folderIds=' + folderId,
+        method: 'DELETE'
+    });
+};
+
 export const createQuote = (folderId, quoteData) => {
     const formData = new FormData();
     for (const name in quoteData) {

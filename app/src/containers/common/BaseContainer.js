@@ -5,6 +5,8 @@ import QuoteDeleteModalContainer from '../modal/QuoteDeleteModalContainer';
 import QuoteEditModalContainer from '../modal/QuoteEditModalContainer';
 import QuoteMoveModalContainer from '../modal/QuoteMoveModalContainer';
 import FolderCreateModalContainer from "../modal/FolderCreateModalContainer";
+import FolderRenameModalContainer from "../modal/FolderRenameModalContainer";
+import FolderDeleteModalContainer from "../modal/FolderDeleteModalContainer";
 
 class BaseContainer extends Component {
     render() {
@@ -15,6 +17,8 @@ class BaseContainer extends Component {
                 <QuoteEditModalContainer/>
                 <QuoteMoveModalContainer/>
                 <FolderCreateModalContainer/>
+                <FolderRenameModalContainer/>
+                <FolderDeleteModalContainer/>
                 { /* 전역적으로 사용되는 컴포넌트들이 있다면 여기서 렌더링합니다. */}
             </div>
         )
