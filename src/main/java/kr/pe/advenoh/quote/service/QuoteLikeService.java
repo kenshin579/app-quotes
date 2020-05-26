@@ -10,8 +10,8 @@ import kr.pe.advenoh.quote.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Slf4j
@@ -38,6 +38,7 @@ public class QuoteLikeService {
         return this.getRegisteredQuoteLikeInfo(quoteId, username);
     }
 
+    @Transactional(readOnly = true)
     public YN getRegisteredQuoteLikeInfo(Long quoteId, String username) {
         Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
             throw new RuntimeException("not found");

@@ -14,8 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.List;
 
@@ -37,6 +37,7 @@ public class FolderService {
 
     private final ModelMapper modelMapper;
 
+    @Transactional(readOnly = true)
     public List<FolderResponseDto> getFolders(Principal currentUser) {
         log.info("[debug] currentUser : {}", currentUser);
         User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> {

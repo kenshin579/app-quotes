@@ -27,8 +27,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
@@ -98,8 +98,8 @@ public class QuoteService {
         return null;
     }
 
-    //todo: readOnly는 왜 옵션이 없나?
     //todo : 좋아요 & 공유수에 대한 정보도 내려주면 좋을 듯함
+    @Transactional(readOnly = true)
     public QuoteResponseDto getQuote(Long quoteId) {
         Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
             throw new RuntimeException("not found");
@@ -109,6 +109,7 @@ public class QuoteService {
         return quoteResponseDto;
     }
 
+    @Transactional(readOnly = true)
     public PagedResponseDto<QuoteResponseDto> getQuotes(Long folderId, Integer pageIndex, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, Sort.Direction.DESC, "createDt");
 
@@ -148,6 +149,7 @@ public class QuoteService {
         return true;
     }
 
+    @Transactional(readOnly = true)
     public PagedResponseDto<QuoteResponseDto> getTodayQuotes(Integer pageIndex, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, Sort.Direction.DESC, "createDt");
         Page<QuoteHistory> quoteHistories = quoteHistoryRepository.findAll(pageable);
@@ -181,6 +183,7 @@ public class QuoteService {
      *
      * @return
      */
+    @Transactional(readOnly = true)
     public QuoteResponseDto getRandomQuote() {
         Quote quote = quoteRepository.getRandomQuote();
         return modelMapper.map(quote, QuoteResponseDto.class);
