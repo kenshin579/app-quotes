@@ -23,6 +23,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>13</java.version>
         <jjwt.version>0.9.0</jjwt.version>
+        <querydsl.version>4.3.1</querydsl.version>
         <skipTests>true</skipTests>
     </properties>
 
@@ -90,6 +91,16 @@
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-apt</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-sql</artifactId>
+            <version>${querydsl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-sql-spring</artifactId>
+            <version>${querydsl.version}</version>
+        </dependency>
 
         <!-- For Working with Json Web Tokens (JWT) -->
         <dependency>
@@ -154,6 +165,53 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>${basedir}/src/main/resources/hibernate-mysql.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-maven-plugin</artifactId>
+                <version>${querydsl.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>export</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <jdbcDriver>${jdbc.driverClassName}</jdbcDriver>
+                    <jdbcUrl>${jdbc.url}</jdbcUrl>
+                    <packageName>kr.pe.advenoh.quote.model.entity</packageName>
+                    <jdbcUser>${jdbc.username}</jdbcUser>
+                    <jdbcPassword>${jdbc.password}</jdbcPassword>
+                    <namePrefix>S</namePrefix>
+                    <targetFolder>target/generated-sources/java</targetFolder>
+                    <sourceFolder>target/generated-sources/java</sourceFolder>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.49</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>com.github.eirslett</groupId>
