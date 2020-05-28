@@ -48,6 +48,14 @@ public class QuoteControllerTest {
 
     @Test
     @WithMockUser(username = "kenshin579", authorities = {"USER"})
+    public void getQuotes() throws Exception {
+        this.mvc.perform(get(BASE_PATH + "/folders/{folderId}", 1))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "kenshin579", authorities = {"USER"})
     public void getQuote() throws Exception {
         this.mvc.perform(get(BASE_PATH + "/{quoteId}", 1))
                 .andDo(print())

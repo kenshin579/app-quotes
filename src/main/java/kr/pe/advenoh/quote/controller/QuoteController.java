@@ -42,7 +42,6 @@ public class QuoteController {
     }
 
     //todo : 좋아요 정보를 같이 내려주는 게 좋아보임
-    //todo : tags 정보고 같이 내려줘야 함
     @GetMapping("/{quoteId}")
     public Object getQuote(@PathVariable(name = "quoteId") Long quoteId) {
         return quoteService.getQuote(quoteId);

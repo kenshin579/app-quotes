@@ -92,6 +92,7 @@ public class QuoteService {
     }
 
 
+    //todo: 수정하는 부분 작업 필요함
     @Transactional
     public QuoteResponseDto updateQuote(Long quoteId, QuoteRequestDto quoteRequestDto, Principal currentUser) {
         Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
@@ -113,7 +114,7 @@ public class QuoteService {
     public PagedResponseDto<QuoteResponseDto> getQuotes(Long folderId, Integer pageIndex, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, Sort.Direction.DESC, "createDt");
 
-        Page<Quote> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
+        Page<QuoteResponseDto> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
 
         if (quotes.getNumberOfElements() == 0) {
             return new PagedResponseDto<>(Collections.emptyList(), quotes.getNumber() + 1,

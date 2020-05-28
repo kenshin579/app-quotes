@@ -69,8 +69,8 @@ public class QuoteRepositoryTest {
     public void findAllByFolderId() {
         Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createDt");
         Long folderId = 2L;
-        Page<Quote> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
-        log.info("quotes : {}", quotes.getContent());
+        Page<QuoteResponseDto> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
+        log.info("QuoteResponseDto : {}", quotes.getContent());
     }
 
     @Test

@@ -17,19 +17,18 @@ public class QuoteResponseDto {
     private Long quoteId;
     private String quoteText;
     private String authorName;
-
-    //    @JsonProperty("userInfo")
-//    private UserDto user;
     private YN useYn;
 
     private List<String> tags;
+
     //todo : 좋아요의 수도 포함해야 하지 않을까?
 
     @Builder
-    public QuoteResponseDto(Long quoteId, String quoteText, String authorName, YN useYn) {
+    public QuoteResponseDto(Long quoteId, String quoteText, String authorName, YN useYn, List<String> tags) {
         this.quoteId = quoteId;
         this.quoteText = quoteText;
         this.authorName = authorName;
         this.useYn = useYn;
+        this.tags = tags;
     }
 }

@@ -2,7 +2,6 @@ package kr.pe.advenoh.quote.model.entity;
 
 import kr.pe.advenoh.quote.model.audit.DateAudit;
 import kr.pe.advenoh.quote.model.enums.YN;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @ToString
 @Entity
 @Table(name = "quotes")
