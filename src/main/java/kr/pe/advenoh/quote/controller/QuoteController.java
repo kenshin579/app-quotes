@@ -63,13 +63,12 @@ public class QuoteController {
     @PostMapping("/{quoteId}")
     public Object updateQuote(
             @PathVariable(name = "quoteId") Long quoteId,
-            @ModelAttribute QuoteRequestDto quoteRequestDto,
-            @CurrentUser Principal currentUser
+            @ModelAttribute QuoteRequestDto quoteRequestDto
     ) {
         if (quoteRequestDto.getQuoteText() == null) {
             throw new RuntimeException("need paramter!!!");
         }
-        return quoteService.updateQuote(quoteId, quoteRequestDto, currentUser);
+        return quoteService.updateQuote(quoteId, quoteRequestDto);
     }
 
     @DeleteMapping

@@ -32,10 +32,10 @@ public class QuoteServiceMockTest {
     }
 
     @Test
-    public void getAbsentTags() {
+    public void getDiffTags() {
         List<String> allTags = Arrays.asList("A", "B", "C", "D", "E");
         List<String> dbTags = Arrays.asList("B", "E");
-        List<Tag> absentTags = quoteService.getAbsentTags(allTags, dbTags);
+        List<Tag> absentTags = quoteService.getDiffTags(allTags, dbTags);
 
         assertThat(absentTags.stream().map(Tag::getTagName).collect(Collectors.toList())).isEqualTo(Arrays.asList("A", "C", "D"));
     }

@@ -14,4 +14,7 @@ public interface QuoteTagMappingRepository extends JpaRepository<QuoteTagMapping
     @Modifying
     @Query("DELETE FROM QuoteTagMapping q WHERE q.quote.id IN :quoteIds")
     Integer deleteAllByQuoteIds(@Param("quoteIds") List<Long> quoteIds);
+
+    @Query("SELECT qt FROM QuoteTagMapping qt WHERE qt.quote.id in :quoteIds")
+    List<QuoteTagMapping> findAllByQuoteIds(@Param("quoteIds") List<Long> quoteIds);
 }

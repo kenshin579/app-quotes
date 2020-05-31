@@ -30,8 +30,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -95,9 +97,11 @@ public class QuoteService {
 
         List<Tag> dbTagsEntity = tagRepository.findByTagNameIn(quoteRequestDto.getTags());
         List<String> dbTags = dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList());
-        List<Tag> absentTags = this.getAbsentTags(quoteRequestDto.getTags(), dbTags);
-        tagRepository.saveAll(absentTags);
-        dbTagsEntity.addAll(absentTags);
+        List<Tag> diffTags = this.getDiffTags(quoteRequestDto.getTags(), dbTags);
+        tagRepository.saveAll(diffTags);
+        dbTagsEntity.addAll(diffTags);
+
+        log.debug("[quotedebug] diffTags : {}", diffTags);
 
         Quote quote = Quote.builder()
                 .quoteText(quoteRequestDto.getQuoteText())
@@ -115,19 +119,40 @@ public class QuoteService {
 
         folderQuoteMappingRepository.save(new FolderQuoteMapping(folder, quote));
 
-        List<QuoteTagMapping> quoteTagMappings = dbTagsEntity.stream().map(tagEntity -> new QuoteTagMapping(quote, tagEntity)).collect(Collectors.toList());
-        quoteTagMappingRepository.saveAll(quoteTagMappings);
+        quoteTagMappingRepository.saveAll(dbTagsEntity.stream().map(tagEntity -> new QuoteTagMapping(quote, tagEntity)).collect(Collectors.toList()));
+        quoteResponseDto.setTags(dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList()));
         return quoteResponseDto;
     }
 
-
-    //todo: 수정하는 부분 작업 필요함
     @Transactional
-    public QuoteResponseDto updateQuote(Long quoteId, QuoteRequestDto quoteRequestDto, Principal currentUser) {
+    public QuoteResponseDto updateQuote(Long quoteId, QuoteRequestDto quoteRequestDto) {
         Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
             throw new RuntimeException("not found");
         });
-        return null;
+
+        Optional.ofNullable(quoteRequestDto.getQuoteText()).ifPresent(quote::setQuoteText);
+        Optional.ofNullable(quoteRequestDto.getUseYn()).ifPresent(quote::setUseYn);
+
+        Author author = authorRepository.getAuthorByName(quoteRequestDto.getAuthorName()).orElse(new Author(quoteRequestDto.getAuthorName()));
+        quote.setAuthor(author);
+
+        List<Tag> dbTagsEntity = tagRepository.findByTagNameIn(quoteRequestDto.getTags());
+        List<String> dbTags = dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList());
+        List<Tag> diffTags = this.getDiffTags(quoteRequestDto.getTags(), dbTags);
+        log.info("[quotedebug] diffTags: {}", diffTags);
+        tagRepository.saveAll(diffTags);
+        dbTagsEntity.addAll(diffTags);
+
+        quoteRepository.save(quote);
+
+        QuoteResponseDto quoteResponseDto = modelMapper.map(quote, QuoteResponseDto.class);
+
+        //todo: 기존 매핑을 삭제해야 함
+        quoteTagMappingRepository.deleteAllByQuoteIds(Arrays.asList(quote.getId()));
+
+        quoteTagMappingRepository.saveAll(dbTagsEntity.stream().map(tagEntity -> new QuoteTagMapping(quote, tagEntity)).collect(Collectors.toList()));
+        quoteResponseDto.setTags(dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList()));
+        return quoteResponseDto;
     }
 
     @Transactional
@@ -196,7 +221,14 @@ public class QuoteService {
         return quoteHistoryRepository.save(new QuoteHistory(quote));
     }
 
-    protected List<Tag> getAbsentTags(List<String> allTags, List<String> dbTags) {
+    /**
+     * allTags - dbTags의 태그를 반환함
+     *
+     * @param allTags the allTags
+     * @param dbTags the dbTags
+     * @return List
+     */
+    protected List<Tag> getDiffTags(List<String> allTags, List<String> dbTags) {
         return allTags.stream()
                 .filter(it -> !dbTags.contains(it))
                 .map(Tag::new)
