@@ -52,7 +52,7 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 
         SQLQuery<String> subQuery = sqlQueryFactory.selectDistinct(SQLExpressions.groupConcat(sTags.tagName))
                 .from(sTags)
-                .innerJoin(sQuotesTags)
+                .innerJoin(sQuotesTags).on(sTags.tagId.eq(sQuotesTags.tagId))
                 .where(sQuotes.quoteId.eq(sQuotesTags.quoteId));
 
         long totalElements = sqlQueryFactory.query()
@@ -73,7 +73,7 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
                 .orderBy(new OrderSpecifier(Order.DESC, sQuotes.createDt))
                 .fetch().stream()
                 .map(x -> new QuoteResponseDto(x.get(sQuotes.quoteId), x.get(sQuotes.quoteText), x.get(sAuthors.name),
-                        YN.valueOf(x.get(sQuotes.useYn)), Arrays.asList(x.get(x.size() - 1, String.class))))
+                        YN.valueOf(x.get(sQuotes.useYn)), Arrays.asList(x.get(x.size() - 1, String.class).split(","))))
                 .collect(Collectors.toList());
 
         log.info("quoteResponseDtos : {}", quoteResponseDtos);

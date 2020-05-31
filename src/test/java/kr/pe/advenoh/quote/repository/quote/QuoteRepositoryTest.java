@@ -84,6 +84,14 @@ public class QuoteRepositoryTest {
         assertThat(content.stream().map(QuoteResponseDto::getQuoteId).collect(Collectors.toList()))
                 .isSortedAccordingTo(Comparator.reverseOrder());
 
+        //체크 tags (중복이 없어야 함)
+        content.stream().forEach(x -> {
+            boolean duplicated = x.getTags().stream()
+                    .distinct()
+                    .count() != x.getTags().size();
+            assertThat(duplicated).isFalse();
+        });
+
         log.info("QuoteResponseDto : {}", quotes.getContent());
     }
 
