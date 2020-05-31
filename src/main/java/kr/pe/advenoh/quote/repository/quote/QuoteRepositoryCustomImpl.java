@@ -66,14 +66,22 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
                 .innerJoin(sFolders)
                 .innerJoin(sFoldersQuotes).on(sFoldersQuotes.folderId.eq(sFolders.folderId))
 //                .leftJoin(sQuotesTags).on(sQuotes.quoteId.eq(sQuotesTags.quoteId))
-                .leftJoin(sAuthors).on(sQuotes.authorId.eq(sAuthors.authorId))
+                .innerJoin(sAuthors).on(sQuotes.authorId.eq(sAuthors.authorId))
                 .where(sFolders.folderId.eq(folderId).and(sFoldersQuotes.quoteId.eq(sQuotes.quoteId)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(new OrderSpecifier(Order.DESC, sQuotes.createDt))
                 .fetch().stream()
-                .map(x -> new QuoteResponseDto(x.get(sQuotes.quoteId), x.get(sQuotes.quoteText), x.get(sAuthors.name),
-                        YN.valueOf(x.get(sQuotes.useYn)), Arrays.asList(x.get(x.size() - 1, String.class).split(","))))
+                .map(x -> {
+                    QuoteResponseDto quoteResponseDto = QuoteResponseDto.builder()
+                            .quoteId(x.get(sQuotes.quoteId))
+                            .quoteText(x.get(sQuotes.quoteText))
+                            .useYn(YN.valueOf(x.get(sQuotes.useYn)))
+                            .build();
+                    Optional.ofNullable(x.get(sAuthors.name)).ifPresent(quoteResponseDto::setAuthorName);
+                    Optional.ofNullable(x.get(x.size() - 1, String.class)).ifPresent(y -> quoteResponseDto.setTags(Arrays.asList(y.split(","))));
+                    return quoteResponseDto;
+                })
                 .collect(Collectors.toList());
 
         log.info("quoteResponseDtos : {}", quoteResponseDtos);
@@ -103,7 +111,7 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
                 .fetch();
 
         QuoteResponseDto result = queryFactory.select(Projections.fields(QuoteResponseDto.class,
-                qQuote.id, qQuote.quoteText, qQuote.author.name.as("authorName"), qQuote.useYn))
+                qQuote.id.as("quoteId"), qQuote.quoteText, qQuote.author.name.as("authorName"), qQuote.useYn))
                 .from(qQuote)
 //                .leftJoin(qQuoteTagMapping).on(qQuote.id.eq(qQuoteTagMapping.quote.id))
                 .where(qQuote.id.eq(quoteId))
