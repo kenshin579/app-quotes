@@ -15,7 +15,8 @@ class MyQuoteContainer extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         console.log('MyQuoteContainer componentDidUpdate :: prevProps', prevProps);
-        const {pagination} = this.props;
+        const {QuoteActions, pagination} = this.props;
+        // QuoteActions.initQuoteSelection();
 
         if (prevProps.folderId !== this.props.folderId
             || prevProps.pagination.total !== this.props.pagination.total) {
@@ -25,10 +26,12 @@ class MyQuoteContainer extends Component {
 
     loadData = async (pagination) => {
         const {QuoteActions, folderId} = this.props;
+        console.log('MyQuoteContainer loadData :: pagination', pagination, 'folderId', folderId);
 
         try {
             const response = await QuoteActions.getQuoteList(folderId, pagination);
             console.log('response', response);
+            // await QuoteActions.initQuoteSelection();
         } catch (e) {
             console.error(e);
         }
@@ -69,6 +72,8 @@ class MyQuoteContainer extends Component {
     render() {
         const {quotes, pagination, selectedRowKeys, loading} = this.props;
         const {handleTableChange, handleCreateModal, handleDeleteModal, handleEditModal, handleMoveModal} = this;
+        console.log('MyQuoteContainer :: selectedRowKeys', selectedRowKeys);
+
         const rowSelection = {
             selectedRowKeys,
             onChange: this.handleSelectChange,

@@ -11,17 +11,19 @@ class QuoteEditModalContainer extends Component {
     handleCancel = () => {
         const {BaseActions} = this.props;
         BaseActions.hideModal('quoteEdit');
+
     };
 
-    handleEdit = async () => {
-        const {BaseActions, QuoteActions, selectedRowKeys, pagination, currentUser, location, history} = this.props;
+    handleEdit = async (values) => {
+        const {BaseActions, QuoteActions, currentUser, location, history} = this.props;
         BaseActions.hideModal('quoteEdit');
 
+        console.log('values', values);
         let folderId = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
 
         try {
-            const response = await QuoteActions.deleteQuote(selectedRowKeys);
-            await QuoteActions.getQuoteList(folderId, pagination);
+            const response = await QuoteActions.editQuote(values);
+            console.log('response', response);
             history.push(`/users/${currentUser}/quotes/folders/${folderId}`);
         } catch (e) {
             console.error(e);
@@ -35,7 +37,7 @@ class QuoteEditModalContainer extends Component {
 
         return (
             <QuoteEditModal visible={visible}
-                            quote={selectedQuotes.length > 0 ? selectedQuotes[0] : []}
+                            quote={selectedQuotes.length > 0 ? selectedQuotes[0] : null}
                             onEdit={this.handleEdit}
                             onCancel={this.handleCancel}/>
         )

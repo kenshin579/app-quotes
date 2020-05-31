@@ -11,6 +11,16 @@ const QuoteEditModal = ({visible, quote, onEdit, onCancel}) => {
     const [form] = Form.useForm();
     const {TextArea} = Input;
 
+    if (quote) {
+        form.setFieldsValue({
+            quoteId: quote.quoteId,
+            quoteText: quote.quoteText,
+            authorName: quote.authorName,
+            tags: quote.tags,
+            useYn: quote.useYn
+        });
+    }
+
     return (
         <Modal
             visible={visible}
@@ -21,7 +31,7 @@ const QuoteEditModal = ({visible, quote, onEdit, onCancel}) => {
             onOk={() => {
                 form.validateFields()
                     .then(values => {
-                        form.resetFields();
+                        // form.resetFields();
                         onEdit(values);
                     })
                     .catch(info => {
@@ -33,12 +43,17 @@ const QuoteEditModal = ({visible, quote, onEdit, onCancel}) => {
                 form={form}
                 layout="vertical"
                 name="form_in_modal"
-                initialValues={{
-                    quoteText: quote.quoteText,
-                    authorName: quote.authorName,
-                    tags: quote.tags,
-                    useYn: quote.useYn
-                }}>
+                // initialValues={{
+                //     quoteText: quote.quoteText,
+                //     authorName: quote.authorName,
+                //     tags: quote.tags,
+                //     useYn: quote.useYn
+                // }}
+            >
+                <Form.Item name="quoteId"
+                           label="id">
+                    <Input disabled/>
+                </Form.Item>
                 <Form.Item name="quoteText"
                            label="명언"
                            rules={[

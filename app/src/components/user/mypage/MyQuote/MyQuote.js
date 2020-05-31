@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './MyQuote.scss';
 import classNames from 'classnames/bind';
-import {Button, Input, Layout, Table} from "antd";
+import {Button, Input, Layout, Table, Tag} from "antd";
 import {PlusOutlined, DeleteOutlined} from '@ant-design/icons';
 import _ from 'lodash';
 import MyQuoteHeader from "../MyQuoteHeader";
@@ -19,6 +19,12 @@ const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal
 
     const columns = [
         {
+            title: 'id',
+            dataIndex: 'quoteId',
+            key: 'quoteId',
+            width: 70
+        },
+        {
             title: '명언',
             dataIndex: 'quoteText',
             key: 'quoteText',
@@ -29,6 +35,22 @@ const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal
             dataIndex: 'authorName',
             key: 'authorName',
             width: 100
+        },
+        {
+            title: '태그',
+            dataIndex: 'tags',
+            key: 'tags',
+            render: tags => tags != null && (
+                <span>
+                    {tags.map(tag => {
+                        return (
+                            <Tag color={'geekblue'} key={tag}>
+                                {tag.toUpperCase()}
+                            </Tag>
+                        );
+                    })}
+                </span>
+            ),
         },
         {
             title: '공개여부',

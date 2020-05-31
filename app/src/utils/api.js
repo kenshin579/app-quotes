@@ -89,6 +89,42 @@ export const getQuoteList = (id, pagination) => {
     });
 };
 
+export const getQuote = (quoteId) => {
+    return request({
+        url: `/api/quotes/${quoteId}`,
+        method: 'GET'
+    });
+};
+
+export const createQuote = (folderId, quoteData) => {
+    const formData = new FormData();
+    for (const name in quoteData) {
+        formData.append(name, quoteData[name]);
+    }
+
+    return request({
+        url: '/api/quotes/folders/' + folderId,
+        method: 'POST',
+        body: formData
+    });
+};
+
+export const editQuote = (quoteData) => {
+    console.log('quoteData', quoteData);
+
+    const formData = new FormData();
+    for (const name in quoteData) {
+        formData.append(name, quoteData[name]);
+    }
+
+    return request({
+        url: `/api/quotes/${quoteData.quoteId}`,
+        method: 'POST',
+        body: formData
+    });
+};
+
+
 export const getFolderList = () => {
     return request({
         url: '/api/folders',
@@ -119,19 +155,6 @@ export const deleteFolder = (folderId) => {
     return request({
         url: '/api/folders?folderIds=' + folderId,
         method: 'DELETE'
-    });
-};
-
-export const createQuote = (folderId, quoteData) => {
-    const formData = new FormData();
-    for (const name in quoteData) {
-        formData.append(name, quoteData[name]);
-    }
-
-    return request({
-        url: '/api/quotes/folders/' + folderId,
-        method: 'POST',
-        body: formData
     });
 };
 
