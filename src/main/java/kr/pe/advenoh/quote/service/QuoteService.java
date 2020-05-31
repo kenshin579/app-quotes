@@ -56,6 +56,35 @@ public class QuoteService {
 
     private final ModelMapper modelMapper;
 
+    @Transactional(readOnly = true)
+    public PagedResponseDto<QuoteResponseDto> getQuotes(Long folderId, Integer pageIndex, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, Sort.Direction.DESC, "createDt");
+
+        Page<QuoteResponseDto> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
+
+        if (quotes.getNumberOfElements() == 0) {
+            return new PagedResponseDto<>(Collections.emptyList(), quotes.getNumber() + 1,
+                    quotes.getSize(), quotes.getTotalElements(), quotes.getTotalPages(), quotes.isLast());
+        }
+
+        List<QuoteResponseDto> quoteResponseList = quotes.getContent().stream().map(it -> {
+            QuoteResponseDto quoteResponseDto = modelMapper.map(it, QuoteResponseDto.class);
+            return quoteResponseDto;
+        }).collect(Collectors.toList());
+
+        return new PagedResponseDto<>(quoteResponseList, quotes.getNumber() + 1,
+                quotes.getSize(), quotes.getTotalElements(), quotes.getTotalPages(), quotes.isLast());
+    }
+
+    //todo : 좋아요 & 공유수에 대한 정보도 내려주면 좋을 듯함
+    @Transactional(readOnly = true)
+    public QuoteResponseDto getQuote(Long quoteId) {
+        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(quoteId).orElseThrow(() -> {
+            throw new RuntimeException("not found");
+        });
+        return quoteResponseDto;
+    }
+
     @Transactional
     public QuoteResponseDto createQuote(QuoteRequestDto quoteRequestDto, Principal currentUser) {
         log.info("[quotedebug] currentUser : {}", currentUser.getName());
@@ -99,35 +128,6 @@ public class QuoteService {
             throw new RuntimeException("not found");
         });
         return null;
-    }
-
-    //todo : 좋아요 & 공유수에 대한 정보도 내려주면 좋을 듯함
-    @Transactional(readOnly = true)
-    public QuoteResponseDto getQuote(Long quoteId) {
-        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(quoteId).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
-        return quoteResponseDto;
-    }
-
-    @Transactional(readOnly = true)
-    public PagedResponseDto<QuoteResponseDto> getQuotes(Long folderId, Integer pageIndex, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, Sort.Direction.DESC, "createDt");
-
-        Page<QuoteResponseDto> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
-
-        if (quotes.getNumberOfElements() == 0) {
-            return new PagedResponseDto<>(Collections.emptyList(), quotes.getNumber() + 1,
-                    quotes.getSize(), quotes.getTotalElements(), quotes.getTotalPages(), quotes.isLast());
-        }
-
-        List<QuoteResponseDto> quoteResponseList = quotes.getContent().stream().map(it -> {
-            QuoteResponseDto quoteResponseDto = modelMapper.map(it, QuoteResponseDto.class);
-            return quoteResponseDto;
-        }).collect(Collectors.toList());
-
-        return new PagedResponseDto<>(quoteResponseList, quotes.getNumber() + 1,
-                quotes.getSize(), quotes.getTotalElements(), quotes.getTotalPages(), quotes.isLast());
     }
 
     @Transactional

@@ -6,15 +6,7 @@ import com.querydsl.sql.SQLExpressions;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.SQLQueryFactory;
 import kr.pe.advenoh.quote.model.dto.QuoteResponseDto;
-import kr.pe.advenoh.quote.model.entity.QQuote;
-import kr.pe.advenoh.quote.model.entity.QQuoteTagMapping;
-import kr.pe.advenoh.quote.model.entity.QTag;
-import kr.pe.advenoh.quote.model.entity.Quote;
-import kr.pe.advenoh.quote.model.entity.SAuthors;
-import kr.pe.advenoh.quote.model.entity.SQuotes;
-import kr.pe.advenoh.quote.model.entity.SQuotesTags;
-import kr.pe.advenoh.quote.model.entity.STags;
-import kr.pe.advenoh.quote.model.entity.Tag;
+import kr.pe.advenoh.quote.model.entity.*;
 import kr.pe.advenoh.quote.model.enums.YN;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -53,6 +45,8 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
         SAuthors sAuthors = SAuthors.authors;
         STags sTags = STags.tags;
         SQuotesTags sQuotesTags = SQuotesTags.quotesTags;
+        SFolders sFolders = SFolders.folders;
+        SFoldersQuotes sFoldersQuotes = SFoldersQuotes.foldersQuotes;
 
         SQLQuery<String> subQuery = sqlQueryFactory.selectDistinct(SQLExpressions.groupConcat(sTags.tagName))
                 .from(sTags)
@@ -62,10 +56,26 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
                 .from(sQuotes)
                 .fetchCount();
 
+//        select q.quote_id,
+//                q.quote_text,
+//                q.use_yn,
+//                a.name,
+//                f.folder_id
+//        from quotes as q
+//        inner join folders as f
+//        inner join folders_quotes folders_quotes on folders_quotes.folder_id = f.folder_id
+//        left join quotes_tags quotes_tags on q.quote_id = quotes_tags.quote_id
+//        left join authors as a on q.author_id = a.author_id
+//        where f.folder_id = 10
+//        and folders_quotes.quote_id = q.quote_id;
+
         List<QuoteResponseDto> quoteResponseDtos = sqlQueryFactory.select(sQuotes.quoteId, sQuotes.quoteText, sQuotes.useYn, sAuthors.name, subQuery.as("tagList"))
                 .from(sQuotes)
-                .innerJoin(sQuotesTags).on(sQuotes.quoteId.eq(sQuotesTags.quoteId))
+                .innerJoin(sFolders)
+                .innerJoin(sFoldersQuotes).on(sFoldersQuotes.folderId.eq(sFolders.folderId))
+                .leftJoin(sQuotesTags).on(sQuotes.quoteId.eq(sQuotesTags.quoteId))
                 .leftJoin(sAuthors).on(sQuotes.authorId.eq(sAuthors.authorId))
+                .where(sFolders.folderId.eq(folderId).and(sFoldersQuotes.quoteId.eq(sQuotes.quoteId)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch().stream()

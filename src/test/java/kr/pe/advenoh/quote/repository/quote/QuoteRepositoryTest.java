@@ -70,6 +70,13 @@ public class QuoteRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createDt");
         Long folderId = 2L;
         Page<QuoteResponseDto> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
+        List<QuoteResponseDto> content = quotes.getContent();
+
+        assertThat(content.size()).isNotZero();
+        if (content.size() > 2) {
+            assertThat(content.get(0).getQuoteId()).isNotEqualTo(content.get(1).getQuoteId());
+        }
+
         log.info("QuoteResponseDto : {}", quotes.getContent());
     }
 
