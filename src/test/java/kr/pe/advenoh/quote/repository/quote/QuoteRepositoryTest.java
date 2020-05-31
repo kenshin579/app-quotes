@@ -20,7 +20,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -68,14 +70,19 @@ public class QuoteRepositoryTest {
     @Transactional
     public void findAllByFolderId() {
         Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createDt");
-        Long folderId = 2L;
+        Long folderId = 6L;
         Page<QuoteResponseDto> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
         List<QuoteResponseDto> content = quotes.getContent();
 
         assertThat(content.size()).isNotZero();
+
+        //todo : new Comparator로 작성하기
         if (content.size() > 2) {
             assertThat(content.get(0).getQuoteId()).isNotEqualTo(content.get(1).getQuoteId());
         }
+
+        assertThat(content.stream().map(QuoteResponseDto::getQuoteId).collect(Collectors.toList()))
+                .isSortedAccordingTo(Comparator.reverseOrder());
 
         log.info("QuoteResponseDto : {}", quotes.getContent());
     }

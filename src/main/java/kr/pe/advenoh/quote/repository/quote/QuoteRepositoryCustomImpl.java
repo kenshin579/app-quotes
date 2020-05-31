@@ -1,5 +1,7 @@
 package kr.pe.advenoh.quote.repository.quote;
 
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.sql.SQLExpressions;
@@ -50,38 +52,31 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
 
         SQLQuery<String> subQuery = sqlQueryFactory.selectDistinct(SQLExpressions.groupConcat(sTags.tagName))
                 .from(sTags)
+                .innerJoin(sQuotesTags)
                 .where(sQuotes.quoteId.eq(sQuotesTags.quoteId));
 
         long totalElements = sqlQueryFactory.query()
                 .from(sQuotes)
                 .fetchCount();
 
-//        select q.quote_id,
-//                q.quote_text,
-//                q.use_yn,
-//                a.name,
-//                f.folder_id
-//        from quotes as q
-//        inner join folders as f
-//        inner join folders_quotes folders_quotes on folders_quotes.folder_id = f.folder_id
-//        left join quotes_tags quotes_tags on q.quote_id = quotes_tags.quote_id
-//        left join authors as a on q.author_id = a.author_id
-//        where f.folder_id = 10
-//        and folders_quotes.quote_id = q.quote_id;
+        //todo : orderby pageable 인자로 넘겨준 값으로 정렬하도록 수정 필요함
 
         List<QuoteResponseDto> quoteResponseDtos = sqlQueryFactory.select(sQuotes.quoteId, sQuotes.quoteText, sQuotes.useYn, sAuthors.name, subQuery.as("tagList"))
                 .from(sQuotes)
                 .innerJoin(sFolders)
                 .innerJoin(sFoldersQuotes).on(sFoldersQuotes.folderId.eq(sFolders.folderId))
-                .leftJoin(sQuotesTags).on(sQuotes.quoteId.eq(sQuotesTags.quoteId))
+//                .leftJoin(sQuotesTags).on(sQuotes.quoteId.eq(sQuotesTags.quoteId))
                 .leftJoin(sAuthors).on(sQuotes.authorId.eq(sAuthors.authorId))
                 .where(sFolders.folderId.eq(folderId).and(sFoldersQuotes.quoteId.eq(sQuotes.quoteId)))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+                .orderBy(new OrderSpecifier(Order.DESC, sQuotes.createDt))
                 .fetch().stream()
                 .map(x -> new QuoteResponseDto(x.get(sQuotes.quoteId), x.get(sQuotes.quoteText), x.get(sAuthors.name),
                         YN.valueOf(x.get(sQuotes.useYn)), Arrays.asList(x.get(x.size() - 1, String.class))))
                 .collect(Collectors.toList());
+
+        log.info("quoteResponseDtos : {}", quoteResponseDtos);
 
         return new PageImpl<>(quoteResponseDtos, pageable, totalElements);
     }
