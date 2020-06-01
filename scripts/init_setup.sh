@@ -16,3 +16,13 @@ date
 sudo vim /etc/sysconfig/network
 sudo reboot
 sudo vim /etc/hosts
+
+# install packages
+sudo yum install mysql 
+sudo yum install git
+git --version
+
+# project setup
+mkdir -p ~/app/step1
+cd ~/app/step1
+git clone https://github.com/kenshin579/app-quotes.git
