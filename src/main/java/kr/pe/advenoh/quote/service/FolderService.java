@@ -40,17 +40,13 @@ public class FolderService {
     @Transactional(readOnly = true)
     public List<FolderResponseDto> getFolders(Principal currentUser) {
         log.info("[debug] currentUser : {}", currentUser);
-        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> new RuntimeException("not found"));
         return folderRepository.findAllByUsername(user.getUsername());
     }
 
     @Transactional
     public FolderResponseDto createFolder(String folderName, Principal currentUser) {
-        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> new RuntimeException("not found"));
 
         //todo: cascade는 다시 정리하는 걸로 함
         Folder folder = new Folder(folderName);

@@ -46,9 +46,7 @@ public class UserService implements IUserService {
         User user = modelMapper.map(signUpRequestDto, User.class);
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList(roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() -> {
-            throw new AppException(QuoteExceptionCode.ACCOUNT_ROLE_IS_NOT_SET.getMessage());
-        })));
+        user.setRoles(Arrays.asList(roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() -> new AppException(QuoteExceptionCode.ACCOUNT_ROLE_IS_NOT_SET.getMessage()))));
         return userRepository.save(user);
     }
 

@@ -26,13 +26,9 @@ public class QuoteLikeService {
 
     @Transactional
     public YN registerAndGetQuoteLikeInfo(Long quoteId, String username) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new RuntimeException("not found"));
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("not found"));
 
         likeRepository.save(new Like(quote, user));
         return this.getRegisteredQuoteLikeInfo(quoteId, username);
@@ -40,13 +36,9 @@ public class QuoteLikeService {
 
     @Transactional(readOnly = true)
     public YN getRegisteredQuoteLikeInfo(Long quoteId, String username) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new RuntimeException("not found"));
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("not found"));
 
         Optional<Like> quoteLikeOptional = likeRepository.findByQuoteAndUser(quote, user);
 
@@ -55,13 +47,9 @@ public class QuoteLikeService {
 
     @Transactional
     public YN unregisterAndGetQuoteLikeInfo(Long quoteId, String username) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new RuntimeException("not found"));
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("not found"));
 
         likeRepository.deleteLikeByQuoteAndUser(quote, user);
         return this.getRegisteredQuoteLikeInfo(quoteId, username);

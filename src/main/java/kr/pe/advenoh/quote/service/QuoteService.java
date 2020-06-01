@@ -81,9 +81,7 @@ public class QuoteService {
     //todo : 좋아요 & 공유수에 대한 정보도 내려주면 좋을 듯함
     @Transactional(readOnly = true)
     public QuoteResponseDto getQuote(Long quoteId) {
-        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(quoteId).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(quoteId).orElseThrow(() -> new RuntimeException("not found"));
         return quoteResponseDto;
     }
 
@@ -91,9 +89,7 @@ public class QuoteService {
     public QuoteResponseDto createQuote(QuoteRequestDto quoteRequestDto, Principal currentUser) {
         log.info("[quotedebug] currentUser : {}", currentUser.getName());
         Author author = authorRepository.getAuthorByName(quoteRequestDto.getAuthorName()).orElse(new Author(quoteRequestDto.getAuthorName()));
-        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> {
-            throw new RuntimeException("not found - user");
-        });
+        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> new RuntimeException("not found - user"));
 
         List<Tag> dbTagsEntity = tagRepository.findByTagNameIn(quoteRequestDto.getTags());
         List<String> dbTags = dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList());
@@ -113,9 +109,7 @@ public class QuoteService {
         quoteRepository.save(quote);
         QuoteResponseDto quoteResponseDto = modelMapper.map(quote, QuoteResponseDto.class);
 
-        Folder folder = folderRepository.findById(quoteRequestDto.getFolderId()).orElseThrow(() -> {
-            throw new RuntimeException("not found - folder");
-        });
+        Folder folder = folderRepository.findById(quoteRequestDto.getFolderId()).orElseThrow(() -> new RuntimeException("not found - folder"));
 
         folderQuoteMappingRepository.save(new FolderQuoteMapping(folder, quote));
 
@@ -126,9 +120,7 @@ public class QuoteService {
 
     @Transactional
     public QuoteResponseDto updateQuote(Long quoteId, QuoteRequestDto quoteRequestDto) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new RuntimeException("not found"));
 
         Optional.ofNullable(quoteRequestDto.getQuoteText()).ifPresent(quote::setQuoteText);
         Optional.ofNullable(quoteRequestDto.getUseYn()).ifPresent(quote::setUseYn);
@@ -166,9 +158,7 @@ public class QuoteService {
 
     @Transactional
     public boolean moveQuotes(List<Long> quoteIds, Long folderId) {
-        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> {
-            throw new RuntimeException("not found");
-        });
+        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new RuntimeException("not found"));
 
         List<FolderQuoteMapping> folderQuoteMappings = folderQuoteMappingRepository.findAllById(quoteIds);
         folderQuoteMappings.forEach(it -> it.setFolder(folder));
