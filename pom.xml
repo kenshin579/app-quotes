@@ -36,7 +36,7 @@
             </activation>
             <properties>
                 <environment>local</environment>
-                <resourceDir>${project.build.outputDirectory}</resourceDir>
+                <resourceDir>${project.basedir}/src/main/resources</resourceDir>
                 <maven.test.skip>true</maven.test.skip>
             </properties>
         </profile>
@@ -44,7 +44,7 @@
             <id>real</id>
             <properties>
                 <environment>real</environment>
-                <resourceDir>${project.build.outputDirectory}</resourceDir>
+                <resourceDir>${project.basedir}/src/main/resources</resourceDir>
                 <maven.test.skip>true</maven.test.skip>
             </properties>
         </profile>
