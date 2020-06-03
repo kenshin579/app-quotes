@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.advenoh</groupId>
-    <artifactId>app-best-quotes</artifactId>
+    <artifactId>app-quotes</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>app-best-quotes</name>
+    <name>app-quotes</name>
     <description>App for Best Quotes API server</description>
 
     <parent>
@@ -26,6 +26,27 @@
         <querydsl.version>4.3.1</querydsl.version>
         <skipTests>true</skipTests>
     </properties>
+
+
+    <profiles>
+        <profile>
+            <id>local</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <environment>local</environment>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+        <profile>
+            <id>real</id>
+            <properties>
+                <environment>real</environment>
+                <maven.test.skip>true</maven.test.skip>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <!--        <dependency>-->
@@ -178,7 +199,7 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>${basedir}/src/main/resources/hibernate-mysql.properties</file>
+                                <file>${basedir}/src/main/resources/application-${environment}-db.properties</file>
                             </files>
                         </configuration>
                     </execution>
@@ -196,11 +217,11 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jdbcDriver>${jdbc.driverClassName}</jdbcDriver>
-                    <jdbcUrl>${jdbc.url}</jdbcUrl>
+                    <jdbcDriver>${spring.datasource.driver-class-name}</jdbcDriver>
+                    <jdbcUrl>${spring.datasource.url}</jdbcUrl>
                     <packageName>kr.pe.advenoh.quote.model.entity</packageName>
-                    <jdbcUser>${jdbc.username}</jdbcUser>
-                    <jdbcPassword>${jdbc.password}</jdbcPassword>
+                    <jdbcUser>${spring.datasource.username}</jdbcUser>
+                    <jdbcPassword>${spring.datasource.password}</jdbcPassword>
                     <namePrefix>S</namePrefix>
                     <targetFolder>target/generated-sources/java</targetFolder>
                     <sourceFolder>target/generated-sources/java</sourceFolder>
