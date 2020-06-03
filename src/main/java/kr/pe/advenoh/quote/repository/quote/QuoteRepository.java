@@ -19,7 +19,8 @@ public interface QuoteRepository extends JpaRepository<Quote, Long>, QuoteReposi
     @Query("DELETE FROM Quote q WHERE q.id IN :quoteIds")
     Integer deleteAllByQuoteIds(@Param("quoteIds") List<Long> quoteIds);
 
+    //todo : 이것도 수정하도록 하자.
     //    @Query(value = "SELECT q FROM Quote q ORDER BY random()")
-    @Query(value = "SELECT * FROM quote_app.quotes ORDER BY rand() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM quotes ORDER BY rand() LIMIT 1", nativeQuery = true)
     Quote getRandomQuote();
 }
