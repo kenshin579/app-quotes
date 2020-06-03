@@ -36,6 +36,7 @@
             </activation>
             <properties>
                 <environment>local</environment>
+                <resourceDir>${project.build.outputDirectory}</resourceDir>
                 <maven.test.skip>true</maven.test.skip>
             </properties>
         </profile>
@@ -43,6 +44,7 @@
             <id>real</id>
             <properties>
                 <environment>real</environment>
+                <resourceDir>${project.build.outputDirectory}</resourceDir>
                 <maven.test.skip>true</maven.test.skip>
             </properties>
         </profile>
@@ -199,7 +201,7 @@
                         </goals>
                         <configuration>
                             <files>
-                                <file>${basedir}/src/main/resources/application-${environment}-db.properties</file>
+                                <file>${resourceDir}/application-${environment}-db.properties</file>
                             </files>
                         </configuration>
                     </execution>
