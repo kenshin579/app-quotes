@@ -10,13 +10,13 @@ git pull
 
 echo "> 프로젝트 Build 시작"
 
-./mvnw clean package
+./mvnw clean package -DresourceDir=/home/ec2-user/app -P real -Dspring.profiles.active=real
 
 echo "> step1 디렉토리로 이동"
 cd $REPOSITORY
 
 echo "> Build 파일 복사"
-cp cp $REPOSITORY/$PROJECT_NAME/target/*.jar $REPOSITORY/
+cp $REPOSITORY/$PROJECT_NAME/target/*.jar $REPOSITORY/
 
 echo "> 현재 구동중인 애플리케이션 pid 확인"
 CURRENT_PID=$(pgrep -f ${PROJECT_NAME}*.jar)
@@ -43,4 +43,7 @@ chmod +x $JAR_NAME
 
 echo "> $JAR_NAME 실행"
 
-nohup java -jar $REPOSITORY/$JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
+nohup java -jar \
+    -Dspring.config.location=classpath:/application.properties,/home/ec2-user/app/application-real.properties,/home/ec2-user/app/application-real-db.properties \
+    -Dspring.profiles.active=real \
+    $JAR_NAME > $REPOSITORY/nohup.out 2>&1 &
