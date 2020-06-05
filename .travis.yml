@@ -16,10 +16,10 @@ before_install:
   - chmod +x mvnw
 
 install:
-  - echo 'test'
+  - echo 'frank test'
 
 script:
-  - ./mvnw -X clean package -P real
+  - ./mvnw clean package -P real
 
 # CI 실행 완료시 메일로 알람
 notifications:
