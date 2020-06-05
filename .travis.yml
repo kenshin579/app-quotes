@@ -15,7 +15,11 @@ cache:
 before_install:
   - chmod +x mvnw
 
-script: "./mvnw -X clean package -P real"
+install:
+  - echo 'test'
+
+script:
+  - ./mvnw -X clean package -P real
 
 # CI 실행 완료시 메일로 알람
 notifications:
