@@ -208,35 +208,6 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>com.querydsl</groupId>
-                <artifactId>querydsl-maven-plugin</artifactId>
-                <version>${querydsl.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>export</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jdbcDriver>${spring.datasource.driver-class-name}</jdbcDriver>
-                    <jdbcUrl>${spring.datasource.url}</jdbcUrl>
-                    <packageName>kr.pe.advenoh.quote.model.entity</packageName>
-                    <jdbcUser>${spring.datasource.username}</jdbcUser>
-                    <jdbcPassword>${spring.datasource.password}</jdbcPassword>
-                    <namePrefix>S</namePrefix>
-                    <targetFolder>target/generated-sources/java</targetFolder>
-                    <sourceFolder>target/generated-sources/java</sourceFolder>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.mariadb.jdbc</groupId>
-                        <artifactId>mariadb-java-client</artifactId>
-                        <version>2.6.0</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>1.9.1</version>
