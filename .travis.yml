@@ -10,7 +10,7 @@ branches:
 cache:
   directories:
     - '$HOME/.m2/repository'
-    - '$HOME/.gradle'
+#    - '$HOME/.gradle'
 
 before_install:
   - chmod +x mvnw
@@ -21,10 +21,10 @@ install:
   - echo 'frank test'
 
 script:
-  - ./mvnw clean package -P real
+  - CI=false ./mvnw clean package -P real
 
-after_script:
-  - cat /home/travis/.npm/_logs/*.log
+#after_script:
+#  - cat /home/travis/.npm/_logs/*.log
 
 # CI 실행 완료시 메일로 알람
 notifications:
