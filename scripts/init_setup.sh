@@ -29,3 +29,7 @@ git clone https://github.com/kenshin579/app-quotes.git
 
 # with codedeploy
 mkdir ~/app/step2 && mkdir ~/app/step2/zip
+
+# ngnix install
+sudo yum -y install nginx
+sudo service nginx start
