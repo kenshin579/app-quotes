@@ -26,3 +26,6 @@ git --version
 mkdir -p ~/app/step1
 cd ~/app/step1
 git clone https://github.com/kenshin579/app-quotes.git
+
+# with codedeploy
+mkdir ~/app/step2 && mkdir ~/app/step2/zip
