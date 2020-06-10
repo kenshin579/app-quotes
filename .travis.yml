@@ -39,7 +39,7 @@ deploy:
     local_dir: deploy # before_deploy에서 생성한 디렉토리
     wait-until-deployed: true
     on:
-      repo: feature/quote-m1
+      branch: feature/quote-m1
 
 #after_script:
 #  - cat /home/travis/.npm/_logs/*.log
