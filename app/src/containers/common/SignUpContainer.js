@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import SignUp from "../../components/user/SignUp";
+import SignUp from "components/user/SignUp";
 import * as baseActions from 'store/modules/base';
 import {notification} from "antd";
 import {withRouter} from "react-router-dom";

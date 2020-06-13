@@ -1,6 +1,6 @@
 import {createAction, handleActions} from 'redux-actions';
 import {Map} from 'immutable';
-import * as api from "../../utils/api";
+import * as api from "utils/api";
 import {pender} from "redux-pender";
 
 // action types

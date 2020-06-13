@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import * as folderActions from 'store/modules/folder';
 import {withRouter} from "react-router-dom";
-import DeleteModal from "../../components/user/modal/DeleteModal";
+import DeleteModal from "components/user/modal/DeleteModal";
 import {DELETE_MODAL_TYPE} from "../../constants";
 
 

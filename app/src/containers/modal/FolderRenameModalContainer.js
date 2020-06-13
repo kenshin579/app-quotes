@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import * as folderActions from 'store/modules/folder';
 import {withRouter} from "react-router-dom";
-import FolderRenameModal from "../../components/user/modal/FolderRenameModal";
+import FolderRenameModal from "components/user/modal/FolderRenameModal";
 
 
 class FolderRenameModalContainer extends Component {

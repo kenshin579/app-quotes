@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as folderActions from 'store/modules/folder';
 import {withRouter} from "react-router-dom";
-import LeftSidebar from "../../components/user/LeftSidebar";
-import * as baseActions from "../../store/modules/base";
+import LeftSidebar from "components/user/LeftSidebar";
+import * as baseActions from "store/modules/base";
 
 class LeftSidebarContainer extends Component {
     componentDidMount() {

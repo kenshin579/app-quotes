@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './SearchQuote.scss';
 import classNames from 'classnames/bind';
 import {Input} from 'antd';
-import {convertNumberWithComma} from "../../../utils/numberformat";
+import {convertNumberWithComma} from "utils/numberformat";
 
 const cx = classNames.bind(styles);
 const {Search} = Input;

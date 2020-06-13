@@ -1,6 +1,6 @@
 import {createAction, handleActions} from 'redux-actions';
 import {fromJS, List, Map} from 'immutable';
-import * as api from "../../utils/api";
+import * as api from "utils/api";
 import {pender} from "redux-pender";
 import {QUOTE_PAGE_INDEX, QUOTE_PAGE_SIZE} from "../../constants";
 

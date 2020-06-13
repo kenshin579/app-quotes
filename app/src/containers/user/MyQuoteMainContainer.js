@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import * as folderActions from 'store/modules/folder';
-import MyQuoteMain from "../../components/user/mypage/MyQuoteMain";
+import MyQuoteMain from "components/user/mypage/MyQuoteMain";
 
 
 class MyQuoteMainContainer extends Component {

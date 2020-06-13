@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import * as quoteActions from 'store/modules/quote';
 import {withRouter} from "react-router-dom";
-import QuoteEditModal from "../../components/user/modal/QuoteEditModal";
+import QuoteEditModal from "components/user/modal/QuoteEditModal";
 
 
 class QuoteEditModalContainer extends Component {

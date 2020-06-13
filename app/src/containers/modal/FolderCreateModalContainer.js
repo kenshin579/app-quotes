@@ -4,7 +4,7 @@ import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import * as folderActions from 'store/modules/folder';
 import {withRouter} from "react-router-dom";
-import FolderCreateModal from "../../components/user/modal/FolderCreateModal";
+import FolderCreateModal from "components/user/modal/FolderCreateModal";
 
 
 class FolderCreateModalContainer extends Component {

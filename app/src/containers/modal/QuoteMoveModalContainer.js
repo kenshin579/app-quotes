@@ -2,10 +2,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
-import * as quoteActions from "../../store/modules/quote";
+import * as quoteActions from "store/modules/quote";
 import * as folderActions from 'store/modules/folder';
 import {withRouter} from "react-router-dom";
-import QuoteMoveModal from "../../components/user/modal/QuoteMoveModal";
+import QuoteMoveModal from "components/user/modal/QuoteMoveModal";
 
 
 class QuoteMoveModalContainer extends Component {

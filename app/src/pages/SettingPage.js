@@ -1,6 +1,6 @@
 import React from 'react';
-import SettingContainer from "../containers/user/SettingContainer";
-import UserTemplate from "../components/user/UserTemplate";
+import SettingContainer from "containers/user/SettingContainer";
+import UserTemplate from "components/user/UserTemplate";
 
 const SettingPage = () => {
     return (

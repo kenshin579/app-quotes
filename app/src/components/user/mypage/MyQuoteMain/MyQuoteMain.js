@@ -3,8 +3,8 @@ import styles from './MyQuoteMain.scss';
 import classNames from 'classnames/bind';
 import {Layout, Menu} from "antd";
 import {FolderOutlined} from '@ant-design/icons';
-import StatisticList from "../../list/StatisticList";
-import FolderList from "../../list/FolderList";
+import StatisticList from "components/user/list/StatisticList";
+import FolderList from "components/user/list/FolderList";
 import _ from "lodash";
 import {Link} from "react-router-dom";
 

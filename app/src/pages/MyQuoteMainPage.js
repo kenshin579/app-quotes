@@ -1,6 +1,6 @@
 import React from 'react';
-import MyQuoteMainContainer from "../containers/user/MyQuoteMainContainer";
-import UserTemplate from "../components/user/UserTemplate";
+import MyQuoteMainContainer from "containers/user/MyQuoteMainContainer";
+import UserTemplate from "components/user/UserTemplate";
 
 const MyQuoteMainPage = ({match}) => {
     const {id} = match.params;

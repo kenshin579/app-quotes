@@ -4,9 +4,9 @@ import QuoteCreateModalContainer from '../modal/QuoteCreateModalContainer';
 import QuoteDeleteModalContainer from '../modal/QuoteDeleteModalContainer';
 import QuoteEditModalContainer from '../modal/QuoteEditModalContainer';
 import QuoteMoveModalContainer from '../modal/QuoteMoveModalContainer';
-import FolderCreateModalContainer from "../modal/FolderCreateModalContainer";
-import FolderRenameModalContainer from "../modal/FolderRenameModalContainer";
-import FolderDeleteModalContainer from "../modal/FolderDeleteModalContainer";
+import FolderCreateModalContainer from "containers/modal/FolderCreateModalContainer";
+import FolderRenameModalContainer from "containers/modal/FolderRenameModalContainer";
+import FolderDeleteModalContainer from "containers/modal/FolderDeleteModalContainer";
 
 class BaseContainer extends Component {
     render() {

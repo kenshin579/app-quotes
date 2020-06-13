@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import AppHeader from "../../components/common/AppHeader";
+import AppHeader from "components/common/AppHeader";
 import {bindActionCreators} from "redux";
 import * as baseActions from 'store/modules/base';
 import {withRouter} from "react-router-dom";
 import {ACCESS_TOKEN} from "../../constants";
-import LoadingIndicator from "../../components/common/LoadingIndicator";
+import LoadingIndicator from "components/common/LoadingIndicator";
 
 class AppHeaderContainer extends Component {
     componentDidMount() {

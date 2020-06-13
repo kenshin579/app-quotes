@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
 import * as mainActions from 'store/modules/main';
-import LoadingIndicator from "../../components/common/LoadingIndicator";
+import LoadingIndicator from "components/common/LoadingIndicator";
 import {Button} from "antd";
 import {QUOTE_TODAY_SIZE} from "../../constants";
-import QuoteCarousel from "../../components/main/list/QuoteCarousel";
-import QuoteTimelineList from "../../components/main/list/QuoteTimelineList";
+import QuoteCarousel from "components/main/list/QuoteCarousel";
+import QuoteTimelineList from "components/main/list/QuoteTimelineList";
 
 class TodayQuoteListContainer extends Component {
 
