@@ -1,10 +1,6 @@
 import React from 'react';
-import styles from './QuoteMoveModal.scss';
-import classNames from 'classnames/bind';
 import {Form, Modal, Select} from "antd";
 import _ from "lodash";
-
-const cx = classNames.bind(styles);
 
 const {Option} = Select;
 

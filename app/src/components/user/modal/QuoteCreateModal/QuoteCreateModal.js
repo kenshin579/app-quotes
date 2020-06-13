@@ -1,9 +1,5 @@
 import React from 'react';
-import styles from './QuoteCreateModal.scss';
-import classNames from 'classnames/bind';
 import {Form, Input, Modal, Radio} from "antd";
-
-const cx = classNames.bind(styles);
 
 const QuoteCreateModal = ({visible, onCreate, onCancel}) => {
     const [form] = Form.useForm();

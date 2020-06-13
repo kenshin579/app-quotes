@@ -1,9 +1,5 @@
 import React from 'react';
-import styles from './QuoteEditModal.scss';
-import classNames from 'classnames/bind';
 import {Form, Input, Modal, Radio} from "antd";
-
-const cx = classNames.bind(styles);
 
 const QuoteEditModal = ({visible, quote, onEdit, onCancel}) => {
     console.log('quote', quote);

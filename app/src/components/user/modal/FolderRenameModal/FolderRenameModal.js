@@ -1,9 +1,5 @@
 import React from 'react';
-import styles from './FolderRenameModal.scss';
-import classNames from 'classnames/bind';
 import {Form, Input, Modal} from "antd";
-
-const cx = classNames.bind(styles);
 
 const FolderRenameModal = ({visible, onRename, onCancel}) => {
     const [form] = Form.useForm();
