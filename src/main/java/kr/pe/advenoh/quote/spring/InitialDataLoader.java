@@ -51,7 +51,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
         this.createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
 
         //테스트 사용자 생성
-        this.createUserIfNotFound("testuser", "test@test.com", "Test", "testpass", Arrays.asList(adminRole));
+//        this.createUserIfNotFound("testuser", "test@test.com", "Test", "testpass", Arrays.asList(adminRole));
     }
 
     @Transactional
