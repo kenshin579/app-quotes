@@ -2,12 +2,12 @@ import React from 'react';
 import styles from './MyQuoteHeader.scss';
 import classNames from 'classnames/bind';
 import {Button, Layout} from "antd";
-import {DeleteOutlined, PlusOutlined, ArrowRightOutlined, EditOutlined} from '@ant-design/icons';
+import {ArrowRightOutlined, DeleteOutlined, EditOutlined, PlusOutlined} from '@ant-design/icons';
 
 const cx = classNames.bind(styles);
 
 const MyQuoteHeader = ({selectedSize, onCreateModal, onEditModal, onDeleteModal, onMoveModal}) => {
-    const {Header, Content} = Layout;
+    const {Header} = Layout;
 
     const hasSelected = selectedSize > 0;
 

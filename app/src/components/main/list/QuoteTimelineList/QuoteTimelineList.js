@@ -1,8 +1,6 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import styles from './QuoteTimelineList.scss';
 import classNames from 'classnames/bind';
-import {Button, Carousel} from "antd";
-import {LeftCircleOutlined, RightCircleOutlined} from '@ant-design/icons';
 import _ from "lodash";
 
 const cx = classNames.bind(styles);

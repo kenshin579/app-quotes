@@ -40,18 +40,15 @@ const initialState = Map({
 // reducer
 export default handleActions({
     [SELECT_QUOTE]: (state, action) => {
-        console.log('select quote :: action.payload', action.payload);
         return state.set('selectedRowKeys', fromJS(action.payload));
     },
     [INIT_QUOTE_SELECTION]: (state, action) => {
-        console.log('INIT_QUOTE_SELECTION :: action.payload', action.payload);
         return state.set('INIT_QUOTE_SELECTION', List());
     },
     ...pender({
         type: GET_QUOTE_LIST,
         onSuccess: (state, action) => {
             const data = action.payload;
-            console.log('quote module :: data', data);
             return state.set('quotes', fromJS(data.content))
                 .setIn(['pagination', 'page'], parseInt(data.page, 10))
                 .setIn(['pagination', 'size'], parseInt(data.size, 10))

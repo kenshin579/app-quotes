@@ -1,16 +1,14 @@
 import React from 'react';
 import styles from './MyQuote.scss';
 import classNames from 'classnames/bind';
-import {Button, Input, Layout, Table, Tag} from "antd";
-import {PlusOutlined, DeleteOutlined} from '@ant-design/icons';
+import {Layout, Table, Tag} from "antd";
 import _ from 'lodash';
 import MyQuoteHeader from "../MyQuoteHeader";
 
 const cx = classNames.bind(styles);
 
 const MyQuote = ({quotes, rowSelection, pagination, onTableChange, onCreateModal, onEditModal, onDeleteModal, onMoveModal}) => {
-    const {Header, Content} = Layout;
-    const Search = Input.Search;
+    const {Content} = Layout;
 
     const quoteWithKey = _.map(quotes, x => {
         _.assign(x, {'key': x['quoteId']});

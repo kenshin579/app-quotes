@@ -3,7 +3,6 @@ import {Redirect, Route, withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 
 const AuthenticatedRoute = ({component: ComponentToRender, authenticated, ...rest}) => {
-    console.log('[FRANK] authenticated : ', authenticated);
     return (
         <Route
             {...rest}

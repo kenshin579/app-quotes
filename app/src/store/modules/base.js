@@ -65,7 +65,6 @@ export default handleActions({
     ...pender({
         type: LOGOUT,
         onSuccess: (state, action) => {
-            console.log('action.payload', action.payload);
             return state.set('authenticated', false)
                 .set('user', Map({}));
         }

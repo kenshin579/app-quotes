@@ -5,7 +5,6 @@ import classNames from 'classnames/bind';
 import AppHeaderContainer from "../../../containers/common/AppHeaderContainer";
 import SidebarContainer from "../../../containers/user/LeftSidebarContainer";
 
-const {Content} = Layout;
 const cx = classNames.bind(styles);
 
 const UserTemplate = ({children}) => (

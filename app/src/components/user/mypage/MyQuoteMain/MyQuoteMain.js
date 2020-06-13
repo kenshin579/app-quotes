@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './MyQuoteMain.scss';
 import classNames from 'classnames/bind';
 import {Layout, Menu} from "antd";
-import {FolderOutlined, UserOutlined, HomeOutlined, SettingOutlined} from '@ant-design/icons';
+import {FolderOutlined} from '@ant-design/icons';
 import StatisticList from "../../list/StatisticList";
 import FolderList from "../../list/FolderList";
 import _ from "lodash";

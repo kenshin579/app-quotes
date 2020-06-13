@@ -1,14 +1,13 @@
 import React from 'react';
 import styles from './QuoteItem.scss';
 import classNames from 'classnames/bind';
-import {Layout, Row} from 'antd';
+import {Layout} from 'antd';
 import {HeartOutlined} from "@ant-design/icons";
 
 const cx = classNames.bind(styles);
-const Header = Layout.Header;
 
 //todo : 현재 사용하지 않음
-const QuoteItem = ({key, quoteText, authorName}) => {
+const QuoteItem = ({quoteText, authorName}) => {
     return (
         <div className={cx('quote-card')}>
             <div className={cx('quote-text')}>

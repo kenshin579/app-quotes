@@ -2,7 +2,7 @@ import {createAction, handleActions} from 'redux-actions';
 import {fromJS, List, Map} from 'immutable';
 import * as api from "../../utils/api";
 import {pender} from "redux-pender";
-import {QUOTE_PAGE_INDEX, QUOTE_PAGE_SIZE, QUOTE_TODAY_INDEX, QUOTE_TODAY_SIZE} from "../../constants";
+import {QUOTE_TODAY_INDEX, QUOTE_TODAY_SIZE} from "../../constants";
 
 // action types
 const GET_RANDOM_LIST = 'main/GET_RANDOM_LIST';

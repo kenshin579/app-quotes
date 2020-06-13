@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import {Link} from 'react-router-dom';
 import {Layout, Menu, Sider} from 'antd';
 import _ from "lodash";
-import {FolderOutlined, HomeOutlined, SettingOutlined, FolderAddOutlined} from '@ant-design/icons';
+import {FolderAddOutlined, FolderOutlined, HomeOutlined, SettingOutlined} from '@ant-design/icons';
 
 const cx = classNames.bind(styles);
 

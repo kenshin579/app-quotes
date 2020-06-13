@@ -3,7 +3,6 @@ import styles from './RandomList.scss';
 import classNames from 'classnames/bind';
 import _ from "lodash";
 import QuoteItem from "../QuoteItem";
-import {List} from "antd";
 
 const cx = classNames.bind(styles);
 

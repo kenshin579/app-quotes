@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './FolderCreateModal.scss';
 import classNames from 'classnames/bind';
-import {Form, Input, Modal, Radio} from "antd";
+import {Form, Input, Modal} from "antd";
 
 const cx = classNames.bind(styles);
 

@@ -1,10 +1,9 @@
 import React from 'react';
 import styles from './FolderList.scss';
 import classNames from 'classnames/bind';
-import {Col, Dropdown, Layout, Menu, Row} from 'antd';
+import {Row} from 'antd';
 import _ from 'lodash';
 import FolderItem from "../FolderItem";
-import {UserOutlined, DownOutlined, FolderOutlined, DeleteOutlined} from "@ant-design/icons";
 
 const cx = classNames.bind(styles);
 

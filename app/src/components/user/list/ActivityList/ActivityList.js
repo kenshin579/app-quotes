@@ -7,6 +7,7 @@ import StatisticItem from "../StatisticItem";
 const cx = classNames.bind(styles);
 const Header = Layout.Header;
 
+//todo: 현재는 사용하지 않음
 const ActivityList = ({activityList}) => {
     const statisticView = [];
 
