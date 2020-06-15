@@ -44,7 +44,7 @@ public class FolderController {
     public Object createFolder(
             @RequestParam(value = "folderName") String folderName,
             @CurrentUser Principal currentUser) {
-        return folderService.createFolder(folderName, currentUser);
+        return folderService.createFolder(folderName, currentUser.getName());
     }
 
     @PutMapping("/{folderId}/rename")

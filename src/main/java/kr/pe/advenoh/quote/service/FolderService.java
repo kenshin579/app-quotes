@@ -45,8 +45,8 @@ public class FolderService {
     }
 
     @Transactional
-    public FolderResponseDto createFolder(String folderName, Principal currentUser) {
-        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> new RuntimeException("not found"));
+    public FolderResponseDto createFolder(String folderName, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("not found"));
 
         //todo: cascade는 다시 정리하는 걸로 함
         Folder folder = new Folder(folderName);

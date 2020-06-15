@@ -10,6 +10,7 @@ import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.model.enums.RoleType;
 import kr.pe.advenoh.quote.repository.RoleRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
+import kr.pe.advenoh.quote.util.AppConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -28,11 +29,14 @@ public class UserService implements IUserService {
 
     private final RoleRepository roleRepository;
 
+    private final FolderService folderService;
+
     private final PasswordEncoder passwordEncoder;
 
     private final ModelMapper modelMapper;
 
     @Override
+    @Transactional
     public User registerNewUserAccount(SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByUsername(signUpRequestDto.getUsername())) {
             throw new UserAlreadyExistException(QuoteExceptionCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST.getMessage());
@@ -47,7 +51,10 @@ public class UserService implements IUserService {
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList(roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() -> new AppException(QuoteExceptionCode.ACCOUNT_ROLE_IS_NOT_SET.getMessage()))));
-        return userRepository.save(user);
+
+        User save = userRepository.save(user);
+        folderService.createFolder(AppConstants.DEFAULT_FOLDER, user.getUsername());
+        return save;
     }
 
     @Transactional(readOnly = true)
