@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import argparse
 import enum
+import getpass
 import glob
 import json
 import os
@@ -24,34 +25,50 @@ import requests
 from requests import Request, Session
 
 DATA_DIR = 'data'
-API_QUOTE_URL = "http://localhost:8080/api/quotes/folders"
-API_LOGIN_URL = "http://localhost:8080/api/auth/login"
+HOSTNAME_LOCAL = 'http://localhost:8080'
+HOSTNAME_REAL = 'http://ec2-13-209-56-65.ap-northeast-2.compute.amazonaws.com'
+
+PATH_NAME_QUOTE_URL = "/api/quotes/folders"
+PATH_NAME_LOGIN_URL = "/api/auth/login"
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
-USERNAME = 'kenshin579'
-PASSWORD = '123456'
-REQUEST_FORM_DATA_BOUNDARY = "REQUEST_FORM_DATA_BOUNDARY"
-FORM_DATA_STARTING_PAYLOAD = '--{0}\r\nContent-Disposition: form-data; name=\\"'.format(REQUEST_FORM_DATA_BOUNDARY)
-FORM_DATA_MIDDLE_PAYLOAD = '\"\r\n\r\n'
-FORM_DATA_ENDING_PAYLOAD = '--{0}--'.format(REQUEST_FORM_DATA_BOUNDARY)
-REQUEST_CUSTOM_HEADER = {
-    'content-type': "multipart/form-data; boundary={}".format(REQUEST_FORM_DATA_BOUNDARY),
-    'Content-Type': "",
-    'cache-control': "no-cache"
-}
 
 
 class PARSE_MODE(enum.Enum):
-    INIT = 0
     START = 1
     END = 2
+
+
+class PasswordPromptAction(argparse.Action):
+    def __init__(self,
+                 option_strings,
+                 dest=None,
+                 nargs=0,
+                 default=None,
+                 required=False,
+                 type=None,
+                 metavar=None,
+                 help=None):
+        super(PasswordPromptAction, self).__init__(
+            option_strings=option_strings,
+            dest=dest,
+            nargs=nargs,
+            default=default,
+            required=required,
+            metavar=metavar,
+            type=type,
+            help=help)
+
+    def __call__(self, parser, args, values, option_string=None):
+        password = getpass.getpass()
+        setattr(args, self.dest, password)
 
 
 ################################################################################################
 # Functions
 #
 ################################################################################################
-def parse_quote_file(filename, lang=DEFAULT_LANG):
+def parse_quote_file(filename):
     parse_mode = PARSE_MODE.END
     print('filename -> ', filename)
     result = []
@@ -91,34 +108,38 @@ def parse_quote_epub(filename):
     #         print('line', line)
     return result
 
-def generate_form_data_payload(kwargs):
-    payload = ''
-    for key, value in kwargs.items():
-        payload += '{0}{1}{2}{3}\r\n'.format(FORM_DATA_STARTING_PAYLOAD, key, FORM_DATA_MIDDLE_PAYLOAD, value)
-    payload += FORM_DATA_ENDING_PAYLOAD
-    return payload
+
+def get_baseurl(phase):
+    if phase == 'local':
+        return HOSTNAME_LOCAL
+    elif phase == 'server':
+        return HOSTNAME_REAL
+    else:
+        print('no server', phase)
 
 
-def send_quotes(url, folder_id, quote_list):
+def get_token(url, username, password):
+    headers = {'Content-Type': 'application/json; charset=utf-8'}
+    login_json = {
+        "username": username,
+        "password": password
+    }
+    print('login_json', login_json)
+    print('url', url)
+    response = requests.post(url, data=json.dumps(login_json), headers=headers)
+    return response.json()
+
+
+def post_quotes(hostname_url, username, password, folder_id, quote_list):
     pprint.pprint(quote_list)
-    token = get_token(API_LOGIN_URL)
+    token = get_token(hostname_url + PATH_NAME_LOGIN_URL, username, password)
     headers = {
         'Authorization': token['token_TYPE'] + ' ' + token['accessToken']
     }
     for quote in quote_list:
         print('quote', quote)
-        response = requests.post(url + '/' + folder_id, data=quote, headers=headers)
+        response = requests.post(hostname_url + PATH_NAME_QUOTE_URL + '/' + folder_id, data=quote, headers=headers)
         # print("response", response.json())
-
-def get_token(url):
-    headers = {'Content-Type': 'application/json; charset=utf-8'}
-    login_json = {
-        "username": USERNAME,
-        "password": PASSWORD
-    }
-    response = requests.post(url, data=json.dumps(login_json), headers=headers)
-    # print('response', response.json())
-    return response.json()
 
 
 def send_bulk_quotes(url, quote_list):
@@ -126,6 +147,7 @@ def send_bulk_quotes(url, quote_list):
     print('quote_list', quote_list)
     # r = requests.post(url, data=json.dumps(quote_list), headers=headers)
     # print("r", r)
+
 
 ################################################################################################
 # Main function
@@ -142,8 +164,9 @@ def move_file(src, dst):
     else:
         print('not found :: source file', src)
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Uploading quotes to API server: " + API_QUOTE_URL)
+    parser = argparse.ArgumentParser(description="Uploading quotes to API server")
 
     subparsers = parser.add_subparsers(help='commands', dest='subcommand')
 
@@ -156,7 +179,13 @@ def main():
     required_group = txt_parser.add_argument_group('required option')
     required_group.add_argument("--folderid", action='store', help="set folderid", required=True)
     required_group.add_argument("-s", "--src", action="store", help="source file or directory name", required=True)
-    required_group.add_argument("-d", "--dst", action="store", help="destination directory (after upload)", required=True)
+    required_group.add_argument("-d", "--dst", action="store", help="destination directory (after upload)",
+                                required=True)
+    required_group.add_argument("--server", action='store', choices=["local", "real"],
+                                help="set server information for the action to carry on",
+                                required=True)
+    required_group.add_argument('-u', dest='username', type=str, required=True)
+    required_group.add_argument('-p', dest='password', action=PasswordPromptAction, type=str, required=True)
 
     # cafe subcommand
     # parser.add_argument("-t", "--tags", nargs='+', help="sending quotes to " + API_QUOTE_URL, required=True)
@@ -169,12 +198,14 @@ def main():
             if args.src:
                 if os.path.exists(args.src):
                     if os.path.isfile(args.src):
-                        send_quotes(API_QUOTE_URL, args.folderid, parse_quote_file(args.src))
+                        post_quotes(get_baseurl(args.server), args.username, args.password, args.folderid,
+                                    parse_quote_file(args.src))
                         move_file(args.src, args.dst)
                     elif os.path.isdir(args.src):
                         for file in glob.glob(os.path.join(args.src, "*.txt")):
                             if os.path.isfile(file):
-                                send_quotes(API_QUOTE_URL, args.folderid, parse_quote_file(file))
+                                post_quotes(get_baseurl(args.server), args.username, args.password, args.folderid,
+                                            parse_quote_file(file))
                                 move_file(file, args.dst)
                 else:
                     print("filename not found: " + args.file)
@@ -184,6 +215,7 @@ def main():
                     parse_quote_epub(args.epub)
                 else:
                     print("filename not found: " + args.epub)
+
 
 if __name__ == "__main__":
     sys.exit(main())
