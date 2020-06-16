@@ -7,6 +7,7 @@ import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.repository.folder.FolderQuoteMappingRepository;
 import kr.pe.advenoh.quote.repository.folder.FolderRepository;
 import kr.pe.advenoh.quote.repository.folder.FolderUserMappingRepository;
+import kr.pe.advenoh.quote.repository.quote.QuoteHistoryRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
@@ -34,6 +35,8 @@ public class FolderService {
     private final QuoteRepository quoteRepository;
 
     private final QuoteTagMappingRepository quoteTagMappingRepository;
+
+    private final QuoteHistoryRepository quoteHistoryRepository;
 
     private final ModelMapper modelMapper;
 
@@ -79,6 +82,7 @@ public class FolderService {
 
         quoteTagMappingRepository.deleteAllByQuoteIds(quoteIds);
         folderQuoteMappingRepository.deleteAllByFolderIds(folderIds);
+        quoteHistoryRepository.deleteAllByQuoteIds(quoteIds);
         quoteRepository.deleteAllByQuoteIds(quoteIds);
         folderUserMappingRepository.deleteAllByFolderIds(folderIds);
         return folderRepository.deleteAllByFolderIds(folderIds);
