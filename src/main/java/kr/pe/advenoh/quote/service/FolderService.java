@@ -79,12 +79,12 @@ public class FolderService {
 
         List<Long> quoteIds = folderQuoteMappingRepository.getAllQuoteIdsByFolderIds(folderIds);
         log.info("quoteIds : {}", quoteIds);
+        folderQuoteMappingRepository.deleteAllByFolderIds(folderIds);
         if (quoteIds.size() > 0) {
             quoteTagMappingRepository.deleteAllByQuoteIds(quoteIds);
             quoteHistoryRepository.deleteAllByQuoteIds(quoteIds);
             quoteRepository.deleteAllByQuoteIds(quoteIds);
         }
-        folderQuoteMappingRepository.deleteAllByFolderIds(folderIds);
         folderUserMappingRepository.deleteAllByFolderIds(folderIds);
         return folderRepository.deleteAllByFolderIds(folderIds);
     }
