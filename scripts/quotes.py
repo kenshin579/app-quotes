@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 import argparse
 import enum
+import glob
 import json
 import os
 import pprint
 import re
+import shutil
 import sys
 
 ################################################################################################
@@ -59,14 +61,14 @@ def parse_quote_file(filename, lang=DEFAULT_LANG):
         for line in f:
             line_count += 1
             if len(line.strip()) != 0:
-                print('each', line_count, ':', parse_mode, 'line', line.strip())
+                # print('each', line_count, ':', parse_mode, 'line', line.strip())
                 if parse_mode == PARSE_MODE.END and re.search('^#\s*tags\s*:', line) != None:
                     print('====> TAGS', line.strip())
                     parse_mode = PARSE_MODE.START
                     tags_line = line.strip().split(':')
                     for each_tag in tags_line[1].split(','):
                         tags.append(each_tag.strip())
-                    print('tags', tags)
+                    # print('tags', tags)
                 elif parse_mode == PARSE_MODE.START and re.search('^#\s*', line) == None:
                     print('====> QUOTE', line)
                     parse_mode = PARSE_MODE.END
@@ -106,7 +108,7 @@ def send_quotes(url, folder_id, quote_list):
     for quote in quote_list:
         print('quote', quote)
         response = requests.post(url + '/' + folder_id, data=quote, headers=headers)
-        print("response", response.json())
+        # print("response", response.json())
 
 def get_token(url):
     headers = {'Content-Type': 'application/json; charset=utf-8'}
@@ -115,7 +117,7 @@ def get_token(url):
         "password": PASSWORD
     }
     response = requests.post(url, data=json.dumps(login_json), headers=headers)
-    print('response', response.json())
+    # print('response', response.json())
     return response.json()
 
 
@@ -130,6 +132,16 @@ def send_bulk_quotes(url, quote_list):
 #
 ################################################################################################
 
+def move_file(src, dst):
+    if os.path.isfile(src):
+        if os.path.isdir(dst):
+            print(src, '->', dst)
+            shutil.move(src, dst)
+        else:
+            print('not found :: dst', dst)
+    else:
+        print('not found :: source file', src)
+
 def main():
     parser = argparse.ArgumentParser(description="Uploading quotes to API server: " + API_QUOTE_URL)
 
@@ -141,10 +153,10 @@ def main():
 
     # txt subcommand
     txt_parser = subparsers.add_parser('text', help='text subcommand')
-    txt_parser.add_argument("-f", "--file", action="store", help="insert quote from a file")
-
     required_group = txt_parser.add_argument_group('required option')
     required_group.add_argument("--folderid", action='store', help="set folderid", required=True)
+    required_group.add_argument("-s", "--src", action="store", help="source file or directory name", required=True)
+    required_group.add_argument("-d", "--dst", action="store", help="destination directory (after upload)", required=True)
 
     # cafe subcommand
     # parser.add_argument("-t", "--tags", nargs='+', help="sending quotes to " + API_QUOTE_URL, required=True)
@@ -154,11 +166,16 @@ def main():
 
     if args.subcommand:
         if args.subcommand == 'text':
-            if args.file:
-                if os.path.exists(args.file):
-                    result = parse_quote_file(args.file)
-                    print('result', result)
-                    send_quotes(API_QUOTE_URL, args.folderid, parse_quote_file(args.file))
+            if args.src:
+                if os.path.exists(args.src):
+                    if os.path.isfile(args.src):
+                        send_quotes(API_QUOTE_URL, args.folderid, parse_quote_file(args.src))
+                        move_file(args.src, args.dst)
+                    elif os.path.isdir(args.src):
+                        for file in glob.glob(os.path.join(args.src, "*.txt")):
+                            if os.path.isfile(file):
+                                send_quotes(API_QUOTE_URL, args.folderid, parse_quote_file(file))
+                                move_file(file, args.dst)
                 else:
                     print("filename not found: " + args.file)
         elif args.subcommand == 'epub':
