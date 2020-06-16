@@ -15,9 +15,9 @@ public class ScheduledTasks {
     @Autowired
     private QuoteService quoteService;
 
-    //    @Scheduled(cron = CRON_EXPRESSION_EVERY_DAY)
+    @Scheduled(cron = CRON_EXPRESSION_EVERY_DAY)
 //    @Scheduled(cron = CRON_EXPRESSION_EVERY_5_SECONDS)
-    @Scheduled(fixedRate = 10 * 60 * 1000)
+//    @Scheduled(fixedRate = 10 * 60 * 1000)
     public QuoteHistory generateDailyRandomQuote() {
         log.debug("[quotedebug] generate daily random quote");
         return quoteService.saveRandomQuote();
