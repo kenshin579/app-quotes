@@ -28,8 +28,8 @@ DATA_DIR = 'data'
 HOSTNAME_LOCAL = 'http://localhost:8080'
 HOSTNAME_REAL = 'http://ec2-13-209-56-65.ap-northeast-2.compute.amazonaws.com'
 
-PATH_NAME_QUOTE_URL = "/api/quotes/folders"
-PATH_NAME_LOGIN_URL = "/api/auth/login"
+PATH_NAME_QUOTE_URL = '/api/quotes/folders'
+PATH_NAME_LOGIN_URL = '/api/auth/login'
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
 
@@ -112,7 +112,7 @@ def parse_quote_epub(filename):
 def get_baseurl(phase):
     if phase == 'local':
         return HOSTNAME_LOCAL
-    elif phase == 'server':
+    elif phase == 'real':
         return HOSTNAME_REAL
     else:
         print('no server', phase)
