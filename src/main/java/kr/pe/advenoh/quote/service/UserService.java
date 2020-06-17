@@ -75,4 +75,12 @@ public class UserService implements IUserService {
 
         return modelMapper.map(user, UserProfileDto.class);
     }
+
+    @Transactional
+    public void deleteUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+
+        userRepository.deleteById(user.getId());
+    }
 }

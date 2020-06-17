@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,5 +54,10 @@ public class UserController {
             @ModelAttribute UserProfileDto userProfileDto) {
         userProfileDto.setUsername(username);
         return userService.updateUserProfile(userProfileDto);
+    }
+
+    @DeleteMapping("/{username}")
+    public void deleteUser(@PathVariable(value = "username") String username) {
+        userService.deleteUser(username);
     }
 }
