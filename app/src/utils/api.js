@@ -34,12 +34,15 @@ const objectToQueryString = (obj) => {
 
 
 export const login = (loginRequest) => {
-    console.log('loginRequest', loginRequest);
+    const formData = new FormData();
+    for (const name in loginRequest) {
+        formData.append(name, loginRequest[name]);
+    }
 
     return request({
         url: '/api/auth/login',
         method: 'POST',
-        body: JSON.stringify(loginRequest)
+        body: formData
     });
 };
 
@@ -55,11 +58,16 @@ export const getCurrentUser = () => {
 };
 
 export const signup = (signUpRequest) => {
+    const formData = new FormData();
+    for (const name in signUpRequest) {
+        formData.append(name, signUpRequest[name]);
+    }
+
     console.log('signUpRequest', signUpRequest);
     return request({
         url: "/api/auth/signup",
         method: 'POST',
-        body: JSON.stringify(signUpRequest)
+        body: formData
     });
 };
 
