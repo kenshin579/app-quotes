@@ -4,6 +4,7 @@ import kr.pe.advenoh.quote.exception.AppException;
 import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.exception.ResourceNotFoundException;
 import kr.pe.advenoh.quote.exception.UserAlreadyExistException;
+import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
 import kr.pe.advenoh.quote.model.dto.SignUpRequestDto;
 import kr.pe.advenoh.quote.model.dto.UserProfileDto;
 import kr.pe.advenoh.quote.model.entity.User;
@@ -19,7 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -81,6 +84,9 @@ public class UserService implements IUserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
 
+        List<FolderResponseDto> folders = folderService.getFolders(user.getUsername());
+
+        folderService.deleteFolders(folders.stream().map(FolderResponseDto::getFolderId).collect(Collectors.toList()));
         userRepository.deleteById(user.getId());
     }
 }
