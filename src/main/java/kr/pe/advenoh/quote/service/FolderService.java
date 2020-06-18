@@ -4,12 +4,12 @@ import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
 import kr.pe.advenoh.quote.model.entity.Folder;
 import kr.pe.advenoh.quote.model.entity.FolderUserMapping;
 import kr.pe.advenoh.quote.model.entity.User;
+import kr.pe.advenoh.quote.repository.UserRepository;
 import kr.pe.advenoh.quote.repository.folder.FolderQuoteMappingRepository;
 import kr.pe.advenoh.quote.repository.folder.FolderRepository;
 import kr.pe.advenoh.quote.repository.folder.FolderUserMappingRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteHistoryRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
-import kr.pe.advenoh.quote.repository.UserRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +17,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.security.Principal;
 import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
 public class FolderService {
+    //todo: dependency가 너무 많다. 이거 어떻게 개선하면 좋을 까?
+
     private final FolderRepository folderRepository;
 
     private final UserRepository userRepository;
@@ -41,9 +42,9 @@ public class FolderService {
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
-    public List<FolderResponseDto> getFolders(Principal currentUser) {
-        log.info("[debug] currentUser : {}", currentUser);
-        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> new RuntimeException("not found"));
+    public List<FolderResponseDto> getFolders(String username) {
+        log.info("[debug] username : {}", username);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("not found"));
         return folderRepository.findAllByUsername(user.getUsername());
     }
 

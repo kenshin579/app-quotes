@@ -30,7 +30,7 @@ public class FolderController {
     @GetMapping
     public Object getFolders(@CurrentUser Principal currentUser) {
         Map<String, Object> result = new HashMap<>();
-        List<FolderResponseDto> folders = folderService.getFolders(currentUser);
+        List<FolderResponseDto> folders = folderService.getFolders(currentUser.getName());
         FolderStatsResponseDto folderStatsResponseDto = FolderStatsResponseDto.builder()
                 .totalNumOfQuotes(folders.stream().mapToLong(FolderResponseDto::getNumOfQuotes).sum())
                 .totalNumOfLikes(0L)
