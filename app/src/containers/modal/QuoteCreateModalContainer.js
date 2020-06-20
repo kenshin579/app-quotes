@@ -14,7 +14,7 @@ class QuoteCreateModalContainer extends Component {
     };
 
     handleCreate = async (values) => {
-        const {BaseActions, QuoteActions, currentUser, location, history} = this.props;
+        const {BaseActions, QuoteActions, currentUser, pagination, location, history} = this.props;
         BaseActions.hideModal('quoteCreate');
 
         let folderId = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
@@ -22,14 +22,11 @@ class QuoteCreateModalContainer extends Component {
         try {
             const response = await QuoteActions.createQuote(folderId, values);
             console.log('response', response);
+            await QuoteActions.getQuoteList(folderId, pagination);
             history.push(`/users/${currentUser}/quotes/folders/${folderId}`);
-
-            //todo : 다시 로딩이 안됨
         } catch (e) {
             console.error(e);
         }
-
-
     };
 
     render() {
@@ -47,6 +44,11 @@ export default connect(
     (state) => ({
         visible: state.base.getIn(['modal', 'quoteCreate']),
         currentUser: state.base.getIn(['user', 'username']),
+        pagination: {
+            current: state.quote.getIn(['pagination', 'page']),
+            pageSize: state.quote.getIn(['pagination', 'size']),
+            total: state.quote.getIn(['pagination', 'totalElements']),
+        },
     }),
     (dispatch) => ({
         BaseActions: bindActionCreators(baseActions, dispatch),
