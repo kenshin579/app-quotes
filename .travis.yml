@@ -8,7 +8,7 @@ jdk:
 
 branches:
   only:
-    - feature/quote-m1
+    - master
 
 # Travis CI 서버의 Home
 cache:
@@ -21,8 +21,8 @@ before_install:
   - node -v
   - npm -v
 
-install:
-  - echo 'frank test'
+#install:
+#  - echo 'frank test'
 
 script:
   - CI=false ./mvnw clean package -P real
@@ -47,8 +47,8 @@ deploy:
     acl: private # zip 파일 접근을 private으로
     local_dir: deploy # before_deploy에서 생성한 디렉토리
     wait_until_deployed: true
-    on:
-      branch: feature/quote-m1
+#    on:
+#      branch: feature/quote-m1
   - provider: codedeploy
     access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
     secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
@@ -59,8 +59,8 @@ deploy:
     deployment_group: app-quotes-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
     region: ap-northeast-2
     wait_until_deployed: true
-    on:
-      branch: feature/quote-m1
+#    on:
+#      branch: feature/quote-m1
 
 #after_script:
 #  - cat /home/travis/.npm/_logs/*.log
