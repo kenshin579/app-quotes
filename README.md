@@ -1,4 +1,4 @@
-https://travis-ci.org/kenshin579/app-quotes.svg?branch=master
+[![Build Status](https://travis-ci.org/kenshin579/app-quotes.svg?branch=master)](https://travis-ci.org/kenshin579/app-quotes)
 
 Best Quotes API
 =====
