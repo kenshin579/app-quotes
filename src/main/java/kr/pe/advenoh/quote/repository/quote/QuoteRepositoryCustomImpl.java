@@ -60,7 +60,7 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
                 .innerJoin(qAuthor).on(qAuthor.id.eq(qQuote.author.id))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(new OrderSpecifier(Order.DESC, qQuote.createDt))
+                .orderBy(new OrderSpecifier(Order.DESC, qQuote.id))
                 .fetchResults();
 
         List<QuoteResponseDto> quoteResponseDtos = queryResults.getResults().stream()
