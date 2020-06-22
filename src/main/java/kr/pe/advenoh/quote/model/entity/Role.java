@@ -1,0 +1,37 @@
+package kr.pe.advenoh.quote.model.entity;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import kr.pe.advenoh.quote.model.enums.RoleType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Setter
+@Entity
+@NoArgsConstructor
+@Table(name = "roles")
+public class Role {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id", unique = true, nullable = false)
+    private Long id;
+
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;
+
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "roles_privileges",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "privilege_id"))
+    private List<Privilege> privileges = new ArrayList<>();
+
+    public Role(RoleType roleType) {
+        this.roleType = roleType;
+    }
+}

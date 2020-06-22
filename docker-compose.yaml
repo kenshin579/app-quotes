@@ -1,0 +1,20 @@
+version: '3.1'
+
+services:
+  mariadb:
+    image: mariadb:10.3
+    container_name: mariadb-app-quotes
+    environment:
+    - MYSQL_ROOT_PASSWORD=password
+    - MYSQL_DATABASE=app_quotes
+    - MYSQL_USER=mybatis
+    - MYSQL_PASSWORD=mybatis$$
+    - TZ=Asia/Seoul
+    volumes:
+    - ${HOME}/data/docker/mariadb_app_quotes:/var/lib/mysql
+    command:
+    - "mysqld"
+    - "--character-set-server=utf8mb4"
+    - "--collation-server=utf8mb4_unicode_ci"
+    ports:
+    - 3306:3306

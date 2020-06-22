@@ -1,0 +1,53 @@
+
+.quote-card {
+  margin-top: 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  transition: 0.3s;
+  width: 55%;
+  border-radius: 10px;
+}
+
+.quote-text {
+  margin: 20px 20px;
+  text-align: center;
+  font-size: 3vh;
+}
+
+.author {
+  &:before {
+    content: "- ";
+  }
+
+  color: #00a6bf;
+  text-align: right;
+  margin-right: 20px;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.1);
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+.curly-quotes {
+  //display: inline-block;
+  //vertical-align: top;
+  //height: 30px;
+  //line-height: 48px;
+  //font-size: 50px;
+  //opacity: .2;
+
+  &:before {
+    content: '\201C';
+    margin-right: 4px;
+    margin-left: -8px;
+  }
+
+  &:after {
+    content: '\201D';
+    margin-left: 4px;
+    margin-right: -8px;
+  }
+}
+
+.footer {
+  margin: 5px 5px
+}
+
