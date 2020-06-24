@@ -1,9 +1,7 @@
 package kr.pe.advenoh.quote.service;
 
-import kr.pe.advenoh.quote.exception.AppException;
+import kr.pe.advenoh.quote.exception.ApiException;
 import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
-import kr.pe.advenoh.quote.exception.ResourceNotFoundException;
-import kr.pe.advenoh.quote.exception.UserAlreadyExistException;
 import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
 import kr.pe.advenoh.quote.model.dto.SignUpRequestDto;
 import kr.pe.advenoh.quote.model.dto.UserProfileDto;
@@ -42,18 +40,18 @@ public class UserService implements IUserService {
     @Transactional
     public User registerNewUserAccount(SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByUsername(signUpRequestDto.getUsername())) {
-            throw new UserAlreadyExistException(QuoteExceptionCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST.getMessage());
+            throw new ApiException(QuoteExceptionCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST);
         }
 
         if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
-            throw new UserAlreadyExistException(QuoteExceptionCode.ACCOUNT_EMAIL_IS_ALREADY_EXIST.getMessage());
+            throw new ApiException(QuoteExceptionCode.ACCOUNT_EMAIL_IS_ALREADY_EXIST);
         }
 
         //새로운 사용자 생성
         User user = modelMapper.map(signUpRequestDto, User.class);
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList(roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() -> new AppException(QuoteExceptionCode.ACCOUNT_ROLE_IS_NOT_SET.getMessage()))));
+        user.setRoles(Arrays.asList(roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() -> new ApiException(QuoteExceptionCode.ACCOUNT_ROLE_IS_NOT_SET))));
 
         User save = userRepository.save(user);
         folderService.createFolder(AppConstants.DEFAULT_FOLDER, user.getUsername());
@@ -63,7 +61,7 @@ public class UserService implements IUserService {
     @Transactional(readOnly = true)
     public UserProfileDto getUserProfile(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+                .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
         return modelMapper.map(user, UserProfileDto.class);
     }
 
@@ -71,7 +69,7 @@ public class UserService implements IUserService {
     public UserProfileDto updateUserProfile(UserProfileDto userProfileDto) {
         String username = userProfileDto.getUsername();
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+                .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
         Optional.ofNullable(userProfileDto.getName()).ifPresent(user::setName);
         Optional.ofNullable(userProfileDto.getEmail()).ifPresent(user::setEmail);
@@ -82,7 +80,7 @@ public class UserService implements IUserService {
     @Transactional
     public void deleteUser(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
+                .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
         List<FolderResponseDto> folders = folderService.getFolders(user.getUsername());
 

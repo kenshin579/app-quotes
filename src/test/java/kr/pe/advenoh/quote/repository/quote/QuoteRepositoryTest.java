@@ -100,4 +100,11 @@ public class QuoteRepositoryTest {
         QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(60L).get();
         log.info("quoteResponseDto : {}", quoteResponseDto);
     }
+
+    //todo: 이 부분 아래 수정하기
+    @Test
+    public void findAllByQuoteId_데이터가_없는_경우() {
+        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(Long.MAX_VALUE).get();
+        log.info("quoteResponseDto : {}", quoteResponseDto);
+    }
 }
