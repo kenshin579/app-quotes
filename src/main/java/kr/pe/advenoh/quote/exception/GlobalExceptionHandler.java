@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler({Exception.class})
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     @ResponseBody
     public ResponseEntity<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception ex) {
         log.error("[exception] uri : {} {} msg : {} {}", request.getRequestURI(), request.getMethod(), ex.getMessage(), ex.getClass(), ex);
@@ -26,7 +24,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({ApiException.class})
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     @ResponseBody
     public ResponseEntity<?> handleAppException(HttpServletRequest request, HttpServletResponse response, ApiException ex) {
         log.error("[exception] uri : {} {} code : {} msg : {} {}", request.getRequestURI(), request.getMethod(), ex.getCode(), ex.getMessage(), ex.getClass(), ex);
