@@ -83,6 +83,7 @@ public class QuoteService {
     //todo : 좋아요 & 공유수에 대한 정보도 내려주면 좋을 듯함
     @Transactional(readOnly = true)
     public QuoteResponseDto getQuote(Long quoteId) {
+        //todo: httpStatu를 NOT_FOUND로 반환하는게 좋아보임
         QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(quoteId).orElseThrow(() -> new ApiException(QuoteExceptionCode.QUOTE_NOT_FOUND));
         return quoteResponseDto;
     }
