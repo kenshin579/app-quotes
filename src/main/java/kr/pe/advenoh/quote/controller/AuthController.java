@@ -71,7 +71,7 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         log.info("[authdebug] userId : {}", userPrincipal.getUsername());
-        //todo : invalidate token
+        //todo : invalidate token (jwt token이 expire 되지 않은 것을 redis에 blacklist로 담아두었다가 나중에 batch로 blacklist에서 제거하면 좋을 듯함)
         return new ResponseEntity<>(new ApiResponseDto(true, "logout successfully"), HttpStatus.OK);
     }
 }
