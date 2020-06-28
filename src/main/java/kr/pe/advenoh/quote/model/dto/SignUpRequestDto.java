@@ -1,14 +1,13 @@
 package kr.pe.advenoh.quote.model.dto;
 
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Getter
-@Setter
 @ToString(exclude = "password")
 public class SignUpRequestDto {
     @NotBlank
@@ -24,4 +23,12 @@ public class SignUpRequestDto {
     @NotBlank
     @Size(min = 6, max = 20)
     private String password;
+
+    @Builder
+    public SignUpRequestDto(String name, String username, String email, String password) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 }
