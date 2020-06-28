@@ -104,7 +104,9 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
                 .where(qQuote.id.eq(quoteId))
                 .fetchOne();
 
-        result.setTags(tags.stream().map(Tag::getTagName).collect(Collectors.toList()));
+        if (result != null) {
+            result.setTags(tags.stream().map(Tag::getTagName).collect(Collectors.toList()));
+        }
         return Optional.ofNullable(result);
     }
 }

@@ -1,5 +1,7 @@
 package kr.pe.advenoh.quote.service;
 
+import kr.pe.advenoh.quote.exception.ApiException;
+import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.dto.PagedResponseDto;
 import kr.pe.advenoh.quote.model.dto.QuoteRequestDto;
 import kr.pe.advenoh.quote.model.dto.QuoteResponseDto;
@@ -81,7 +83,8 @@ public class QuoteService {
     //todo : 좋아요 & 공유수에 대한 정보도 내려주면 좋을 듯함
     @Transactional(readOnly = true)
     public QuoteResponseDto getQuote(Long quoteId) {
-        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(quoteId).orElseThrow(() -> new RuntimeException("not found"));
+        //todo: httpStatu를 NOT_FOUND로 반환하는게 좋아보임
+        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(quoteId).orElseThrow(() -> new ApiException(QuoteExceptionCode.QUOTE_NOT_FOUND));
         return quoteResponseDto;
     }
 
@@ -89,7 +92,7 @@ public class QuoteService {
     public QuoteResponseDto createQuote(QuoteRequestDto quoteRequestDto, Principal currentUser) {
         log.info("[quotedebug] currentUser : {}", currentUser.getName());
         Author author = authorRepository.getAuthorByName(quoteRequestDto.getAuthorName()).orElse(new Author(quoteRequestDto.getAuthorName()));
-        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> new RuntimeException("not found - user"));
+        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
         List<Tag> dbTagsEntity = tagRepository.findByTagNameIn(quoteRequestDto.getTags());
         List<String> dbTags = dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList());
@@ -109,7 +112,7 @@ public class QuoteService {
         quoteRepository.save(quote);
         QuoteResponseDto quoteResponseDto = modelMapper.map(quote, QuoteResponseDto.class);
 
-        Folder folder = folderRepository.findById(quoteRequestDto.getFolderId()).orElseThrow(() -> new RuntimeException("not found - folder"));
+        Folder folder = folderRepository.findById(quoteRequestDto.getFolderId()).orElseThrow(() -> new ApiException(QuoteExceptionCode.FOLDER_NOT_FOUND));
 
         folderQuoteMappingRepository.save(new FolderQuoteMapping(folder, quote));
 
@@ -120,7 +123,7 @@ public class QuoteService {
 
     @Transactional
     public QuoteResponseDto updateQuote(Long quoteId, QuoteRequestDto quoteRequestDto) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new RuntimeException("not found"));
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new ApiException(QuoteExceptionCode.QUOTE_NOT_FOUND));
 
         Optional.ofNullable(quoteRequestDto.getQuoteText()).ifPresent(quote::setQuoteText);
         Optional.ofNullable(quoteRequestDto.getUseYn()).ifPresent(quote::setUseYn);
@@ -158,7 +161,7 @@ public class QuoteService {
 
     @Transactional
     public boolean moveQuotes(List<Long> quoteIds, Long folderId) {
-        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new RuntimeException("not found"));
+        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new ApiException(QuoteExceptionCode.FOLDER_NOT_FOUND));
 
         List<FolderQuoteMapping> folderQuoteMappings = folderQuoteMappingRepository.findAllById(quoteIds);
         folderQuoteMappings.forEach(it -> it.setFolder(folder));

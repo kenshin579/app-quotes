@@ -1,6 +1,7 @@
 package kr.pe.advenoh.quote.spring.security;
 
-import kr.pe.advenoh.quote.exception.ResourceNotFoundException;
+import kr.pe.advenoh.quote.exception.ApiException;
+import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserById(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+                .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
         return UserPrincipal.create(user);
     }
 }

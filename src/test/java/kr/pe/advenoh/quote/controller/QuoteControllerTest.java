@@ -1,13 +1,11 @@
 package kr.pe.advenoh.quote.controller;
 
 import com.jayway.jsonpath.JsonPath;
+import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.entity.QuoteTagMapping;
 import kr.pe.advenoh.quote.model.enums.YN;
-import kr.pe.advenoh.quote.repository.AuthorRepository;
-import kr.pe.advenoh.quote.repository.TagRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,6 +134,17 @@ public class QuoteControllerTest {
         this.mvc.perform(get(BASE_PATH + "/{quoteId}", 1))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "kenshin579", authorities = {"USER"})
+    public void getQuote_ApiException_발생시_response_포멧_확인() throws Exception {
+        this.mvc.perform(get(BASE_PATH + "/{quoteId}", Integer.MAX_VALUE))
+                .andDo(print())
+                .andExpect(status().isServiceUnavailable())
+                .andExpect(jsonPath("$.status", is("SERVICE_UNAVAILABLE")))
+                .andExpect(jsonPath("$.message", is(QuoteExceptionCode.QUOTE_NOT_FOUND.getMessage())))
+                .andExpect(jsonPath("$.code", is(QuoteExceptionCode.QUOTE_NOT_FOUND.getCode())));
     }
 
     private List<String> getRandomTags(String prefix, int max) {

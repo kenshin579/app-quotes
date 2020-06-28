@@ -1,5 +1,7 @@
 package kr.pe.advenoh.quote.service;
 
+import kr.pe.advenoh.quote.exception.ApiException;
+import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
 import kr.pe.advenoh.quote.model.entity.Folder;
 import kr.pe.advenoh.quote.model.entity.FolderUserMapping;
@@ -44,13 +46,13 @@ public class FolderService {
     @Transactional(readOnly = true)
     public List<FolderResponseDto> getFolders(String username) {
         log.info("[debug] username : {}", username);
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
         return folderRepository.findAllByUsername(user.getUsername());
     }
 
     @Transactional
     public FolderResponseDto createFolder(String folderName, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("not found"));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
         //todo: cascade는 다시 정리하는 걸로 함
         Folder folder = new Folder(folderName);

@@ -47,11 +47,12 @@ public class FolderControllerTest {
         username = TestUtils.generateRandomString(5);
         log.info("username : {}", username);
 
-        SignUpRequestDto signUpRequestDto = new SignUpRequestDto();
-        signUpRequestDto.setUsername(username);
-        signUpRequestDto.setEmail("test@sdf.com");
-        signUpRequestDto.setName("test");
-        signUpRequestDto.setPassword("123456");
+        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+                .username(username)
+                .email("test@sdf.com")
+                .name("test")
+                .password("123456")
+                .build();
         userService.registerNewUserAccount(signUpRequestDto);
     }
 
