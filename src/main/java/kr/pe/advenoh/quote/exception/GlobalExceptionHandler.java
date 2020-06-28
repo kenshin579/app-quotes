@@ -4,16 +4,29 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public ResponseEntity<?> handleMethodArgumentNotValidExceptionException(HttpServletRequest request, HttpServletResponse response, Exception ex) {
+        List<String> details = new ArrayList<>();
+        details.add(ex.getLocalizedMessage());
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST, QuoteExceptionCode.REQUEST_INVALID.getMessage(),
+                QuoteExceptionCode.REQUEST_INVALID.getCode(), details);
+        return new ResponseEntity<Object>(error, error.getStatus());
+    }
 
     @ExceptionHandler({Exception.class})
     @ResponseBody

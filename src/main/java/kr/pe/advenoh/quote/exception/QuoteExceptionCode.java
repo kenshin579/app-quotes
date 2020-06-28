@@ -9,6 +9,7 @@ public enum QuoteExceptionCode implements ExceptionCode {
     quote   : 20000
     folder  : 30000
     user    : 40000
+    system  : 50000
     */
 
     ACCOUNT_USER_NOT_FOUND("10000", "User not found with username or email : %s"),
@@ -22,7 +23,9 @@ public enum QuoteExceptionCode implements ExceptionCode {
 
     FOLDER_NOT_FOUND("30000", "요청하신 폴더 정보를 찾을 수 없습니다"),
 
-    USER_NOT_FOUND("40000", "요청하신 사용자 정보를 찾을 수 없습니다")
+    USER_NOT_FOUND("40000", "요청하신 사용자 정보를 찾을 수 없습니다"),
+
+    REQUEST_INVALID("50000", "요청하신 값이 잘못 되었습니다. 입력값을 확인해주세요")
     ;
 
     private String code;
