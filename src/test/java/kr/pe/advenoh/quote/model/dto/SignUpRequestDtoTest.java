@@ -1,7 +1,7 @@
 package kr.pe.advenoh.quote.model.dto;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -11,19 +11,19 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SignUpRequestDtoTest {
+class SignUpRequestDtoTest {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
     private SignUpRequestDto signUpRequestDto;
 
-    @BeforeClass
+    @BeforeAll
     public static void createValidator() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
         validator = validatorFactory.getValidator();
     }
 
     @Test
-    public void 정상요청인_경우에는_오류가_없다() {
+    void 정상요청인_경우에는_오류가_없다() {
         signUpRequestDto = SignUpRequestDto.builder()
                 .name("Frank")
                 .username("test")

@@ -5,14 +5,12 @@ import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.entity.QuoteTagMapping;
 import kr.pe.advenoh.quote.model.enums.YN;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
+import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -32,11 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-//@WebMvcTest(QuoteController.class)
-@SpringBootTest
 @AutoConfigureMockMvc
-public class QuoteControllerTest {
+class QuoteControllerTest extends DefaultSpringTestSupport {
     private final String BASE_PATH = "/api/quotes";
 
     @Autowired
@@ -53,7 +48,7 @@ public class QuoteControllerTest {
     @Test
     @WithMockUser(username = "kenshin579", authorities = {"USER"})
     @Transactional
-    public void createQuote_getQuote_updateQuote_deleteQuote_새로운_tags로만_생성함() throws Exception {
+    void createQuote_getQuote_updateQuote_deleteQuote_새로운_tags로만_생성함() throws Exception {
         //명언 생성
         Long folderId = 1L;
         tags = this.getRandomTags("first", 3);
@@ -122,7 +117,7 @@ public class QuoteControllerTest {
 
     @Test
     @WithMockUser(username = "kenshin579", authorities = {"USER"})
-    public void getQuotes() throws Exception {
+    void getQuotes() throws Exception {
         this.mvc.perform(get(BASE_PATH + "/folders/{folderId}", 1))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -130,7 +125,7 @@ public class QuoteControllerTest {
 
     @Test
     @WithMockUser(username = "kenshin579", authorities = {"USER"})
-    public void getQuote() throws Exception {
+    void getQuote() throws Exception {
         this.mvc.perform(get(BASE_PATH + "/{quoteId}", 1))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -138,7 +133,7 @@ public class QuoteControllerTest {
 
     @Test
     @WithMockUser(username = "kenshin579", authorities = {"USER"})
-    public void getQuote_ApiException_발생시_response_포멧_확인() throws Exception {
+    void getQuote_ApiException_발생시_response_포멧_확인() throws Exception {
         this.mvc.perform(get(BASE_PATH + "/{quoteId}", Integer.MAX_VALUE))
                 .andDo(print())
                 .andExpect(status().isServiceUnavailable())

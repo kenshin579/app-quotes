@@ -2,12 +2,11 @@ package kr.pe.advenoh.quote.service;
 
 import kr.pe.advenoh.quote.model.entity.Tag;
 import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
+import kr.pe.advenoh.quote.util.DefaultMockitoTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,8 +15,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-@RunWith(MockitoJUnitRunner.class)
-public class QuoteServiceMockTest {
+class QuoteServiceMockTest extends DefaultMockitoTestSupport {
 
     @InjectMocks
     private QuoteService quoteService;
@@ -26,13 +24,13 @@ public class QuoteServiceMockTest {
     private QuoteRepository quoteRepository;
 
     @Test
-    public void createQuote() {
+    void createQuote() {
 
 
     }
 
     @Test
-    public void getDiffTags() {
+    void getDiffTags() {
         List<String> allTags = Arrays.asList("A", "B", "C", "D", "E");
         List<String> dbTags = Arrays.asList("B", "E");
         List<Tag> absentTags = quoteService.getDiffTags(allTags, dbTags);
