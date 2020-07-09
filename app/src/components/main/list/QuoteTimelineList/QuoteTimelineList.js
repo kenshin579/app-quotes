@@ -22,7 +22,7 @@ const QuoteTimelineList = ({quotes, loadMoreButton}) => {
     return (
         <div className={cx('timeline-container')}>
             {quoteView}
-            {loadMoreButton}
+            {quoteView.length > 0 && loadMoreButton}
         </div>
 
     );

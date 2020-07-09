@@ -25,8 +25,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 
-const lessToJs = require('less-vars-to-js');
-const themeVariables = lessToJs(fs.readFileSync(path.join(__dirname, '../src/styles/ant-theme-vars.less'), 'utf8'));
+const theme = require('../package.json').theme;
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -464,7 +463,7 @@ module.exports = function(webpackEnv) {
                 {
                   loader: 'less-loader', // compiles Less to CSS
                   options: {
-                    modifyVars: themeVariables,
+                    modifyVars: theme,
                     javascriptEnabled: true
                   }
                 }

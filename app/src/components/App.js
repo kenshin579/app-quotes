@@ -10,8 +10,8 @@ import {
     SignUpPage,
     TestPage
 } from 'pages';
-import BaseContainer from '../containers/common/BaseContainer';
-import AuthenticatedRoute from "./common/AuthenticatedRoute";
+import BaseContainer from 'containers/common/BaseContainer';
+import AuthenticatedRoute from 'components/common/AuthenticatedRoute';
 
 const App = () => {
     return (

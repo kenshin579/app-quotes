@@ -117,7 +117,7 @@ public class QuoteController {
 
     @GetMapping("/today")
     public Object getTodayQuotes(
-            @RequestParam(value = "pageIdex", defaultValue = AppConstants.DEFAULT_PAGE_INDEX) Integer pageIndex,
+            @RequestParam(value = "pageIndex", defaultValue = AppConstants.DEFAULT_PAGE_INDEX) Integer pageIndex,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer pageSize) {
         return quoteService.getTodayQuotes(pageIndex, pageSize);
     }

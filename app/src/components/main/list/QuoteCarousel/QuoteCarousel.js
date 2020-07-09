@@ -37,21 +37,23 @@ const QuoteCarousel = ({quotes}) => {
             <Carousel ref={carouselRef} {...settings}>
                 {quoteView}
             </Carousel>
-            <Button type="link"
-                    className={cx('custom-slick-arrow')}
-                    style={{left: '10px', zIndex: '1'}}
-                    icon={<LeftCircleOutlined/>}
-                    onClick={() => {
-                        carouselRef.current.prev()
-                    }}/>
+            {quoteView.length > 0
+            && <Button type="link"
+                       className={cx('custom-slick-arrow')}
+                       style={{left: '10px', zIndex: '1'}}
+                       icon={<LeftCircleOutlined/>}
+                       onClick={() => {
+                           carouselRef.current.prev()
+                       }}/>}
             {/*<br />*/}
-            <Button type="link"
-                    className={cx('custom-slick-arrow')}
-                    style={{right: '10px'}}
-                    icon={<RightCircleOutlined/>}
-                    onClick={() => {
-                        carouselRef.current.next()
-                    }}/>
+            {quoteView.length > 0
+            && <Button type="link"
+                       className={cx('custom-slick-arrow')}
+                       style={{right: '10px'}}
+                       icon={<RightCircleOutlined/>}
+                       onClick={() => {
+                           carouselRef.current.next()
+                       }}/>}
         </div>
 
     );

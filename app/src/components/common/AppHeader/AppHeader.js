@@ -37,7 +37,6 @@ const AppHeader = ({authenticated, currentUser, onClick}) => {
                 <Link to="/">Best Quotes</Link>
             </div>
             <Menu
-                className={cx('app-menu')}
                 mode="horizontal">
                 {headerMenuItems}
             </Menu>
@@ -47,7 +46,7 @@ const AppHeader = ({authenticated, currentUser, onClick}) => {
 
 const ProfileDropdownMenu = ({currentUser, onClick}) => {
     const dropDownMenu = (
-        <Menu  className={cx('profile-dropdown-menu')} onClick={onClick}>
+        <Menu onClick={onClick}>
             <Menu.Item key="myquote">
                 <Link to={`/users/${currentUser}/quotes`}>내 명언</Link>
             </Menu.Item>
