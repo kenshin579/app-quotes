@@ -1,10 +1,10 @@
 package kr.pe.advenoh.quote.util;
 
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public abstract class DefaultMockitoConfig {
+@ExtendWith(SpringExtension.class)
+public abstract class DefaultSpringTestSupport {
     protected String username = "testUsername";
     protected String email = "test@gmail.com";
     protected String name = "Frank";

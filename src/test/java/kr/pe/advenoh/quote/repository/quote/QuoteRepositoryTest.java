@@ -5,17 +5,14 @@ import kr.pe.advenoh.quote.model.entity.Author;
 import kr.pe.advenoh.quote.model.entity.Quote;
 import kr.pe.advenoh.quote.model.enums.YN;
 import kr.pe.advenoh.quote.repository.AuthorRepository;
-import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
+import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -27,13 +24,11 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest
 //@Transactional
 //@Import({JpaConfig.class, AuditingConfig.class})
 //@DataJpaTest
 //@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-public class QuoteRepositoryTest {
+class QuoteRepositoryTest extends DefaultSpringTestSupport {
 
     @Autowired
     private QuoteRepository quoteRepository;
@@ -48,7 +43,7 @@ public class QuoteRepositoryTest {
     private EntityManager em;
 
     @Test
-    public void quote_save() {
+    void quote_save() {
         Author saveAuthor = authorRepository.save(new Author("frank1"));
         Quote quote = Quote.builder()
                 .quoteText("quote1")
@@ -68,7 +63,7 @@ public class QuoteRepositoryTest {
 
     @Test
     @Transactional
-    public void findAllByFolderId() {
+    void findAllByFolderId() {
         Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createDt");
         Long folderId = 6L;
         Page<QuoteResponseDto> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
@@ -96,14 +91,14 @@ public class QuoteRepositoryTest {
     }
 
     @Test
-    public void findAllByQuoteId() {
+    void findAllByQuoteId() {
         QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(60L).get();
         log.info("quoteResponseDto : {}", quoteResponseDto);
     }
 
     //todo: 이 부분 아래 수정하기
     @Test
-    public void findAllByQuoteId_데이터가_없는_경우() {
+    void findAllByQuoteId_데이터가_없는_경우() {
         QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(Long.MAX_VALUE).get();
         log.info("quoteResponseDto : {}", quoteResponseDto);
     }

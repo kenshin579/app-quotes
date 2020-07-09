@@ -1,14 +1,12 @@
 package kr.pe.advenoh.quote.controller;
 
+import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
 import kr.pe.advenoh.quote.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
@@ -19,23 +17,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
-public class UserControllerTest {
+class UserControllerTest extends DefaultSpringTestSupport {
     @Autowired
     private MockMvc mockMvc;
 
     private String username;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         username = TestUtils.generateRandomString(5);
     }
 
     @Test
     @Transactional
-    public void createUser_deleteUser() throws Exception {
+    void createUser_deleteUser() throws Exception {
         //user 생성
         this.mockMvc.perform(post("/api/auth/signup")
                 .param("name", "test name")
