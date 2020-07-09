@@ -7,12 +7,10 @@ import kr.pe.advenoh.quote.model.entity.Quote;
 import kr.pe.advenoh.quote.model.entity.QuoteTagMapping;
 import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
+import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.security.Principal;
@@ -22,9 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class QuoteServiceTest {
+class QuoteServiceTest extends DefaultSpringTestSupport {
     @Autowired
     private QuoteService quoteService;
 
@@ -37,7 +33,7 @@ public class QuoteServiceTest {
     @Test
     @Transactional
 //    @WithMockUser(username = "testuser", roles = "USER")
-    public void createQuote() {
+    void createQuote() {
         QuoteRequestDto quoteRequestDto = QuoteRequestDto.builder()
                 .authorName("Frank")
                 .quoteText("quote1")
@@ -59,7 +55,7 @@ public class QuoteServiceTest {
 
     @Test
     @Transactional
-    public void getTodayQuotes() {
+    void getTodayQuotes() {
         PagedResponseDto<QuoteResponseDto> todayQuotes = quoteService.getTodayQuotes(0, 10);
         log.info("[quotedebug] todayQuotes : {}", todayQuotes.getContent());
     }

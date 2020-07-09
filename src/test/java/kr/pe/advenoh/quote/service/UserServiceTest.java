@@ -10,7 +10,7 @@
 //import kr.pe.advenoh.quote.util.DefaultMockitoConfig;
 //import lombok.extern.slf4j.Slf4j;
 //import org.junit.Before;
-//import org.junit.Test;
+//import org.junit.jupiter.api.Test;
 //import org.mockito.ArgumentCaptor;
 //import org.mockito.Captor;
 //import org.mockito.InjectMocks;
@@ -27,7 +27,7 @@
 //import static org.mockito.Mockito.when;
 //
 //@Slf4j
-//public class UserServiceTest extends DefaultMockitoConfig {
+//class UserServiceTest extends DefaultMockitoConfig {
 //    @InjectMocks
 //    private UserService userService;
 //
@@ -43,12 +43,12 @@
 //    @Captor
 //    private ArgumentCaptor<User> userArgumentCaptor;
 //
-//    @Before
-//    public void setUp() throws Exception {
+//    @BeforeEach
+//    void setUp() throws Exception {
 //    }
 //
 //    @Test
-//    public void registerNewUserAccount_저장() {
+//    void registerNewUserAccount_저장() {
 //        SignUpRequestDto signUpRequestDto = new SignUpRequestDto();
 //        signUpRequestDto.setUsername(username);
 //        signUpRequestDto.setEmail(email);
@@ -69,7 +69,7 @@
 //    }
 //
 //    @Test
-//    public void registerNewUserAccount_username이_존재하는_경우() {
+//    void registerNewUserAccount_username이_존재하는_경우() {
 //        SignUpRequestDto signUpRequestDto = new SignUpRequestDto();
 //        signUpRequestDto.setUsername(username);
 //
@@ -81,7 +81,7 @@
 //    }
 //
 //    @Test
-//    public void registerNewUserAccount_email이_존재하는_경우() {
+//    void registerNewUserAccount_email이_존재하는_경우() {
 //        SignUpRequestDto signUpRequestDto = new SignUpRequestDto();
 //        signUpRequestDto.setEmail(email);
 //
