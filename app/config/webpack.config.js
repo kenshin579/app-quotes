@@ -71,14 +71,15 @@ module.exports = function(webpackEnv) {
   const getStyleLoaders = (cssOptions, preProcessor) => {
     const loaders = [
       isEnvDevelopment && require.resolve('style-loader'),
-      isEnvProduction && {
-        loader: MiniCssExtractPlugin.loader,
-        // css is located in `static/css`, use '../../' to locate index.html folder
-        // in production `paths.publicUrlOrPath` can be a relative path
-        options: paths.publicUrlOrPath.startsWith('.')
-          ? { publicPath: '../../' }
-          : {},
-      },
+      isEnvProduction && require.resolve('style-loader'),
+      // isEnvProduction && {
+      //   loader: MiniCssExtractPlugin.loader,
+      //   // css is located in `static/css`, use '../../' to locate index.html folder
+      //   // in production `paths.publicUrlOrPath` can be a relative path
+      //   options: paths.publicUrlOrPath.startsWith('.')
+      //     ? { publicPath: '../../' }
+      //     : {},
+      // },
       {
         loader: require.resolve('css-loader'),
         options: cssOptions,
@@ -586,12 +587,14 @@ module.exports = function(webpackEnv) {
       isEnvDevelopment &&
         new WatchMissingNodeModulesPlugin(paths.appNodeModules),
       isEnvProduction &&
-        new MiniCssExtractPlugin({
-          // Options similar to the same options in webpackOptions.output
-          // both options are optional
-          filename: 'static/css/[name].[contenthash:8].css',
-          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
-        }),
+        new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+      // isEnvProduction &&
+      //   new MiniCssExtractPlugin({
+      //     // Options similar to the same options in webpackOptions.output
+      //     // both options are optional
+      //     filename: 'static/css/[name].[contenthash:8].css',
+      //     chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      //   }),
       // Generate an asset manifest file with the following content:
       // - "files" key: Mapping of all asset filenames to their corresponding
       //   output file so that tools can pick it up without having to parse
