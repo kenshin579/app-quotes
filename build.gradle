@@ -1,0 +1,121 @@
+plugins {
+    id 'org.springframework.boot' version '2.3.1.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
+    id 'java'
+
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'net.sf.ehcache:ehcache:2.10.6'
+    implementation 'javax.cache:cache-api:1.1.1'
+
+    implementation 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    implementation 'org.modelmapper:modelmapper:2.3.5'
+//    implementation 'com.querydsl:querydsl-jpa:4.2.1'
+    implementation 'com.querydsl:querydsl-apt:4.2.1'
+//    annotationProcessor 'com.querydsl:querydsl-apt:4.2.1:jpa'
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:2.4.4'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+
+//    testImplementation 'org.springframework.security:spring-security-test'
+
+}
+
+group = 'com.advenoh'
+version = '0.0.1-SNAPSHOT'
+description = 'app-quotes'
+sourceCompatibility = '1.8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+/**
+ * https://blog.naver.com/writer0713/221553471465
+ */
+
+def querydslSrcDir = 'src/main/generated'
+
+querydsl {
+    library = 'com.querydsl:querydsl-apt'
+    jpa = true
+    querydslSourcesDir = querydslSrcDir
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', querydslSrcDir]
+        }
+    }
+}
+
+compileQuerydsl {
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+    querydsl.extendsFrom compipleClasspath
+}
+
+/**
+ * QueryDSL Class Generate Script
+ * https://blog.ddoong2.com/2020/01/02/Querydsl-build-gradle-%EC%84%A4%EC%A0%95/#
+ */
+//def generatedJavaSrcDir = 'src/main/generated'
+//def queryDslOutput = file(generatedJavaSrcDir)
+//
+//sourceSets {
+//    main {
+//        java {
+//            srcDirs = ['src/main/java', generatedJavaSrcDir]
+//        }
+//    }
+//}
+//
+///** QClass 생성 */
+//task generateQueryDSL(type: JavaCompile, group: 'build') {
+//    doFirst {
+//        delete queryDslOutput
+//        queryDslOutput.mkdirs()
+//    }
+//    source = sourceSets.main.java
+//    classpath = configurations.compile
+////    options.annotationProcessorPath = configurations.annotationProcessor
+//    destinationDir = queryDslOutput
+//    options.compilerArgs = [
+//            '-proc:only',
+//            '-processor',
+//            'com.querydsl.apt.jpa.JPAAnnotationProcessor'
+//    ]
+//}
+//compileJava.dependsOn(generateQueryDSL)
+//
+//compileQuerydsl {
+//    options.annotationProcessorPath = configurations.querydsl
+//}
+//
+///** clean 태스크 실행시 QClass 삭제 */
+//clean {
+//    delete queryDslOutput
+//}
+//test {
+//    useJUnitPlatform()
+//}
