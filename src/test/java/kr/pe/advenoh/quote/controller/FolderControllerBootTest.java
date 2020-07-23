@@ -3,7 +3,7 @@ package kr.pe.advenoh.quote.controller;
 import com.jayway.jsonpath.JsonPath;
 import kr.pe.advenoh.quote.model.dto.SignUpRequestDto;
 import kr.pe.advenoh.quote.service.IUserService;
-import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
+import kr.pe.advenoh.quote.util.SpringBootTestSupport;
 import kr.pe.advenoh.quote.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @AutoConfigureMockMvc
-class FolderControllerTest extends DefaultSpringTestSupport {
+class FolderControllerBootTest extends SpringBootTestSupport {
     //todo: db가 running하고 있지 않아도 동작하도록 수정하면 좋을 듯함
 
     @Autowired
