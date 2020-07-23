@@ -1,6 +1,6 @@
 package kr.pe.advenoh.quote.controller;
 
-import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
+import kr.pe.advenoh.quote.util.SpringBootTestSupport;
 import kr.pe.advenoh.quote.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @AutoConfigureMockMvc(addFilters = false)
-class UserControllerTest extends DefaultSpringTestSupport {
+class UserControllerBootTest extends SpringBootTestSupport {
     @Autowired
     private MockMvc mockMvc;
 

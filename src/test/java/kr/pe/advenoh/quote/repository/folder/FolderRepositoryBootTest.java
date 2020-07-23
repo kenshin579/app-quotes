@@ -1,7 +1,7 @@
 package kr.pe.advenoh.quote.repository.folder;
 
 import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
-import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
+import kr.pe.advenoh.quote.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Slf4j
-class FolderRepositoryTest extends DefaultSpringTestSupport {
+class FolderRepositoryBootTest extends SpringBootTestSupport {
     @PersistenceContext
     private EntityManager em;
 

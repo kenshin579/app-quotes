@@ -5,8 +5,9 @@ import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.entity.QuoteTagMapping;
 import kr.pe.advenoh.quote.model.enums.YN;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
-import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
+import kr.pe.advenoh.quote.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,6 +15,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import javax.transaction.RollbackException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @AutoConfigureMockMvc
-class QuoteControllerTest extends DefaultSpringTestSupport {
+class QuoteControllerBootTest extends SpringBootTestSupport {
     private final String BASE_PATH = "/api/quotes";
 
     @Autowired
@@ -45,8 +47,13 @@ class QuoteControllerTest extends DefaultSpringTestSupport {
 
     private List<String> tags;
 
+//    @BeforeEach
+//    void setUp() {
+//	    createUserIfNotFound( Arrays.asList());
+//    }
+
     @Test
-    @WithMockUser(username = "kenshin579", authorities = {"USER"})
+    @WithMockUser(username = username, authorities = { ROLE_USER })
     @Transactional
     void createQuote_getQuote_updateQuote_deleteQuote_새로운_tags로만_생성함() throws Exception {
         //명언 생성
@@ -116,7 +123,7 @@ class QuoteControllerTest extends DefaultSpringTestSupport {
     }
 
     @Test
-    @WithMockUser(username = "kenshin579", authorities = {"USER"})
+    @WithMockUser(username = "testuser", authorities = {"USER"})
     void getQuotes() throws Exception {
         this.mvc.perform(get(BASE_PATH + "/folders/{folderId}", 1))
                 .andDo(print())
@@ -124,7 +131,7 @@ class QuoteControllerTest extends DefaultSpringTestSupport {
     }
 
     @Test
-    @WithMockUser(username = "kenshin579", authorities = {"USER"})
+    @WithMockUser(username = "testuser", authorities = {"USER"})
     void getQuote() throws Exception {
         this.mvc.perform(get(BASE_PATH + "/{quoteId}", 1))
                 .andDo(print())
@@ -132,7 +139,7 @@ class QuoteControllerTest extends DefaultSpringTestSupport {
     }
 
     @Test
-    @WithMockUser(username = "kenshin579", authorities = {"USER"})
+    @WithMockUser(username = "testuser", authorities = {"USER"})
     void getQuote_ApiException_발생시_response_포멧_확인() throws Exception {
         this.mvc.perform(get(BASE_PATH + "/{quoteId}", Integer.MAX_VALUE))
                 .andDo(print())

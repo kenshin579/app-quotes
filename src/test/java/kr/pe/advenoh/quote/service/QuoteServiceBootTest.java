@@ -7,7 +7,7 @@ import kr.pe.advenoh.quote.model.entity.Quote;
 import kr.pe.advenoh.quote.model.entity.QuoteTagMapping;
 import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
-import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
+import kr.pe.advenoh.quote.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-class QuoteServiceTest extends DefaultSpringTestSupport {
+class QuoteServiceBootTest extends SpringBootTestSupport {
     @Autowired
     private QuoteService quoteService;
 

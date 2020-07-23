@@ -5,7 +5,7 @@ import kr.pe.advenoh.quote.model.entity.Author;
 import kr.pe.advenoh.quote.model.entity.Quote;
 import kr.pe.advenoh.quote.model.enums.YN;
 import kr.pe.advenoh.quote.repository.AuthorRepository;
-import kr.pe.advenoh.quote.util.DefaultSpringTestSupport;
+import kr.pe.advenoh.quote.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //@Import({JpaConfig.class, AuditingConfig.class})
 //@DataJpaTest
 //@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-class QuoteRepositoryTest extends DefaultSpringTestSupport {
+class QuoteRepositoryBootTest extends SpringBootTestSupport {
 
     @Autowired
     private QuoteRepository quoteRepository;
