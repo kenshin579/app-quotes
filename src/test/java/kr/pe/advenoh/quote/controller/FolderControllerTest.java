@@ -32,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 class FolderControllerTest extends SpringMockMvcTestSupport {
+    private final String BASE_URL = "/api/folders";
     private User user;
     private String folderName;
 
@@ -53,7 +54,7 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
     @Test
     @WithMockUser(username = username, authorities = {ROLE_USER})
     void getFolders() throws Exception {
-        this.mockMvc.perform(get("/api/folders")
+        this.mockMvc.perform(get(BASE_URL)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -67,7 +68,8 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
     @WithMockUser(username = username, authorities = {ROLE_USER})
     void createFolder_renameFolder_deleteFolders() throws Exception {
         //create folder
-        MvcResult result = this.mockMvc.perform(post("/api/folders")
+
+        MvcResult result = this.mockMvc.perform(post(BASE_URL)
                 .param("folderName", folderName)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -79,7 +81,7 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
 
         //rename folder
         String newFolderName = "new " + folderName;
-        this.mockMvc.perform(put("/api/folders/{folderId}/rename", folderId)
+        this.mockMvc.perform(put(BASE_URL + "/{folderId}/rename", folderId)
                 .param("folderName", newFolderName)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -87,7 +89,7 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.succeed", is(true)));
 
         //delete folder
-        this.mockMvc.perform(delete("/api/folders")
+        this.mockMvc.perform(delete(BASE_URL)
                 .param("folderIds", folderId.toString())
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
