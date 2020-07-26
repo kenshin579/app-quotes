@@ -1,5 +1,6 @@
 package kr.pe.advenoh.quote.model.dto;
 
+import kr.pe.advenoh.quote.util.TestConfig;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SignUpRequestDtoTest {
+class SignUpRequestDtoTest implements TestConfig {
     private static ValidatorFactory validatorFactory;
     private static Validator validator;
     private SignUpRequestDto signUpRequestDto;
@@ -25,10 +26,10 @@ class SignUpRequestDtoTest {
     @Test
     void 정상요청인_경우에는_오류가_없다() {
         signUpRequestDto = SignUpRequestDto.builder()
-                .name("Frank")
-                .username("test")
-                .email("hello@sdf.com")
-                .password("password")
+                .name(name)
+                .username(username)
+                .email(email)
+                .password(password)
                 .build();
 
         Set<ConstraintViolation<SignUpRequestDto>> violations = validator.validate(signUpRequestDto);
