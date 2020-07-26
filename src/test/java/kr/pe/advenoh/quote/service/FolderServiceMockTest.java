@@ -20,7 +20,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class FolderServiceTest extends DefaultMockitoTestSupport {
+class FolderServiceMockTest extends DefaultMockitoTestSupport {
     @InjectMocks
     private FolderService folderService;
 
