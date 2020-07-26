@@ -1,8 +1,8 @@
 import React from 'react';
-import {Redirect, Route, withRouter} from "react-router-dom";
-import {connect} from "react-redux";
+import {Redirect, Route} from "react-router-dom";
 
 const AuthenticatedRoute = ({component: ComponentToRender, authenticated, ...rest}) => {
+
     return (
         <Route
             {...rest}
@@ -22,9 +22,4 @@ const AuthenticatedRoute = ({component: ComponentToRender, authenticated, ...res
     );
 };
 
-export default connect(
-    (state) => ({
-        authenticated: state.base.get('authenticated')
-    }),
-    null
-)(withRouter(AuthenticatedRoute));
+export default AuthenticatedRoute;
