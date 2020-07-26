@@ -11,7 +11,7 @@ import kr.pe.advenoh.quote.model.enums.YN;
 import kr.pe.advenoh.quote.repository.RoleRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
 import kr.pe.advenoh.quote.spring.InitialDataLoader;
-import kr.pe.advenoh.quote.util.SpringMockMvcSupport;
+import kr.pe.advenoh.quote.util.SpringMockMvcTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,11 +38,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @ActiveProfiles("jdbc")
-class QuoteControllerTest extends SpringMockMvcSupport {
+class QuoteControllerTest extends SpringMockMvcTestSupport {
     private final String BASE_PATH = "/api/quotes";
-
-//    @MockBean
-//    private QuoteService quoteService;
+    private List<String> tags;
+    private User user;
+    private Long folderId;
+    private Long quoteId;
 
     @Autowired
     private InitialDataLoader initialDataLoader;
@@ -56,11 +57,6 @@ class QuoteControllerTest extends SpringMockMvcSupport {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    private List<String> tags;
-    private User user;
-    private Long folderId;
-    private Long quoteId;
-
     @BeforeEach
     void setUp() {
         Role role = roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() ->
@@ -68,7 +64,7 @@ class QuoteControllerTest extends SpringMockMvcSupport {
         user = initialDataLoader.createUserIfNotFound(username, email, name, password, Arrays.asList(role));
         folderId = jdbcTemplate.queryForObject("SELECT folder_id FROM app_quotes.folders LIMIT 1", Long.class);
         quoteId = jdbcTemplate.queryForObject("SELECT quote_id FROM app_quotes.quotes LIMIT 1", Long.class);
-        log.debug("folderId : {} quoteId: {}", folderId, quoteId);
+        log.debug("folderId : {} quoteId: {} user: {}", folderId, quoteId, user);
     }
 
     @Test

@@ -5,8 +5,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureMockMvc
-public abstract class SpringMockMvcSupport extends SpringBootTestSupport {
-
+public abstract class SpringMockMvcTestSupport extends SpringBootTestSupport {
     @Autowired
     protected MockMvc mvc;
 }
