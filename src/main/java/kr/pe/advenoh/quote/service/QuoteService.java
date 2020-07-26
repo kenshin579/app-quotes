@@ -193,7 +193,7 @@ public class QuoteService {
             return quoteResponseDto;
         }).collect(Collectors.toList());
 
-        return new PagedResponseDto<>(quoteResponseList, quoteHistories.getNumber(),
+        return new PagedResponseDto<>(quoteResponseList, quoteHistories.getNumber() + 1,
                 quoteHistories.getSize(), quoteHistories.getTotalElements(), quoteHistories.getTotalPages(), quoteHistories.isLast());
     }
 

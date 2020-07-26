@@ -8,7 +8,7 @@ import {QUOTE_TODAY_INDEX, QUOTE_TODAY_SIZE} from "../../constants";
 const GET_RANDOM_LIST = 'main/GET_RANDOM_LIST';
 
 // action creators
-export const getRandomList = createAction(GET_RANDOM_LIST, api.getRandomList);
+export const getRandomList = createAction(GET_RANDOM_LIST, api.getTodayQuoteList);
 
 // initial state
 const initialState = Map({

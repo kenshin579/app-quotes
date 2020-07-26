@@ -73,7 +73,7 @@ export const logout = () => {
 };
 
 export const getQuoteList = (id, pagination) => {
-    console.log('getRandomList :: id', id, 'pagination', pagination);
+    console.log('getQuoteList :: id', id, 'pagination', pagination);
 
     const queryStr = objectToQueryString({
         pageIndex: pagination['current'],
@@ -177,8 +177,8 @@ export const moveQuotes = (folderId, selectedRowKeys) => {
     });
 };
 
-export const getRandomList = (pagination) => {
-    console.log('getRandomList :: pagination', pagination);
+export const getTodayQuoteList = (pagination) => {
+    console.log('getTodayQuoteList :: pagination', pagination);
 
     const queryStr = objectToQueryString({
         pageIndex: pagination['current'],
