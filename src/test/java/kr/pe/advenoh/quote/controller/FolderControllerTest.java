@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
 import javax.transaction.Transactional;
@@ -35,9 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class FolderControllerTest extends SpringMockMvcTestSupport {
     private User user;
     private String folderName;
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
     private InitialDataLoader initialDataLoader;

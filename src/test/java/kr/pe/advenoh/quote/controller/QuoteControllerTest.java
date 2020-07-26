@@ -77,7 +77,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
 
         String quoteText = "quote text1";
         String authorName = "test author";
-        MvcResult mvcResult = this.mvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
+        MvcResult mvcResult = this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
                 .param("quoteText", quoteText)
                 .param("authorName", authorName)
                 .param("useYn", YN.Y.name())
@@ -92,7 +92,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
         log.info("quoteId : {}", quoteId);
 
         //명언 조회
-        this.mvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
+        this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteId", is(quoteId)))
@@ -107,7 +107,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
         tags.addAll(this.getRandomTags("second", 1));
         log.info("new tags : {}", tags);
 
-        this.mvc.perform(post(BASE_PATH + "/{quoteId}", quoteId)
+        this.mockMvc.perform(post(BASE_PATH + "/{quoteId}", quoteId)
                 .param("quoteText", quoteText)
                 .param("authorName", authorName)
                 .param("useYn", YN.N.name())
@@ -119,7 +119,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.authorName", is(authorName)));
 
         //명언 조회
-        this.mvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
+        this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteId", is(quoteId)))
@@ -133,7 +133,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
         assertThat(quoteTagMappings.size()).isEqualTo(tags.size());
 
         //명언 삭제
-        this.mvc.perform(delete(BASE_PATH)
+        this.mockMvc.perform(delete(BASE_PATH)
                 .param("quoteIds", quoteId.toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -143,7 +143,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     @Test
     @WithMockUser(username = username, authorities = {ROLE_USER})
     void getQuotes() throws Exception {
-        this.mvc.perform(get(BASE_PATH + "/folders/{folderId}", folderId))
+        this.mockMvc.perform(get(BASE_PATH + "/folders/{folderId}", folderId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray());
@@ -152,7 +152,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     @Test
     @WithMockUser(username = username, authorities = {ROLE_USER})
     void getQuote() throws Exception {
-        this.mvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
+        this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteId", is(quoteId.intValue())));
@@ -161,7 +161,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     @Test
     @WithMockUser(username = username, authorities = {ROLE_USER})
     void getQuote_ApiException_발생시_response_포멧_확인() throws Exception {
-        this.mvc.perform(get(BASE_PATH + "/{quoteId}", Integer.MAX_VALUE))
+        this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", Integer.MAX_VALUE))
                 .andDo(print())
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(jsonPath("$.message", is(QuoteExceptionCode.QUOTE_NOT_FOUND.getMessage())))
