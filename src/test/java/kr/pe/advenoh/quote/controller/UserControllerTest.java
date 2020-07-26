@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @AutoConfigureMockMvc(addFilters = false)
-class UserControllerBootTest extends SpringBootTestSupport {
+class UserControllerTest extends SpringBootTestSupport {
     @Autowired
     private MockMvc mockMvc;
 

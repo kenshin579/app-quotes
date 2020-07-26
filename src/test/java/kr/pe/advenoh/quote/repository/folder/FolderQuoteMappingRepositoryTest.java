@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
-class FolderQuoteMappingRepositoryBootTest extends SpringBootTestSupport {
+class FolderQuoteMappingRepositoryTest extends SpringBootTestSupport {
     @Autowired
     private FolderQuoteMappingRepository folderQuoteMappingRepository;
 

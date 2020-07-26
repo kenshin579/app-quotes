@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 //@Import({JpaConfig.class, AuditingConfig.class})
 //@DataJpaTest
 //@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-class QuoteRepositoryBootTest extends SpringBootTestSupport {
+class QuoteRepositoryTest extends SpringBootTestSupport {
 
     @Autowired
     private QuoteRepository quoteRepository;

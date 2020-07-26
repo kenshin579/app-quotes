@@ -12,7 +12,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Slf4j
-class FolderRepositoryBootTest extends SpringBootTestSupport {
+class FolderRepositoryTest extends SpringBootTestSupport {
     @PersistenceContext
     private EntityManager em;
 

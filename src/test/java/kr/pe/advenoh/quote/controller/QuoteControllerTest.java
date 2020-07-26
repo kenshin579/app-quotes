@@ -33,7 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @AutoConfigureMockMvc
-class QuoteControllerBootTest extends SpringBootTestSupport {
+class QuoteControllerTest extends SpringBootTestSupport {
+
     private final String BASE_PATH = "/api/quotes";
 
     @Autowired

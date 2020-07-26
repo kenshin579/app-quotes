@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @Slf4j
 @AutoConfigureMockMvc
-class FolderControllerBootTest extends SpringBootTestSupport {
+class FolderControllerTest extends SpringBootTestSupport {
     //todo: db가 running하고 있지 않아도 동작하도록 수정하면 좋을 듯함
 
     @Autowired

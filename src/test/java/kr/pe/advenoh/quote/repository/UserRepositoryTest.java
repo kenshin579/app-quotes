@@ -10,7 +10,7 @@ import javax.transaction.Transactional;
 
 @Slf4j
 @Transactional
-class UserRepositoryBootTest extends SpringBootTestSupport {
+class UserRepositoryTest extends SpringBootTestSupport {
     @Autowired
     private UserRepository userRepository;
 

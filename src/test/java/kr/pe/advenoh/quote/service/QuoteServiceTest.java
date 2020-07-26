@@ -20,7 +20,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-class QuoteServiceBootTest extends SpringBootTestSupport {
+class QuoteServiceTest extends SpringBootTestSupport {
     @Autowired
     private QuoteService quoteService;
 

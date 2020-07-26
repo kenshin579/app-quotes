@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-class ScheduledTasksBootTest extends SpringBootTestSupport {
+class ScheduledTasksTest extends SpringBootTestSupport {
     @Autowired
     private ScheduledTasks scheduledTasks;
 
