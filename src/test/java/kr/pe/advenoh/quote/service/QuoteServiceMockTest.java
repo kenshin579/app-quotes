@@ -2,7 +2,7 @@ package kr.pe.advenoh.quote.service;
 
 import kr.pe.advenoh.quote.model.entity.Tag;
 import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
-import kr.pe.advenoh.quote.util.DefaultMockitoTestSupport;
+import kr.pe.advenoh.quote.util.MockitoTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-class QuoteServiceMockTest extends DefaultMockitoTestSupport {
+class QuoteServiceMockTest extends MockitoTestSupport {
 
     @InjectMocks
     private QuoteService quoteService;

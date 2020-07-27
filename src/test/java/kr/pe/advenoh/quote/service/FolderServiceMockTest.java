@@ -6,7 +6,7 @@ import kr.pe.advenoh.quote.repository.folder.FolderUserMappingRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteHistoryRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteRepository;
 import kr.pe.advenoh.quote.repository.quote.QuoteTagMappingRepository;
-import kr.pe.advenoh.quote.util.DefaultMockitoTestSupport;
+import kr.pe.advenoh.quote.util.MockitoTestSupport;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class FolderServiceMockTest extends DefaultMockitoTestSupport {
+class FolderServiceMockTest extends MockitoTestSupport {
     @InjectMocks
     private FolderService folderService;
 
