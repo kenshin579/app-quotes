@@ -7,4 +7,9 @@ public interface TestConfig {
     String password = "testpass";
 
     String ROLE_USER = "USER";
+
+    String authorName = "frank";
+    String quoteText = "quote text";
+    String folderName = "folder test";
+    Long folderId = 1L;
 }

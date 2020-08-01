@@ -142,6 +142,16 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
 
     @Test
     @WithMockUser(username = username, authorities = {ROLE_USER})
+    @Transactional
+    void createQuote_request_값이_없는_경우() throws Exception {
+        this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
+                .param("useYn", YN.Y.name()))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @WithMockUser(username = username, authorities = {ROLE_USER})
     void getQuotes() throws Exception {
         this.mockMvc.perform(get(BASE_PATH + "/folders/{folderId}", folderId))
                 .andDo(print())
