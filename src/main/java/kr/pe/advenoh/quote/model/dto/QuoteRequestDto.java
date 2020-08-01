@@ -17,15 +17,15 @@ public class QuoteRequestDto {
     private String quoteText;
     private String authorName;
     private YN useYn;
-
     private Long folderId;
     private List<String> tags; //todo : client에서 중복 값은 체크가 필요함
 
     @Builder
-    public QuoteRequestDto(String quoteText, String authorName, YN useYn, List<String> tags) {
+    public QuoteRequestDto(String quoteText, String authorName, YN useYn, Long folderId, List<String> tags) {
         this.quoteText = quoteText;
         this.authorName = authorName;
         this.useYn = useYn;
+        this.folderId = folderId;
         this.tags = tags;
     }
 }
