@@ -20,6 +20,7 @@ class FolderCreateModalContainer extends Component {
         try {
             const response = await FolderActions.createFolder(values.folderName);
             console.log('response', response);
+            await FolderActions.getFolderList();
         } catch (e) {
             console.error(e);
         }
