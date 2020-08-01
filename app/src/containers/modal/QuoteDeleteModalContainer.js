@@ -21,7 +21,8 @@ class QuoteCreateModalContainer extends Component {
         let folderId = location.pathname.substring(location.pathname.lastIndexOf('/') + 1);
 
         try {
-            const response = await QuoteActions.deleteQuote(selectedRowKeys);
+            const response = await QuoteActions.deleteQuotes(selectedRowKeys);
+
             await QuoteActions.getQuoteList(folderId, pagination);
             history.push(`/users/${currentUser}/quotes/folders/${folderId}`);
         } catch (e) {
@@ -34,7 +35,7 @@ class QuoteCreateModalContainer extends Component {
 
         return (
             <DeleteModal visible={visible}
-                         itemType={DELETE_MODAL_TYPE.QUOTE}
+                         deleteModalType={DELETE_MODAL_TYPE.QUOTE}
                          onDelete={this.handleDelete}
                          onCancel={this.handleCancel}/>
         )
