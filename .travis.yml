@@ -62,7 +62,8 @@ deploy:
     on:
       all_branches: true
 
-#after_script:
+after_script:
+  - ./mvnw clean test cobertura:cobertura coveralls:report
 #  - cat /home/travis/.npm/_logs/*.log
 
 # CI 실행 완료시 메일로 알람
