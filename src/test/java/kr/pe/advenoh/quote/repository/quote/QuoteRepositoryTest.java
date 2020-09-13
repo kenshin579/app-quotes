@@ -51,7 +51,7 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
                 .author(saveAuthor)
                 .build();
 
-        Quote saveQuote = quoteRepository.save(quote);
+        Quote saveQuote = quoteRepository.save(quote); //todo : fail로 떨어짐
         log.info("saveQuote : {}", saveQuote);
 
         List<Quote> quotes = quoteRepository.findAll();
@@ -69,7 +69,7 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
         Page<QuoteResponseDto> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
         List<QuoteResponseDto> content = quotes.getContent();
 
-        assertThat(content.size()).isNotZero();
+        assertThat(content.size()).isNotZero(); //todo : fail로 떨어짐
 
         //todo : new Comparator로 작성하기
         if (content.size() > 2) {
@@ -90,6 +90,7 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
         log.info("QuoteResponseDto : {}", quotes.getContent());
     }
 
+    //todo : fail로 떨어짐
     @Test
     void findAllByQuoteId() {
         QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(60L).get();

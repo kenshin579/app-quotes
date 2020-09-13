@@ -140,6 +140,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.succeed", is(true)));
     }
 
+    //todo : 여기 작업하기
     @Test
     @WithMockUser(username = username, authorities = {ROLE_USER})
     @Transactional

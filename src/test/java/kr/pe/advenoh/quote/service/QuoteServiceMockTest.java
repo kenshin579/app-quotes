@@ -79,6 +79,7 @@ class QuoteServiceMockTest extends MockitoTestSupport {
         prefixStr = TestUtils.generateRandomString(4);
     }
 
+    //todo : fail로 떨어짐
     @Test
     void createQuote_tags_모두_새로운_태그인_경우() {
         //given
@@ -119,6 +120,7 @@ class QuoteServiceMockTest extends MockitoTestSupport {
 
     }
 
+    //todo : fail로 떨어짐
     @Test
     void createQuote_tags_새로운_태그_2개_이미_존재하는_태그_1개_인_경우() {
         QuoteRequestDto quoteRequestDto = QuoteRequestDto.builder()
