@@ -1,52 +1,82 @@
 package kr.pe.advenoh.quote.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.pe.advenoh.quote.exception.ApiException;
+import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
+import kr.pe.advenoh.quote.model.dto.SignUpRequestDto;
+import kr.pe.advenoh.quote.model.entity.Role;
+import kr.pe.advenoh.quote.model.entity.User;
+import kr.pe.advenoh.quote.model.enums.RoleType;
+import kr.pe.advenoh.quote.repository.RoleRepository;
+import kr.pe.advenoh.quote.spring.InitialDataLoader;
+import kr.pe.advenoh.quote.util.SpringMockMvcTestSupport;
 import kr.pe.advenoh.quote.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
-public class UserControllerTest {
+class UserControllerTest extends SpringMockMvcTestSupport {
+    private final String BASE_PATH = "/api/user";
+    private User user;
+
     @Autowired
-    private MockMvc mockMvc;
+    private InitialDataLoader initialDataLoader;
 
-    private String username;
+    @Autowired
+    private RoleRepository roleRepository;
 
-    @Before
-    public void setUp() throws Exception {
-        username = TestUtils.generateRandomString(5);
+    @BeforeEach
+    void setUp() {
+        Role role = roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() ->
+                new ApiException(QuoteExceptionCode.ACCOUNT_ROLE_NOT_FOUND, RoleType.ROLE_USER.name()));
+        user = initialDataLoader.createUserIfNotFound(username, email, name, password, Arrays.asList(role));
+    }
+
+    @Disabled
+    @Test
+    @WithMockUser(username = username, authorities = {ROLE_USER})
+    void getCurrentUser() throws Exception {
+        this.mockMvc.perform(get(BASE_PATH + "/me"))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 
     @Test
     @Transactional
-    public void createUser_deleteUser() throws Exception {
+    void deleteUser() throws Exception {
+        String username = TestUtils.generateRandomString(5);
+        log.debug("username : {}", username);
+
         //user 생성
         this.mockMvc.perform(post("/api/auth/signup")
-                .param("name", "test name")
-                .param("email", "test@sdf.com")
-                .param("password", "123456")
-                .param("username", username))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(new ObjectMapper().writeValueAsBytes(SignUpRequestDto.builder()
+                        .name(name)
+                        .password(password)
+                        .email(username + "@gmail.com")
+                        .username(username)
+                        .build())))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
         //user 삭제
-        this.mockMvc.perform(delete("/api/user/{username}", username))
+        this.mockMvc.perform(delete("/api/user/{username}", username)
+                .with(user(username)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

@@ -1,26 +1,18 @@
 package kr.pe.advenoh.quote.repository.folder;
 
 import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
-import kr.pe.advenoh.quote.repository.folder.FolderRepository;
-import kr.pe.advenoh.quote.repository.folder.FolderUserMappingRepository;
+import kr.pe.advenoh.quote.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest
-//@Import({JpaConfig.class, AuditingConfig.class})
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-public class FolderRepositoryTest {
+class FolderRepositoryTest extends SpringBootTestSupport {
     @PersistenceContext
     private EntityManager em;
 
@@ -30,8 +22,8 @@ public class FolderRepositoryTest {
     @Autowired
     private FolderUserMappingRepository folderUserMappingRepository;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
 //        Folder folder;
 //        for (int i = 0; i < 3; i++) {
 //            folder = new Folder("folder" + i);
@@ -40,7 +32,7 @@ public class FolderRepositoryTest {
     }
 
     @Test
-    public void findAllByUsername() {
+    void findAllByUsername() {
         List<FolderResponseDto> testuser = folderRepository.findAllByUsername("testuser");
         log.info("[quotedebug] testuser : {}", testuser);
     }

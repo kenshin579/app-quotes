@@ -6,6 +6,8 @@ import kr.pe.advenoh.quote.service.FolderService;
 import kr.pe.advenoh.quote.spring.security.CurrentUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,7 +30,7 @@ public class FolderController {
     private FolderService folderService;
 
     @GetMapping
-    public Object getFolders(@CurrentUser Principal currentUser) {
+    public ResponseEntity<?> getFolders(@CurrentUser Principal currentUser) {
         Map<String, Object> result = new HashMap<>();
         List<FolderResponseDto> folders = folderService.getFolders(currentUser.getName());
         FolderStatsResponseDto folderStatsResponseDto = FolderStatsResponseDto.builder()
@@ -37,30 +39,30 @@ public class FolderController {
                 .build();
         result.put("folderStatInfo", folderStatsResponseDto);
         result.put("folderList", folders);
-        return result;
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @PostMapping
-    public Object createFolder(
+    public ResponseEntity<?>  createFolder(
             @RequestParam(value = "folderName") String folderName,
             @CurrentUser Principal currentUser) {
-        return folderService.createFolder(folderName, currentUser.getName());
+        return new ResponseEntity<>(folderService.createFolder(folderName, currentUser.getName()), HttpStatus.OK);
     }
 
     @PutMapping("/{folderId}/rename")
-    public Object renameFolder(
+    public ResponseEntity<?>  renameFolder(
             @PathVariable(name = "folderId") Long folderId,
             @RequestParam(value = "folderName") String folderName) {
         Map<String, Object> result = new HashMap<>();
         folderService.renameFolder(folderId, folderName);
         result.put("succeed", true);
-        return result;
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     @DeleteMapping
-    public Object deleteFolders(@RequestParam(value = "folderIds") List<Long> folderIds) {
+    public ResponseEntity<?>  deleteFolders(@RequestParam(value = "folderIds") List<Long> folderIds) {
         Map<String, Object> result = new HashMap<>();
         result.put("succeed", folderIds.size() == folderService.deleteFolders(folderIds));
-        return result;
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }

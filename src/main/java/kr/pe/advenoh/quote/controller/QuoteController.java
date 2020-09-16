@@ -7,6 +7,8 @@ import kr.pe.advenoh.quote.spring.security.CurrentUser;
 import kr.pe.advenoh.quote.util.AppConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -34,45 +37,42 @@ public class QuoteController {
     private QuoteLikeService quoteLikeService;
 
     @GetMapping("/folders/{folderId}")
-    public Object getQuotes(
+    public ResponseEntity<?> getQuotes(
             @PathVariable(name = "folderId") Long folderId,
             @RequestParam(value = "pageIndex", defaultValue = AppConstants.DEFAULT_PAGE_INDEX) Integer pageIndex,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer pageSize) {
-        return quoteService.getQuotes(folderId, pageIndex, pageSize);
+        return new ResponseEntity<>(quoteService.getQuotes(folderId, pageIndex, pageSize), HttpStatus.OK);
     }
 
     //todo : 좋아요 정보를 같이 내려주는 게 좋아보임
     @GetMapping("/{quoteId}")
-    public Object getQuote(@PathVariable(name = "quoteId") Long quoteId) {
-        return quoteService.getQuote(quoteId);
+    public ResponseEntity<?> getQuote(@PathVariable(name = "quoteId") Long quoteId) {
+        return new ResponseEntity<>(quoteService.getQuote(quoteId), HttpStatus.OK);
     }
 
     @PostMapping("/folders/{folderId}")
-    public Object createQuote(
+    public ResponseEntity<?> createQuote(
             @PathVariable(name = "folderId") Long folderId,
-            @ModelAttribute QuoteRequestDto quoteRequestDto,
+            @ModelAttribute @Valid QuoteRequestDto quoteRequestDto,
             @CurrentUser Principal currentUser) {
         log.info("[quotedebug] quoteRequestDto : {} currentUser : {}", quoteRequestDto, currentUser.getName());
-        if (quoteRequestDto.getQuoteText() == null) {
-            throw new RuntimeException("need paramter!!!");
-        }
         quoteRequestDto.setFolderId(folderId);
-        return quoteService.createQuote(quoteRequestDto, currentUser);
+        return new ResponseEntity<>(quoteService.createQuote(quoteRequestDto, currentUser), HttpStatus.OK);
     }
 
     @PostMapping("/{quoteId}")
-    public Object updateQuote(
+    public ResponseEntity<?> updateQuote(
             @PathVariable(name = "quoteId") Long quoteId,
             @ModelAttribute QuoteRequestDto quoteRequestDto
     ) {
         if (quoteRequestDto.getQuoteText() == null) {
             throw new RuntimeException("need paramter!!!");
         }
-        return quoteService.updateQuote(quoteId, quoteRequestDto);
+        return new ResponseEntity<>(quoteService.updateQuote(quoteId, quoteRequestDto), HttpStatus.OK);
     }
 
     @DeleteMapping
-    public Object deleteQuotes(
+    public ResponseEntity<?> deleteQuotes(
             @RequestParam(value = "quoteIds") List<Long> quoteIds) {
         Map<String, Object> result = new HashMap<>();
 
@@ -81,49 +81,49 @@ public class QuoteController {
 
         int status = quoteService.deleteQuotes(quoteIds);
         result.put("succeed", status == quoteIds.size());
-        return result;
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 
     @PutMapping("/move/{folderId}")
-    public Object moveQuotes(@RequestParam(value = "quoteIds") List<Long> quoteIds,
-                             @PathVariable(name = "folderId") Long folderId) {
+    public ResponseEntity<?> moveQuotes(@RequestParam(value = "quoteIds") List<Long> quoteIds,
+                                        @PathVariable(name = "folderId") Long folderId) {
         Map<String, Object> result = new HashMap<>();
         result.put("succeed", quoteService.moveQuotes(quoteIds, folderId));
-        return result;
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
     //likes
     @PostMapping("/{quoteId}/likes")
-    public Object registerVodLike(
+    public ResponseEntity<?> registerVodLike(
             @PathVariable(value = "quoteId") Long quoteId, @CurrentUser Principal currentUser) {
         log.debug("[quotedebug] quoteId : {} currentUser : {}", quoteId, currentUser.getName());
-        return quoteLikeService.registerAndGetQuoteLikeInfo(quoteId, currentUser.getName());
+        return new ResponseEntity<>(quoteLikeService.registerAndGetQuoteLikeInfo(quoteId, currentUser.getName()), HttpStatus.OK);
     }
 
     @GetMapping("/{quoteId}/likes")
-    public Object getVodLike(
+    public ResponseEntity<?> getVodLike(
             @PathVariable(value = "quoteId") Long quoteId, @CurrentUser Principal currentUser) {
         log.debug("[quotedebug] quoteId : {} currentUser : {}", quoteId, currentUser.getName());
-        return quoteLikeService.getRegisteredQuoteLikeInfo(quoteId, currentUser.getName());
+        return new ResponseEntity<>(quoteLikeService.getRegisteredQuoteLikeInfo(quoteId, currentUser.getName()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{quoteId}/likes")
-    public Object unregisterVodLike(
+    public ResponseEntity<?> unregisterVodLike(
             @PathVariable(value = "quoteId") Long quoteId, @CurrentUser Principal currentUser) {
         log.debug("[quotedebug] quoteId : {} currentUser : {}", quoteId, currentUser.getName());
-        return quoteLikeService.unregisterAndGetQuoteLikeInfo(quoteId, currentUser.getName());
+        return new ResponseEntity<>(quoteLikeService.unregisterAndGetQuoteLikeInfo(quoteId, currentUser.getName()), HttpStatus.OK);
     }
 
     @GetMapping("/today")
-    public Object getTodayQuotes(
+    public ResponseEntity<?> getTodayQuotes(
             @RequestParam(value = "pageIndex", defaultValue = AppConstants.DEFAULT_PAGE_INDEX) Integer pageIndex,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer pageSize) {
-        return quoteService.getTodayQuotes(pageIndex, pageSize);
+        return new ResponseEntity<>(quoteService.getTodayQuotes(pageIndex, pageSize), HttpStatus.OK);
     }
 
     @GetMapping("/random")
-    public Object getRandomQuote() {
-        return quoteService.getRandomQuote();
+    public ResponseEntity<?> getRandomQuote() {
+        return new ResponseEntity<>(quoteService.getRandomQuote(), HttpStatus.OK);
     }
 }

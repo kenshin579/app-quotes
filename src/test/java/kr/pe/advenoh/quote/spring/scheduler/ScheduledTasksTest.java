@@ -1,24 +1,20 @@
 package kr.pe.advenoh.quote.spring.scheduler;
 
 import kr.pe.advenoh.quote.model.entity.QuoteHistory;
+import kr.pe.advenoh.quote.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ScheduledTasksTest {
+class ScheduledTasksTest extends SpringBootTestSupport {
     @Autowired
     private ScheduledTasks scheduledTasks;
 
     @Test
-    public void generateDailyRandomQuote() {
+    void generateDailyRandomQuote() {
         QuoteHistory quoteHistory = scheduledTasks.generateDailyRandomQuote();
         assertThat(quoteHistory.getId()).isNotNull();
     }

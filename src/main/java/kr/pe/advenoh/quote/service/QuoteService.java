@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class QuoteService {
+    //todo : repository가 너무 많음 - 개선할 수 있는 방법은?
     private final QuoteRepository quoteRepository;
 
     private final AuthorRepository authorRepository;

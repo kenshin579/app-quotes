@@ -32,15 +32,6 @@ public class UserController {
     @PreAuthorize("hasRole('USER')")
     public UserResponseDto getCurrentUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
         return new UserResponseDto(userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getName());
-//        return UserDto.builder()
-//                .id(userPrincipal.getId())
-//                .username(userPrincipal.getUsername())
-//                .firstName(userPrincipal.getFirstName())
-//                .lastName(userPrincipal.getLastName())
-//                .build();
-
-//        return userRepository.findById(userPrincipal.getId())
-//                .orElseThrow(() -> new ResourceNotFoundException("User", "id", userPrincipal.getId()));
     }
 
     @GetMapping("/{username}")

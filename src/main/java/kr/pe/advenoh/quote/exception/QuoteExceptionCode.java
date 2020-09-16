@@ -12,11 +12,11 @@ public enum QuoteExceptionCode implements ExceptionCode {
     system  : 50000
     */
 
-    ACCOUNT_USER_NOT_FOUND("10000", "User not found with username or email : %s"),
-    ACCOUNT_USERNAME_IS_ALREADY_EXIST("10010", "Username is already exist!"),
-    ACCOUNT_EMAIL_IS_ALREADY_EXIST("10020", "Email is already exist!"),
-    ACCOUNT_USER_REGISTERED_SUCCESS("10030", "User registered successfully"),
-    ACCOUNT_ROLE_IS_NOT_SET("10040", "Role(%s) is not set"),
+    ACCOUNT_USER_NOT_FOUND("10000", "사용자 정보를 찾을 수 없습니다"),
+    ACCOUNT_USERNAME_IS_ALREADY_EXIST("10010", "Username이 이미 존재합니다"),
+    ACCOUNT_EMAIL_IS_ALREADY_EXIST("10020", "이메일 주소가 이미 존재합니다"),
+    ACCOUNT_USER_REGISTERED_SUCCESS("10030", "사용자 등록이 완료되었습니ㄷ"),
+    ACCOUNT_ROLE_NOT_FOUND("10040", "Role(%s) 정보를 찾을 수가 없습니다"),
     ACCOUNT_FAILED_LOGIN("10050", "id/password를 확인해주세요"),
 
     QUOTE_NOT_FOUND("20000", "요청하신 명언 정보를 찾을 수 없습니다"),

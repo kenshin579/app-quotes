@@ -1,88 +1,76 @@
 package kr.pe.advenoh.quote.controller;
 
 import com.jayway.jsonpath.JsonPath;
-import kr.pe.advenoh.quote.model.dto.SignUpRequestDto;
-import kr.pe.advenoh.quote.service.IUserService;
+import kr.pe.advenoh.quote.exception.ApiException;
+import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
+import kr.pe.advenoh.quote.model.entity.Role;
+import kr.pe.advenoh.quote.model.entity.User;
+import kr.pe.advenoh.quote.model.enums.RoleType;
+import kr.pe.advenoh.quote.repository.RoleRepository;
+import kr.pe.advenoh.quote.spring.InitialDataLoader;
+import kr.pe.advenoh.quote.util.SpringMockMvcTestSupport;
 import kr.pe.advenoh.quote.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-public class FolderControllerTest {
-    //todo: db가 running하고 있지 않아도 동작하도록 수정하면 좋을 듯함
+class FolderControllerTest extends SpringMockMvcTestSupport {
+    private final String BASE_URL = "/api/folders";
+    private User user;
+    private String folderName;
 
     @Autowired
-    private MockMvc mockMvc;
+    private InitialDataLoader initialDataLoader;
 
     @Autowired
-    private IUserService userService;
+    private RoleRepository roleRepository;
 
-    private String username;
-
-    @Before
-    public void setUp() throws Exception {
-        username = TestUtils.generateRandomString(5);
-        log.info("username : {}", username);
-
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
-                .username(username)
-                .email("test@sdf.com")
-                .name("test")
-                .password("123456")
-                .build();
-        userService.registerNewUserAccount(signUpRequestDto);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        userService.deleteUser(username);
+    @BeforeEach
+    void setUp() {
+        Role role = roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() ->
+                new ApiException(QuoteExceptionCode.ACCOUNT_ROLE_NOT_FOUND, RoleType.ROLE_USER.name()));
+        user = initialDataLoader.createUserIfNotFound(username, email, name, password, Arrays.asList(role));
+        folderName = TestUtils.generateRandomString(3);
+        log.info("user: {} folderName : {}", user, folderName);
     }
 
     @Test
-    public void getFolders() throws Exception {
-        this.mockMvc.perform(get("/api/folders")
-                .with(user(username))
+    @WithMockUser(username = username, authorities = {ROLE_USER})
+    void getFolders() throws Exception {
+        this.mockMvc.perform(get(BASE_URL)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.folderStatInfo.totalNumOfQuotes").exists())
                 .andExpect(jsonPath("$.folderStatInfo.totalNumOfLikes").exists())
-                .andExpect(jsonPath("$.folderList").isArray())
-                .andExpect(jsonPath("$.folderList[*].folderId").exists())
-                .andExpect(jsonPath("$.folderList[*].folderName").exists())
-                .andExpect(jsonPath("$.folderList[*].numOfQuotes").exists());
+                .andExpect(jsonPath("$.folderList").isArray());
     }
 
     @Test
     @Transactional
-    public void createFolder_deleteFolders_폴더에_명언이_없는_경우() throws Exception {
+    @WithMockUser(username = username, authorities = {ROLE_USER})
+    void createFolder_renameFolder_deleteFolders() throws Exception {
         //create folder
-        MvcResult result = this.mockMvc.perform(post("/api/folders")
-                .param("folderName", "test1")
-                .with(user(username))
+
+        MvcResult result = this.mockMvc.perform(post(BASE_URL)
+                .param("folderName", folderName)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -91,12 +79,21 @@ public class FolderControllerTest {
         Integer folderId = JsonPath.parse(result.getResponse().getContentAsString()).read("$.folderId");
         log.info("folderId : {}", folderId);
 
-        //delete folder
-        this.mockMvc.perform(delete("/api/folders")
-                .param("folderIds", folderId.toString())
-                .with(user(username))
+        //rename folder
+        String newFolderName = "new " + folderName;
+        this.mockMvc.perform(put(BASE_URL + "/{folderId}/rename", folderId)
+                .param("folderName", newFolderName)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.succeed", is(true)));
+
+        //delete folder
+        this.mockMvc.perform(delete(BASE_URL)
+                .param("folderIds", folderId.toString())
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.succeed", is(true)));
     }
 }
