@@ -16,7 +16,6 @@ import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,6 +41,7 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
     @PersistenceContext
     private EntityManager em;
 
+    //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
     void quote_save() {
         Author saveAuthor = authorRepository.save(new Author("frank1"));
@@ -62,7 +62,6 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
     }
 
     @Test
-    @Transactional
     void findAllByFolderId() {
         Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createDt");
         Long folderId = 6L;
@@ -90,14 +89,14 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
         log.info("QuoteResponseDto : {}", quotes.getContent());
     }
 
-    //todo : fail로 떨어짐
+    //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
     void findAllByQuoteId() {
         QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(60L).get();
         log.info("quoteResponseDto : {}", quoteResponseDto);
     }
 
-    //todo: 이 부분 아래 수정하기
+    //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
     void findAllByQuoteId_데이터가_없는_경우() {
         QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(Long.MAX_VALUE).get();

@@ -1,13 +1,10 @@
 package kr.pe.advenoh.quote.service;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import kr.pe.advenoh.quote.model.dto.QuoteRequestDto;
 import kr.pe.advenoh.quote.model.dto.QuoteResponseDto;
 import kr.pe.advenoh.quote.model.entity.Author;
 import kr.pe.advenoh.quote.model.entity.Folder;
-import kr.pe.advenoh.quote.model.entity.FolderQuoteMapping;
 import kr.pe.advenoh.quote.model.entity.Quote;
-import kr.pe.advenoh.quote.model.entity.QuoteTagMapping;
 import kr.pe.advenoh.quote.model.entity.Tag;
 import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.repository.AuthorRepository;
@@ -27,12 +24,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.modelmapper.ModelMapper;
-import org.springframework.ui.ModelMap;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -80,8 +75,7 @@ class QuoteServiceMockTest extends MockitoTestSupport {
         prefixStr = TestUtils.generateRandomString(4);
     }
 
-    //todo : fail로 떨어짐 - repository 단 수정하면 이것도 수정해야 해서 다음 작업으로 남겨줌
-    @Ignore
+    //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
     void createQuote_tags_모두_새로운_태그인_경우() {
         //given
@@ -122,8 +116,7 @@ class QuoteServiceMockTest extends MockitoTestSupport {
 
     }
 
-    //todo : fail로 떨어짐 - repository 단 수정하면 이것도 수정해야 해서 다음 작업으로 남겨줌
-    @Ignore
+    //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
     void createQuote_tags_새로운_태그_2개_이미_존재하는_태그_1개_인_경우() {
         QuoteRequestDto quoteRequestDto = QuoteRequestDto.builder()
