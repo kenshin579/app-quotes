@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Getter
@@ -14,8 +15,12 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class QuoteRequestDto {
+    @NotNull
     private String quoteText;
+
     private String authorName;
+
+    @NotNull
     private YN useYn;
     private Long folderId;
     private List<String> tags; //todo : client에서 중복 값은 체크가 필요함
