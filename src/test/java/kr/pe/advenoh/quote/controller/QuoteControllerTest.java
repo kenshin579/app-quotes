@@ -140,7 +140,6 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.succeed", is(true)));
     }
 
-    //todo : 여기 작업하기
     @Test
     @WithMockUser(username = username, authorities = {ROLE_USER})
     @Transactional
@@ -148,7 +147,8 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
         this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
                 .param("useYn", YN.Y.name()))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message", is(QuoteExceptionCode.REQUEST_INVALID.getMessage())));
     }
 
     @Test
