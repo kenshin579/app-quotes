@@ -1,7 +1,5 @@
 package kr.pe.advenoh.quote.controller;
 
-import kr.pe.advenoh.quote.exception.ApiException;
-import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.dto.QuoteRequestDto;
 import kr.pe.advenoh.quote.service.QuoteLikeService;
 import kr.pe.advenoh.quote.service.QuoteService;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -54,14 +53,9 @@ public class QuoteController {
     @PostMapping("/folders/{folderId}")
     public ResponseEntity<?> createQuote(
             @PathVariable(name = "folderId") Long folderId,
-            @ModelAttribute QuoteRequestDto quoteRequestDto,
+            @ModelAttribute @Valid QuoteRequestDto quoteRequestDto,
             @CurrentUser Principal currentUser) {
         log.info("[quotedebug] quoteRequestDto : {} currentUser : {}", quoteRequestDto, currentUser.getName());
-        //todo : 이건 @Valid 어노테이션을 변경작업하도록 함
-        if (quoteRequestDto.getQuoteText() == null
-                || quoteRequestDto.getUseYn() == null) {
-            throw new ApiException(HttpStatus.BAD_REQUEST, QuoteExceptionCode.REQUEST_INVALID);
-        }
         quoteRequestDto.setFolderId(folderId);
         return new ResponseEntity<>(quoteService.createQuote(quoteRequestDto, currentUser), HttpStatus.OK);
     }
