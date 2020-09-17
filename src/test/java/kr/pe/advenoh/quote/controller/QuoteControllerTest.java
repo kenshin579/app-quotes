@@ -179,6 +179,13 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.code", is(QuoteExceptionCode.QUOTE_NOT_FOUND.getCode())));
     }
 
+    @Test
+    public void getRandomQuote() throws Exception {
+        this.mockMvc.perform(get(BASE_PATH + "/random"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
     private List<String> getRandomTags(String prefix, int max) {
         List<String> tags = new ArrayList<>();
         for (int i = 0; i < max; i++) {
