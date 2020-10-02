@@ -1,11 +1,13 @@
 package kr.pe.advenoh.quote.controller;
 
 import kr.pe.advenoh.quote.model.dto.QuoteRequestDto;
+import kr.pe.advenoh.quote.model.dto.QuoteResponseDto;
 import kr.pe.advenoh.quote.service.QuoteLikeService;
 import kr.pe.advenoh.quote.service.QuoteService;
 import kr.pe.advenoh.quote.spring.security.CurrentUser;
 import kr.pe.advenoh.quote.util.AppConstants;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,9 @@ public class QuoteController {
 
     @Autowired
     private QuoteLikeService quoteLikeService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping("/folders/{folderId}")
     public ResponseEntity<?> getQuotes(
@@ -85,7 +90,6 @@ public class QuoteController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
-
     @PutMapping("/move/{folderId}")
     public ResponseEntity<?> moveQuotes(@RequestParam(value = "quoteIds") List<Long> quoteIds,
                                         @PathVariable(name = "folderId") Long folderId) {
@@ -126,6 +130,6 @@ public class QuoteController {
     @CrossOrigin
     @GetMapping("/random")
     public ResponseEntity<?> getRandomQuote() {
-        return new ResponseEntity<>(quoteService.getRandomQuote(), HttpStatus.OK);
+        return new ResponseEntity<>(modelMapper.map(quoteService.getRandomQuote(), QuoteResponseDto.class), HttpStatus.OK);
     }
 }

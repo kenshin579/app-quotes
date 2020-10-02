@@ -157,6 +157,7 @@ public class QuoteService {
         //todo : 명언 삭제시 다른 table로 이동하고 batch 작업으로 migratino 하는 작업이 별도로 필요함
         quoteTagMappingRepository.deleteAllByQuoteIds(quoteIds);
         folderQuoteMappingRepository.deleteByQuoteIds(quoteIds);
+        quoteHistoryRepository.deleteAllByQuoteIds(quoteIds);
         return quoteRepository.deleteAllByQuoteIds(quoteIds);
     }
 
@@ -204,14 +205,13 @@ public class QuoteService {
      * @return
      */
     @Transactional(readOnly = true)
-    public QuoteResponseDto getRandomQuote() {
-        Quote quote = quoteRepository.getRandomQuote();
-        return modelMapper.map(quote, QuoteResponseDto.class);
+    public Quote getRandomQuote() {
+        return quoteRepository.getRandomQuote();
     }
 
     @Transactional
     public QuoteHistory saveRandomQuote() {
-        Quote quote = quoteRepository.getRandomQuote();
+        Quote quote = this.getRandomQuote();
         return quoteHistoryRepository.save(new QuoteHistory(quote));
     }
 
