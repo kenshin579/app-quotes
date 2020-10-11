@@ -8,8 +8,8 @@ import kr.pe.advenoh.quote.model.enums.RoleType;
 import kr.pe.advenoh.quote.repository.PrivilegeRepository;
 import kr.pe.advenoh.quote.repository.RoleRepository;
 import kr.pe.advenoh.quote.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,19 +20,16 @@ import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
 @Component
 public class InitialDataLoader implements ApplicationListener<ContextRefreshedEvent> {
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
 
-    @Autowired
-    private PrivilegeRepository privilegeRepository;
+    private final PrivilegeRepository privilegeRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {

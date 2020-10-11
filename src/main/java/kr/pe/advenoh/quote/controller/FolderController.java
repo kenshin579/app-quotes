@@ -4,8 +4,8 @@ import kr.pe.advenoh.quote.model.dto.FolderResponseDto;
 import kr.pe.advenoh.quote.model.dto.FolderStatsResponseDto;
 import kr.pe.advenoh.quote.service.FolderService;
 import kr.pe.advenoh.quote.spring.security.CurrentUser;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,11 +23,11 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/folders")
 public class FolderController {
-    @Autowired
-    private FolderService folderService;
+    private final FolderService folderService;
 
     @GetMapping
     public ResponseEntity<?> getFolders(@CurrentUser Principal currentUser) {

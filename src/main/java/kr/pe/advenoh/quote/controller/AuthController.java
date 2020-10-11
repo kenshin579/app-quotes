@@ -9,8 +9,8 @@ import kr.pe.advenoh.quote.model.entity.User;
 import kr.pe.advenoh.quote.service.IUserService;
 import kr.pe.advenoh.quote.spring.security.JwtTokenProvider;
 import kr.pe.advenoh.quote.spring.security.UserPrincipal;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,18 +28,16 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private IUserService userService;
+    private final IUserService userService;
 
-    @Autowired
-    private JwtTokenProvider tokenProvider;
+    private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody @Valid SignUpRequestDto signUpRequestDto) {
