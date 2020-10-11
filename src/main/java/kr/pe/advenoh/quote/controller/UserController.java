@@ -4,6 +4,7 @@ import kr.pe.advenoh.quote.model.dto.UserProfileDto;
 import kr.pe.advenoh.quote.model.dto.UserResponseDto;
 import kr.pe.advenoh.quote.service.UserService;
 import kr.pe.advenoh.quote.spring.security.UserPrincipal;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,15 +19,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")

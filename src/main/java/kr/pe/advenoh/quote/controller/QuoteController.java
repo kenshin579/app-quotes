@@ -6,9 +6,9 @@ import kr.pe.advenoh.quote.service.QuoteLikeService;
 import kr.pe.advenoh.quote.service.QuoteService;
 import kr.pe.advenoh.quote.spring.security.CurrentUser;
 import kr.pe.advenoh.quote.util.AppConstants;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,18 +29,16 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/quotes")
 public class QuoteController {
 
-    @Autowired
-    private QuoteService quoteService;
+    private final QuoteService quoteService;
 
-    @Autowired
-    private QuoteLikeService quoteLikeService;
+    private final QuoteLikeService quoteLikeService;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/folders/{folderId}")
     public ResponseEntity<?> getQuotes(
