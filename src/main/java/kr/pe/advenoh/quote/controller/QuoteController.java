@@ -98,21 +98,21 @@ public class QuoteController {
 
     //likes
     @PostMapping("/{quoteId}/likes")
-    public ResponseEntity<?> registerVodLike(
+    public ResponseEntity<?> registerQuoteLike(
             @PathVariable(value = "quoteId") Long quoteId, @CurrentUser Principal currentUser) {
         log.debug("[quotedebug] quoteId : {} currentUser : {}", quoteId, currentUser.getName());
         return new ResponseEntity<>(quoteLikeService.registerAndGetQuoteLikeInfo(quoteId, currentUser.getName()), HttpStatus.OK);
     }
 
     @GetMapping("/{quoteId}/likes")
-    public ResponseEntity<?> getVodLike(
+    public ResponseEntity<?> getQuoteLike(
             @PathVariable(value = "quoteId") Long quoteId, @CurrentUser Principal currentUser) {
         log.debug("[quotedebug] quoteId : {} currentUser : {}", quoteId, currentUser.getName());
         return new ResponseEntity<>(quoteLikeService.getRegisteredQuoteLikeInfo(quoteId, currentUser.getName()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{quoteId}/likes")
-    public ResponseEntity<?> unregisterVodLike(
+    public ResponseEntity<?> unregisterQuoteLike(
             @PathVariable(value = "quoteId") Long quoteId, @CurrentUser Principal currentUser) {
         log.debug("[quotedebug] quoteId : {} currentUser : {}", quoteId, currentUser.getName());
         return new ResponseEntity<>(quoteLikeService.unregisterAndGetQuoteLikeInfo(quoteId, currentUser.getName()), HttpStatus.OK);
