@@ -26,10 +26,11 @@ from requests import Request, Session
 
 DATA_DIR = 'data'
 HOSTNAME_LOCAL = 'http://localhost:8080'
-HOSTNAME_REAL = 'http://ec2-13-209-56-65.ap-northeast-2.compute.amazonaws.com'
+HOSTNAME_REAL = 'http://quote.advenoh.pe.kr'
 
-PATH_NAME_QUOTE_URL = '/api/quotes/folders'
-PATH_NAME_LOGIN_URL = '/api/auth/login'
+API_QUOTE_URL = '/api/quotes/folders'
+API_LOGIN_URL = '/api/auth/login'
+API_RANDOM_URL = '/api/quote/random'
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
 
@@ -132,13 +133,13 @@ def get_token(url, username, password):
 
 def post_quotes(hostname_url, username, password, folder_id, quote_list):
     pprint.pprint(quote_list)
-    token = get_token(hostname_url + PATH_NAME_LOGIN_URL, username, password)
+    token = get_token(hostname_url + API_LOGIN_URL, username, password)
     headers = {
         'Authorization': token['token_TYPE'] + ' ' + token['accessToken']
     }
     for quote in quote_list:
         print('quote', quote)
-        response = requests.post(hostname_url + PATH_NAME_QUOTE_URL + '/' + folder_id, data=quote, headers=headers)
+        response = requests.post(hostname_url + API_QUOTE_URL + '/' + folder_id, data=quote, headers=headers)
         # print("response", response.json())
 
 
@@ -165,6 +166,11 @@ def move_file(src, dst):
         print('not found :: source file', src)
 
 
+def send_quite_twitter():
+    print('sending twitter')
+    pass
+
+
 def main():
     parser = argparse.ArgumentParser(description="Uploading quotes to API server")
 
@@ -187,8 +193,9 @@ def main():
     required_group.add_argument('-u', dest='username', type=str, required=True)
     required_group.add_argument('-p', dest='password', action=PasswordPromptAction, type=str, required=True)
 
-    # cafe subcommand
-    # parser.add_argument("-t", "--tags", nargs='+', help="sending quotes to " + API_QUOTE_URL, required=True)
+    # twitter upload
+    twitter_parser = subparsers.add_parser('twitter', help='twitter subcommand')
+    twitter_parser.add_argument("-u", "--upload", action="store_true", help="send quote to twiter")
 
     args = parser.parse_args()
     print('args', args)
@@ -209,6 +216,8 @@ def main():
                                 move_file(file, args.dst)
                 else:
                     print("filename not found: " + args.file)
+        elif args.subcommand == 'twitter':
+            send_quite_twitter()
         elif args.subcommand == 'epub':
             if args.epub:
                 if os.path.exists(args.epub):
