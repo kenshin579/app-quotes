@@ -27,5 +27,4 @@ jobs:
 #        SECRETS_TEST : ${{ SECRETS_TEST }
         super_secret: ${{ secrets.SuperSecret }}
       run: |
-        echo
         python scripts/quotes.py -u
