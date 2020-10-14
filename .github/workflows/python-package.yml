@@ -26,5 +26,6 @@ jobs:
       env:
 #        SECRETS_TEST : ${{ SECRETS_TEST }
         super_secret: ${{ secrets.SuperSecret }}
+        TEST_VAR: 'frank test'
       run: |
         python scripts/quotes.py twitter -u
