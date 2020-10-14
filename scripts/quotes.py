@@ -168,9 +168,11 @@ def move_file(src, dst):
 
 def send_quote_twitter():
     print('sending twitter')
-    print('var1: ', os.getenv('SECRETS_TEST'))
-    print('var2: ', os.getenv('super_secret'))
-    print('var3: ', os.getenv('TEST_VAR'))
+    print('CONSUMER_KEY: ', os.getenv('CONSUMER_KEY'))
+    print('CONSUMER_SECRET: ', os.getenv('CONSUMER_SECRET'))
+    print('ACCESS_TOKEN: ', os.getenv('ACCESS_TOKEN'))
+    print('TOKEN_SECRET: ', os.getenv('TOKEN_SECRET'))
+    print('BEARER_TOKEN: ', os.getenv('BEARER_TOKEN'))
 
 
 def main():
