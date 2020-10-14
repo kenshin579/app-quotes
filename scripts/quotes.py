@@ -10,6 +10,8 @@ import pprint
 import re
 import shutil
 import sys
+import confighelper
+import requests
 
 ################################################################################################
 # TODO:
@@ -21,8 +23,7 @@ import sys
 # Constants
 #
 ################################################################################################
-import requests
-from requests import Request, Session
+
 
 DATA_DIR = 'data'
 HOSTNAME_LOCAL = 'http://localhost:8080'
@@ -199,6 +200,8 @@ def main():
 
     # twitter upload
     twitter_parser = subparsers.add_parser('twitter', help='twitter subcommand')
+    twitter_parser.add_argument('-c', '--config', dest='config_file', metavar='PATH', default=None,
+                                type=str, help='config file (yaml)')
     twitter_parser.add_argument("-u", "--upload", action="store_true", help="send quote to twiter")
 
     args = parser.parse_args()
@@ -222,6 +225,10 @@ def main():
                     print("filename not found: " + args.file)
         elif args.subcommand == 'twitter':
             send_quote_twitter()
+            if args.config_file:
+                config_filename = confighelper.find_file(args.config_file)
+                config = confighelper.parse(config_filename)
+                print('config', config)
         elif args.subcommand == 'epub':
             if args.epub:
                 if os.path.exists(args.epub):
