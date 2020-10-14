@@ -27,4 +27,4 @@ jobs:
 #        SECRETS_TEST : ${{ SECRETS_TEST }
         super_secret: ${{ secrets.SuperSecret }}
       run: |
-        python scripts/quotes.py -u
+        python scripts/quotes.py twitter -u
