@@ -24,9 +24,10 @@ jobs:
         if [ -f scripts/requirements.txt ]; then pip install -r scripts/requirements.txt; fi
     - name: Run maintenance.py
       env:
-#        SECRETS_TEST : ${{ SECRETS_TEST }
-        super_secret: ${{ secrets.SuperSecret }}
-        SECRETS_TEST: ${{ secrets.SECRETS_TEST }}
-        TEST_VAR: 'frank test'
+        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+        BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
       run: |
         python scripts/quotes.py twitter -u
