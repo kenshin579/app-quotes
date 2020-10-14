@@ -170,6 +170,7 @@ def send_quote_twitter():
     print('sending twitter')
     print('var1: ', os.getenv('SECRETS_TEST'))
     print('var2: ', os.getenv('super_secret'))
+    print('var3: ', os.getenv('TEST_VAR'))
 
 
 def main():
