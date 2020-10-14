@@ -30,13 +30,13 @@ import tweepy
 CONFIG_DIRS = [
     getcwd(),
     '~',
-    path.join('~', 'bots'),
+    path.join('~', 'twitter'),
 ]
 
 CONFIG_BASES = [
-    'bots.yml',
-    'bots.yaml',
-    'bots.json'
+    'twitter.yml',
+    'twitter.yaml',
+    'twitter.json'
 ]
 
 
