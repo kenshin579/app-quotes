@@ -168,7 +168,8 @@ def move_file(src, dst):
 
 def send_quote_twitter():
     print('sending twitter')
-    print('var: ', os.getenv('SECRETS_TEST'))
+    print('var1: ', os.getenv('SECRETS_TEST'))
+    print('var2: ', os.getenv('super_secret'))
 
 
 def main():
