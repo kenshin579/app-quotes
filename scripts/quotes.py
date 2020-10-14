@@ -167,7 +167,7 @@ def move_file(src, dst):
         print('not found :: source file', src)
 
 
-def send_quote_twitter():
+def send_quote_twitter(config):
     print('sending twitter')
     print('CONSUMER_KEY: ', os.getenv('CONSUMER_KEY'))
     print('CONSUMER_SECRET: ', os.getenv('CONSUMER_SECRET'))
@@ -224,11 +224,15 @@ def main():
                 else:
                     print("filename not found: " + args.file)
         elif args.subcommand == 'twitter':
-            send_quote_twitter()
             if args.config_file:
                 config_filename = confighelper.find_file(args.config_file)
                 config = confighelper.parse(config_filename)
                 print('config', config)
+                send_quote_twitter(config)
+            else:
+                # env...
+                pass
+
         elif args.subcommand == 'epub':
             if args.epub:
                 if os.path.exists(args.epub):
