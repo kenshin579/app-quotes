@@ -166,9 +166,9 @@ def move_file(src, dst):
         print('not found :: source file', src)
 
 
-def send_quite_twitter():
+def send_quote_twitter():
     print('sending twitter')
-    pass
+    print('var: ', os.getenv('SECRETS_TEST'))
 
 
 def main():
@@ -217,7 +217,7 @@ def main():
                 else:
                     print("filename not found: " + args.file)
         elif args.subcommand == 'twitter':
-            send_quite_twitter()
+            send_quote_twitter()
         elif args.subcommand == 'epub':
             if args.epub:
                 if os.path.exists(args.epub):
