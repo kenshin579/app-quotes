@@ -178,7 +178,7 @@ def send_quote_twitter(twitter_config, quote_url):
 
     # Create API object
     twitter_api = tweepy.API(auth)
-    twitter_api.update_status(quote.quoteText)
+    twitter_api.update_status(quote['quoteText'])
 
 ################################################################################################
 # Main function
