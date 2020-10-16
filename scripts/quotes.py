@@ -10,6 +10,9 @@ import pprint
 import re
 import shutil
 import sys
+import confighelper
+import requests
+import config
 
 ################################################################################################
 # TODO:
@@ -21,8 +24,7 @@ import sys
 # Constants
 #
 ################################################################################################
-import requests
-from requests import Request, Session
+import tweepy
 
 DATA_DIR = 'data'
 HOSTNAME_LOCAL = 'http://localhost:8080'
@@ -30,7 +32,7 @@ HOSTNAME_REAL = 'http://quote.advenoh.pe.kr'
 
 API_QUOTE_URL = '/api/quotes/folders'
 API_LOGIN_URL = '/api/auth/login'
-API_RANDOM_URL = '/api/quote/random'
+API_RANDOM_URL = '/api/quotes/random'
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
 
@@ -149,11 +151,10 @@ def send_bulk_quotes(url, quote_list):
     # r = requests.post(url, data=json.dumps(quote_list), headers=headers)
     # print("r", r)
 
-
-################################################################################################
-# Main function
-#
-################################################################################################
+def get_random_quote(url):
+    print('url', url)
+    res = requests.get(url)
+    return res.json()
 
 def move_file(src, dst):
     if os.path.isfile(src):
@@ -166,13 +167,24 @@ def move_file(src, dst):
         print('not found :: source file', src)
 
 
-def send_quote_twitter():
-    print('sending twitter')
-    print('CONSUMER_KEY: ', os.getenv('CONSUMER_KEY'))
-    print('CONSUMER_SECRET: ', os.getenv('CONSUMER_SECRET'))
-    print('ACCESS_TOKEN: ', os.getenv('ACCESS_TOKEN'))
-    print('TOKEN_SECRET: ', os.getenv('TOKEN_SECRET'))
-    print('BEARER_TOKEN: ', os.getenv('BEARER_TOKEN'))
+def send_quote_twitter(twitter_config, quote_url):
+    print('twitter_config', twitter_config)
+    auth = tweepy.OAuthHandler(twitter_config["consumer_key"], twitter_config["consumer_secret"])
+    auth.set_access_token(twitter_config["access_token"], twitter_config["token_secret"])
+
+    # get random quote
+    quote = get_random_quote(quote_url)
+    print('quote', quote)
+
+    # Create API object
+    twitter_api = tweepy.API(auth)
+    twitter_api.update_status(quote.quoteText)
+
+################################################################################################
+# Main function
+#
+################################################################################################
+
 
 
 def main():
@@ -199,8 +211,12 @@ def main():
 
     # twitter upload
     twitter_parser = subparsers.add_parser('twitter', help='twitter subcommand')
+    twitter_parser.add_argument('-c', '--config', dest='config_file', metavar='PATH', default=None,
+                                type=str, help='config file (yaml)')
     twitter_parser.add_argument("-u", "--upload", action="store_true", help="send quote to twiter")
-
+    twitter_parser.add_argument("--server", action='store', choices=["local", "real"],
+                            help="set server information for the action to carry on",
+                            required=True)
     args = parser.parse_args()
     print('args', args)
 
@@ -221,7 +237,14 @@ def main():
                 else:
                     print("filename not found: " + args.file)
         elif args.subcommand == 'twitter':
-            send_quote_twitter()
+            quote_url = get_baseurl(args.server) + API_RANDOM_URL
+            if args.config_file:
+                local_file = confighelper.configure('quote', config_file=args.config_file)
+
+                send_quote_twitter(local_file, quote_url)
+            else:
+                send_quote_twitter(config.credentials, quote_url)
+
         elif args.subcommand == 'epub':
             if args.epub:
                 if os.path.exists(args.epub):
