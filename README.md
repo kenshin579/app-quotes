@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/kenshin579/app-quotes.svg?branch=master)](https://travis-ci.org/kenshin579/app-quotes)
+![.github/workflows/python-package.yml](https://github.com/kenshin579/app-quotes/workflows/.github/workflows/python-package.yml/badge.svg?branch=master)
 
 Quotes 검색 사이트 
 =====
