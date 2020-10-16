@@ -24,7 +24,6 @@ except NameError:
     FileNotFoundError = lambda x: IOError(ENOENT, x)
 
 import yaml
-import tweepy
 
 
 CONFIG_DIRS = [
@@ -118,17 +117,6 @@ def find_file(config_file=None, default_directories=None, default_bases=None):
             return filepath
 
     raise FileNotFoundError('Config file not found in {}'.format(dirs))
-
-
-def setup_auth(**keys):
-    '''Set up Tweepy authentication using passed args or config file settings.'''
-    auth = tweepy.OAuthHandler(consumer_key=keys['consumer_key'], consumer_secret=keys['consumer_secret'])
-    auth.set_access_token(
-        key=keys.get('token', keys.get('key', keys.get('oauth_token'))),
-        secret=keys.get('secret', keys.get('oauth_secret'))
-    )
-    return auth
-
 
 def dump(contents, file_path):
     _, ext = path.splitext(file_path)
