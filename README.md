@@ -16,7 +16,9 @@ Quotes 검색 사이트
 - 명언 관리 페이지
   - 폴더
   - 명언 생성/수정/삭제
-- 매일 명언 목록 리스트
+- 매일 명언 목록
+- 기타
+  - 매일 자동으로 명언 트위터 계정 ([@DailyQuotesKr](https://twitter.com/DailyQuotesKr))으로 업로드
 
 ## 화면
 
