@@ -174,11 +174,15 @@ def send_quote_twitter(twitter_config, quote_url):
 
     # get random quote
     quote = get_random_quote(quote_url)
-    print('quote', quote)
+    quote_text = quote['quoteText']
 
+    if quote['authorName']:
+        quote_text += "/n/n- " + quote['authorName']
+
+    print('quote_text', quote_text)
     # Create API object
     twitter_api = tweepy.API(auth)
-    twitter_api.update_status(quote['quoteText'])
+    twitter_api.update_status(quote_text)
 
 ################################################################################################
 # Main function
