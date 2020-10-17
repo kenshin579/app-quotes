@@ -5,11 +5,7 @@ name: Upload a random quote to twitter account
 
 on:
   schedule:
-    # every 12 hours
     - cron:  '*/5 * * * *'
-#  push:
-#    branches: [ master ]
-
 jobs:
   build:
 
