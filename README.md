@@ -21,17 +21,12 @@ Quotes 검색 사이트
 - 기타
   - 매일 자동으로 명언 트위터 계정 ([@DailyQuotesKr](https://twitter.com/DailyQuotesKr))으로 업로드
 
-## 화면
+## Contributions
 
-### 1. 메인 화면
+많은 기능은 계획 되어 있습니다. 스터디하면서 더 발전 시킬 예정입니다. 누구나 참여 가능합니다. Issue 페이지를 참고해주세요. 
+감사합니다. 
 
-<img src="images/image-20200714202101800.png" alt="메인화면" style="zoom:50%;" />
-
-### 2. 명언 관리 페이지
-
-<img src="images/image-20200714202242104.png" alt="명언 관리 페이지" style="zoom:50%;" />
-
-<img src="images/image-20200714202256330.png" alt="명언 추가" style="zoom:50%;" />
+https://github.com/kenshin579/app-quotes/issues
 
 # 개발환경
 
@@ -76,7 +71,6 @@ $ npm run start
 
 http://localhost:3000로 접속하면 됩니다. 
 
-
 ## Production으로 빌드하기
 
 Production으로 빌드하려면 아래와 같이 -P 옵션에 real 값으로 패키지하면 FE 빌드시 production 모드로 빌드하여 jar 파일에 FE 파일도 같이 포함되어 빌드하게 됩니다. 
@@ -87,9 +81,15 @@ $ mvn clean package -P real
 
 http://localhost:8080로 접속해보세요. 
 
-## Contributions
 
-많은 기능은 계획 되어 있습니다. 스터디하면서 더 발전 시킬 예정입니다. 누구나 참여 가능합니다. Issue 페이지를 참고해주세요. 
-감사합니다. 
+## 화면
 
-https://github.com/kenshin579/app-quotes/issues
+### 1. 메인 화면
+
+<img src="images/image-20200714202101800.png" alt="메인화면" style="zoom:50%;" />
+
+### 2. 명언 관리 페이지
+
+<img src="images/image-20200714202242104.png" alt="명언 관리 페이지" style="zoom:50%;" />
+
+<img src="images/image-20200714202256330.png" alt="명언 추가" style="zoom:50%;" />
