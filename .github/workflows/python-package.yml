@@ -5,7 +5,7 @@ name: Upload a random quote to twitter account
 
 on:
   schedule:
-    - cron:  '*/5 * * * *'
+    - cron:  '* */6 * * *'
 jobs:
   build:
 
