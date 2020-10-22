@@ -1,5 +1,7 @@
 package kr.pe.advenoh.quote.controller;
 
+import kr.pe.advenoh.quote.exception.ApiException;
+import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.dto.QuoteRequestDto;
 import kr.pe.advenoh.quote.model.dto.QuoteResponseDto;
 import kr.pe.advenoh.quote.service.QuoteLikeService;
@@ -94,6 +96,14 @@ public class QuoteController {
         Map<String, Object> result = new HashMap<>();
         result.put("succeed", quoteService.moveQuotes(quoteIds, folderId));
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @GetMapping("/checkQuoteExists")
+    public ResponseEntity<?> checkQuoteExists(@RequestParam(value = "quoteText") String quoteText) {
+        if (quoteText.isEmpty()) {
+            throw new ApiException(QuoteExceptionCode.REQUEST_INVALID);
+        }
+        return new ResponseEntity<>(quoteService.doesQuoteExists(quoteText), HttpStatus.OK);
     }
 
     //likes

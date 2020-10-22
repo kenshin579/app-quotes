@@ -215,6 +215,11 @@ public class QuoteService {
         return quoteHistoryRepository.save(new QuoteHistory(quote));
     }
 
+    @Transactional(readOnly = true)
+    public boolean doesQuoteExists(String quoteText) {
+        return quoteRepository.existsQuoteByQuoteText(quoteText);
+    }
+
     /**
      * allTags - dbTags의 태그를 반환함
      *

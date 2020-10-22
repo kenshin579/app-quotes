@@ -23,4 +23,6 @@ public interface QuoteRepository extends JpaRepository<Quote, Long>, QuoteReposi
     //    @Query(value = "SELECT q FROM Quote q ORDER BY random()")
     @Query(value = "SELECT * FROM quotes ORDER BY rand() LIMIT 1", nativeQuery = true)
     Quote getRandomQuote();
+
+    boolean existsQuoteByQuoteText(String quoteText);
 }

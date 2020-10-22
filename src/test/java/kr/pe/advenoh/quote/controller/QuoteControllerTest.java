@@ -180,6 +180,15 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     }
 
     @Test
+    public void checkQuoteExists() throws Exception {
+        this.mockMvc.perform(get(BASE_PATH + "/checkQuoteExists")
+                .param("quoteText", quoteText))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isBoolean());
+    }
+
+    @Test
     public void getRandomQuote() throws Exception {
         this.mockMvc.perform(get(BASE_PATH + "/random"))
                 .andDo(print())
