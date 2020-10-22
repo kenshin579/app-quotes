@@ -67,6 +67,8 @@ deploy:
 
 # CI 실행 완료시 메일로 알람
 notifications:
-  email:
-    recipients:
-      - advenoh@gmail.com
+  #  email:
+  #    recipients:
+  #    - advenoh@gmail.com
+  slack:
+    secure: pnEZaS1REkNU5VWKLK+JE2tbA7n18vfE8Cikk9RpOV0AkUIVCTtyO94A+0TXdKE0J5qqwfggF+gkU1yCO5rkGeubTDG/PTTggIwtJRV6uyDyXTDF37Gv/mik9sIofYW9oo0kwWVaoXblgdL38MFkRKN1dscyozgYFCyrRG8rgqxOVJ3Xak132WW2Krsn1bOzYaG9RTTZCYoe3Spk1CWulSOlrenqgmaUbJenak3bQBIpJCSLNS80D2+unoMh51lyE/PAcwbZT5xbkcO0ITEv/Ap5Qte+HGE9iIyrXo+0t3FjlSNx6eszDa7QS43CkSAsTb/sTJkGCs1r3bHSgPlRhPPFBBcAV0G5utvXmrVT0zjedoe+RXK5DBizi3skT5Q/QNZqBnNf12t+NyqWbgX/pDA0mNzke9H/Jbvdbr706JDtxzXSMeO0jKm4TRuLUTP/irjQQH0/6Jg3u9AG/0pka5dZkXmvYYAXJN4W+TKihH450bONILtZQDXbfr8OHLKiXrxaPdubrGmqddy+sgpHePotqQcGf6SPsgUBhheduRrZ8i3T/R6o+AsPCGkvBtw3nou/74R2IuznMnbmjVOdLOnM33JS62IsTgEZi9OAqssf0musbfJozmathZVexn2qyQriPyeQRSHNuwQron9+LHZBT80nchhHAp2lPYWgicc=
