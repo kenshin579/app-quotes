@@ -33,9 +33,13 @@ HOSTNAME_REAL = 'http://quote.advenoh.pe.kr'
 API_QUOTE_URL = '/api/quotes/folders'
 API_LOGIN_URL = '/api/auth/login'
 API_RANDOM_URL = '/api/quotes/random'
+API_QUOTE_EXISTS_URL = '/api/quotes/checkQuoteExists'
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
-
+TWITTER_QUOTE_ACCOUNTS = [{
+    "twitter_id": "munganbot",
+    "interval": "1hrs"
+}]
 
 class PARSE_MODE(enum.Enum):
     START = 1
@@ -167,13 +171,12 @@ def move_file(src, dst):
         print('not found :: source file', src)
 
 
-def send_quote_twitter(twitter_config, quote_url):
+def send_quote_twitter(twitter_config, url_random_quote):
     print('twitter_config', twitter_config)
-    auth = tweepy.OAuthHandler(twitter_config["consumer_key"], twitter_config["consumer_secret"])
-    auth.set_access_token(twitter_config["access_token"], twitter_config["token_secret"])
+    twitter_api = create_tweepy_api(twitter_config)
 
     # get random quote
-    quote = get_random_quote(quote_url)
+    quote = get_random_quote(url_random_quote)
     quote_text = quote['quoteText']
 
     if quote['authorName']:
@@ -181,14 +184,32 @@ def send_quote_twitter(twitter_config, quote_url):
 
     print('quote_text', quote_text)
     # Create API object
-    twitter_api = tweepy.API(auth)
+
     twitter_api.update_status(quote_text)
+
+
+def create_tweepy_api(twitter_config):
+    auth = tweepy.OAuthHandler(twitter_config["consumer_key"], twitter_config["consumer_secret"])
+    auth.set_access_token(twitter_config["access_token"], twitter_config["token_secret"])
+    twitter_api = tweepy.API(auth)
+    return twitter_api
+
 
 ################################################################################################
 # Main function
 #
 ################################################################################################
 
+
+def save_quote_from_twitter(twitter_config, url_quote_exists):
+    print('save')
+    twitter_api = create_tweepy_api(twitter_config)
+
+    #twitter에서 명언 가져오기
+
+    # quote exists
+
+    # quote save
 
 
 def main():
@@ -213,14 +234,17 @@ def main():
     required_group.add_argument('-u', dest='username', type=str, required=True)
     required_group.add_argument('-p', dest='password', action=PasswordPromptAction, type=str, required=True)
 
-    # twitter upload
+    # twitter subcommand
     twitter_parser = subparsers.add_parser('twitter', help='twitter subcommand')
     twitter_parser.add_argument('-c', '--config', dest='config_file', metavar='PATH', default=None,
                                 type=str, help='config file (yaml)')
-    twitter_parser.add_argument("-u", "--upload", action="store_true", help="send quote to twiter")
     twitter_parser.add_argument("--server", action='store', choices=["local", "real"],
                             help="set server information for the action to carry on",
                             required=True)
+
+    twitter_parser.add_argument("-u", "--upload", action="store_true", help="send quote to twitter")
+    twitter_parser.add_argument("-s", "--save", action="store_true", help="save quote from twitter")
+
     args = parser.parse_args()
     print('args', args)
 
@@ -241,13 +265,21 @@ def main():
                 else:
                     print("filename not found: " + args.file)
         elif args.subcommand == 'twitter':
-            quote_url = get_baseurl(args.server) + API_RANDOM_URL
-            if args.config_file:
-                local_file = confighelper.configure('quote', config_file=args.config_file)
+            if args.upload:
+                url_random_quote = get_baseurl(args.server) + API_RANDOM_URL
+                if args.config_file:
+                    local_file = confighelper.configure('quote', config_file=args.config_file)
 
-                send_quote_twitter(local_file, quote_url)
-            else:
-                send_quote_twitter(config.credentials, quote_url)
+                    send_quote_twitter(local_file, url_random_quote)
+                else:
+                    send_quote_twitter(config.credentials, url_random_quote)
+            elif args.download:
+                url_quote_exists = get_baseurl(args.server) + API_QUOTE_EXISTS_URL
+                if args.config_file:
+                    local_file = confighelper.configure('quote', config_file=args.config_file)
+                    save_quote_from_twitter(local_file, url_quote_exists)
+                else:
+                    save_quote_from_twitter(config.credentials, url_quote_exists)
 
         elif args.subcommand == 'epub':
             if args.epub:
