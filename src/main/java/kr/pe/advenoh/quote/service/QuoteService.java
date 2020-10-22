@@ -215,6 +215,13 @@ public class QuoteService {
         return quoteHistoryRepository.save(new QuoteHistory(quote));
     }
 
+    /**
+     * todo : jpa like로 개선 작업하기
+     * 명언의 한 부분이 겹치는 경우에는 DB에 있다고 판단하는게 좋아보임
+     *
+     * @param quoteText
+     * @return
+     */
     @Transactional(readOnly = true)
     public boolean doesQuoteExists(String quoteText) {
         return quoteRepository.existsQuoteByQuoteText(quoteText);
