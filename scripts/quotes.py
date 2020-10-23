@@ -207,9 +207,10 @@ def save_quote_from_twitter(twitter_config, url_quote_exists):
 
     #twitter에서 명언 가져오기
 
-    # quote exists
 
-    # quote save
+    #quote exists
+
+    #quote save
 
 
 def main():
@@ -273,7 +274,7 @@ def main():
                     send_quote_twitter(local_file, url_random_quote)
                 else:
                     send_quote_twitter(config.credentials, url_random_quote)
-            elif args.download:
+            elif args.save:
                 url_quote_exists = get_baseurl(args.server) + API_QUOTE_EXISTS_URL
                 if args.config_file:
                     local_file = confighelper.configure('quote', config_file=args.config_file)
