@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "app-quotes",
+  "name": "App Quotes",
   "icons": [
     {
       "src": "favicon.ico",
