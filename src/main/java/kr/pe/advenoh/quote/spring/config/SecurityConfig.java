@@ -67,13 +67,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/",
                         "/favicon.ico",
-                        "/**/*.png",
-                        "/**/*.gif",
-                        "/**/*.svg",
-                        "/**/*.jpg",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js",
+                        "/manifest.json",
+                        "/static",
                         "/profile")
                 .permitAll()
                 .antMatchers("/api/auth/**", "/actuator/**")
