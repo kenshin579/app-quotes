@@ -36,10 +36,8 @@ API_RANDOM_URL = '/api/quotes/random'
 API_QUOTE_EXISTS_URL = '/api/quotes/checkQuoteExists'
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
-TWITTER_QUOTE_ACCOUNTS = [{
-    "twitter_id": "munganbot",
-    "interval": "1hrs"
-}]
+TWITTER_QUOTE_ACCOUNTS = ["munganbot", "Famoussay_bot", "nsw1223", "quotetodays", "goldensaying13", "majuwang",
+                          "famouSayingForU", "riverphilosophy", "saying__", "flipquotestudy"]
 
 class PARSE_MODE(enum.Enum):
     START = 1
@@ -206,12 +204,14 @@ def save_quote_from_twitter(twitter_config, url_quote_exists):
     twitter_api = create_tweepy_api(twitter_config)
 
     #twitter에서 명언 가져오기
+    timeline = twitter_api.user_timeline(twitter_api.user_timeline, screen_name='@munganbot')
+    for status in timeline:
+        print('text', status.text)
 
+    #quote exists check하기
 
-    #quote exists
-
-    #quote save
-
+    #없으면 quote save
+    #하나님, 하느님, 주님이 있는 경우 성경 tag 추가하기
 
 def main():
     parser = argparse.ArgumentParser(description="Uploading quotes to API server")
