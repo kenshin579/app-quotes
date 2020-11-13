@@ -219,7 +219,10 @@ def postprocess(text):
     '''
     if text in ['봇의특성상트윗이중복될수있습니다']:
         return ''
-    return text
+    result = re.sub('^\*\s+(.*?)\.$', '\\1', text)
+    logging.debug('result: %s', result)
+
+    return result
 
 
 def random_sleep(max_sleep_time_in_secs):
