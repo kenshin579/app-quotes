@@ -5,11 +5,15 @@ import enum
 import getpass
 import glob
 import json
+import logging
 import os
 import pprint
+import random
 import re
 import shutil
 import sys
+import time
+
 import confighelper
 import requests
 import config
@@ -36,8 +40,11 @@ API_RANDOM_URL = '/api/quotes/random'
 API_QUOTE_EXISTS_URL = '/api/quotes/checkQuoteExists'
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
-TWITTER_QUOTE_ACCOUNTS = ["munganbot", "Famoussay_bot", "nsw1223", "quotetodays", "goldensaying13", "majuwang",
-                          "famouSayingForU", "riverphilosophy", "saying__", "flipquotestudy"]
+TWITTER_QUOTE_ACCOUNTS = ["munganbot",
+                          # "Famoussay_bot", "nsw1223", "quotetodays", "goldensaying13", "majuwang",
+                          # "famouSayingForU", "riverphilosophy", "saying__", "flipquotestudy"
+                          ]
+
 
 class PARSE_MODE(enum.Enum):
     START = 1
@@ -75,7 +82,7 @@ class PasswordPromptAction(argparse.Action):
 ################################################################################################
 def parse_quote_file(filename):
     parse_mode = PARSE_MODE.END
-    print('filename -> ', filename)
+    logging.debug('filename -> %s', filename)
     result = []
     line_count = 1
     with open(filename) as f:
@@ -85,14 +92,14 @@ def parse_quote_file(filename):
             if len(line.strip()) != 0:
                 # print('each', line_count, ':', parse_mode, 'line', line.strip())
                 if parse_mode == PARSE_MODE.END and re.search('^#\s*tags\s*:', line) != None:
-                    print('====> TAGS', line.strip())
+                    logging.debug('====> TAGS: %s', line.strip())
                     parse_mode = PARSE_MODE.START
                     tags_line = line.strip().split(':')
                     for each_tag in tags_line[1].split(','):
                         tags.append(each_tag.strip())
                     # print('tags', tags)
                 elif parse_mode == PARSE_MODE.START and re.search('^#\s*', line) == None:
-                    print('====> QUOTE', line)
+                    logging.debug('====> QUOTE: %s', line)
                     parse_mode = PARSE_MODE.END
                     parse_line = line.strip().split('-')
                     result.append({
@@ -120,7 +127,7 @@ def get_baseurl(phase):
     elif phase == 'real':
         return HOSTNAME_REAL
     else:
-        print('no server', phase)
+        logging.error('no server : %s', phase)
 
 
 def get_token(url, username, password):
@@ -129,8 +136,8 @@ def get_token(url, username, password):
         "username": username,
         "password": password
     }
-    print('login_json', login_json)
-    print('url', url)
+    # print('login_json', login_json)
+    # print('url', url)
     response = requests.post(url, data=json.dumps(login_json), headers=headers)
     return response.json()
 
@@ -142,21 +149,23 @@ def post_quotes(hostname_url, username, password, folder_id, quote_list):
         'Authorization': token['token_TYPE'] + ' ' + token['accessToken']
     }
     for quote in quote_list:
-        print('quote', quote)
+        logging.debug('quote : %s', quote)
         response = requests.post(hostname_url + API_QUOTE_URL + '/' + folder_id, data=quote, headers=headers)
         # print("response", response.json())
 
 
 def send_bulk_quotes(url, quote_list):
     headers = {'Content-Type': 'application/json; charset=utf-8'}
-    print('quote_list', quote_list)
+    logging.debug('quote_list : %s', quote_list)
     # r = requests.post(url, data=json.dumps(quote_list), headers=headers)
     # print("r", r)
 
+
 def get_random_quote(url):
-    print('url', url)
+    logging.debug('url : %s', url)
     res = requests.get(url)
     return res.json()
+
 
 def move_file(src, dst):
     if os.path.isfile(src):
@@ -164,13 +173,13 @@ def move_file(src, dst):
             print(src, '->', dst)
             shutil.move(src, dst)
         else:
-            print('not found :: dst', dst)
+            logging.info('not found :: dst : %s', dst)
     else:
-        print('not found :: source file', src)
+        logging.info('not found :: source file : %s', src)
 
 
 def send_quote_twitter(twitter_config, url_random_quote):
-    print('twitter_config', twitter_config)
+    logging.debug('twitter_config : %s', twitter_config)
     twitter_api = create_tweepy_api(twitter_config)
 
     # get random quote
@@ -180,7 +189,7 @@ def send_quote_twitter(twitter_config, url_random_quote):
     if quote['authorName']:
         quote_text += "\n\n- " + quote['authorName']
 
-    print('quote_text', quote_text)
+    logging.debug('quote_text : %s', quote_text)
     # Create API object
 
     twitter_api.update_status(quote_text)
@@ -199,19 +208,32 @@ def create_tweepy_api(twitter_config):
 ################################################################################################
 
 
+def postprocess(text):
+    pass
+
+
+def random_sleep(max_sleep_time_in_secs):
+    sleep_time = random.randrange(1, max_sleep_time_in_secs, 1)
+    logging.info('sleep... %s', sleep_time)
+    time.sleep(sleep_time)
+
+
 def save_quote_from_twitter(twitter_config, url_quote_exists):
-    print('save')
+    logging.debug('save')
     twitter_api = create_tweepy_api(twitter_config)
 
-    #twitter에서 명언 가져오기
+    # twitter에서 명언 가져오기
     timeline = twitter_api.user_timeline(twitter_api.user_timeline, screen_name='@munganbot')
     for status in timeline:
-        print('text', status.text)
+        postprocess(status.text)
+        logging.debug('text : %s', status.text)
+    random_sleep(4)
 
-    #quote exists check하기
+    # quote exists check하기
 
-    #없으면 quote save
-    #하나님, 하느님, 주님이 있는 경우 성경 tag 추가하기
+    # 없으면 quote save
+    # 하나님, 하느님, 주님이 있는 경우 성경 tag 추가하기
+
 
 def main():
     parser = argparse.ArgumentParser(description="Uploading quotes to API server")
@@ -240,14 +262,14 @@ def main():
     twitter_parser.add_argument('-c', '--config', dest='config_file', metavar='PATH', default=None,
                                 type=str, help='config file (yaml)')
     twitter_parser.add_argument("--server", action='store', choices=["local", "real"],
-                            help="set server information for the action to carry on",
-                            required=True)
+                                help="set server information for the action to carry on",
+                                required=True)
 
     twitter_parser.add_argument("-u", "--upload", action="store_true", help="send quote to twitter")
     twitter_parser.add_argument("-s", "--save", action="store_true", help="save quote from twitter")
 
     args = parser.parse_args()
-    print('args', args)
+    logging.info('args: %s', args)
 
     if args.subcommand:
         if args.subcommand == 'text':
@@ -264,7 +286,7 @@ def main():
                                             parse_quote_file(file))
                                 move_file(file, args.dst)
                 else:
-                    print("filename not found: " + args.file)
+                    logging.info("filename not found: %s", args.file)
         elif args.subcommand == 'twitter':
             if args.upload:
                 url_random_quote = get_baseurl(args.server) + API_RANDOM_URL
@@ -287,8 +309,11 @@ def main():
                 if os.path.exists(args.epub):
                     parse_quote_epub(args.epub)
                 else:
-                    print("filename not found: " + args.epub)
+                    logging.info("filename not found: %s", args.epub)
 
 
 if __name__ == "__main__":
+    format = '[%(asctime)s,%(msecs)d] [%(levelname)-4s] %(filename)s:%(funcName)s:%(lineno)d %(message)s'
+    logging.basicConfig(format=format, level=logging.DEBUG,
+                        datefmt='%Y-%m-%d:%H:%M:%S')
     sys.exit(main())
