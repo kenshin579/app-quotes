@@ -209,7 +209,17 @@ def create_tweepy_api(twitter_config):
 
 
 def postprocess(text):
-    pass
+    '''
+    - munganbot에서 제외 목록
+    1.봇의특성상트윗이중복될수있습니다
+    2.* 충고는 눈과 같아 조용히 내리면 내릴수록 마음에 오래 남고 가슴에 더욱 깊이 새겨진다.
+
+    :param text:
+    :return:
+    '''
+    if text in ['봇의특성상트윗이중복될수있습니다']:
+        return ''
+    return text
 
 
 def random_sleep(max_sleep_time_in_secs):
@@ -223,11 +233,14 @@ def save_quote_from_twitter(twitter_config, url_quote_exists):
     twitter_api = create_tweepy_api(twitter_config)
 
     # twitter에서 명언 가져오기
-    timeline = twitter_api.user_timeline(twitter_api.user_timeline, screen_name='@munganbot')
-    for status in timeline:
-        postprocess(status.text)
-        logging.debug('text : %s', status.text)
-    random_sleep(4)
+    for twitter_id in TWITTER_QUOTE_ACCOUNTS:
+        logging.debug('twitter_id: %s', twitter_id)
+        timeline = twitter_api.user_timeline(twitter_api.user_timeline, screen_name='@' + twitter_id)
+        for status in timeline:
+            postprocess(status.text)
+            logging.debug('text : %s', status.text)
+        random_sleep(6)
+        print('')
 
     # quote exists check하기
 
