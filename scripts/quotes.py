@@ -230,6 +230,22 @@ def random_sleep(max_sleep_time_in_secs):
     logging.info('sleep... %s', sleep_time)
     time.sleep(sleep_time)
 
+def parse_quote(text):
+    '''
+
+    :param text:
+    :return:
+    '''
+
+    matched_str = re.search('^(.*?)\n+\s*-\s*(.*?)$', text)
+
+    result = {}
+    if matched_str is not None:
+        result[0] = matched_str.group(1)
+        result[1] = matched_str.group(2)
+
+    logging.debug('result: %s', result)
+    return result
 
 def save_quote_from_twitter(twitter_config, url_quote_exists):
     logging.debug('save')
