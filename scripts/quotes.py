@@ -237,7 +237,7 @@ def parse_quote(text):
     :return:
     '''
 
-    matched_str = re.search('^(.*?)\n+\s*-\s*(.*?)$', text)
+    matched_str = re.search('^([\S\n ]+)-\s*(.*?)$', text)
 
     result = {}
     if matched_str is not None:
