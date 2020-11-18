@@ -214,12 +214,16 @@ def postprocess(text):
     1.봇의특성상트윗이중복될수있습니다
     2.* 충고는 눈과 같아 조용히 내리면 내릴수록 마음에 오래 남고 가슴에 더욱 깊이 새겨진다.
 
+    참고
+    - https://regex101.com/
+    - https://stackoverflow.com/questions/33889952/python-re-sub-multiline-on-string
+
     :param text:
     :return:
     '''
     if text in ['봇의특성상트윗이중복될수있습니다']:
         return ''
-    result = re.sub('^\*\s+(.*?)\.$', '\\1', text)
+    result = re.sub('^[*\s]*(.*?)[.\s]*$', '\\1', text, flags=re.S)
     logging.debug('result: %s', result)
 
     return result
@@ -232,7 +236,7 @@ def random_sleep(max_sleep_time_in_secs):
 
 def parse_quote(text):
     '''
-
+    text를 명언과 저자로 parse해준다
     :param text:
     :return:
     '''
@@ -241,8 +245,8 @@ def parse_quote(text):
 
     result = {}
     if matched_str is not None:
-        result[0] = matched_str.group(1)
-        result[1] = matched_str.group(2)
+        result[0] = postprocess(matched_str.group(1))
+        result[1] = postprocess(matched_str.group(2))
 
     logging.debug('result: %s', result)
     return result
