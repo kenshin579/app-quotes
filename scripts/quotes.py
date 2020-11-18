@@ -241,12 +241,17 @@ def parse_quote(text):
     :return:
     '''
 
-    matched_str = re.search('^([\S\n ]+)-\s*(.*?)$', text)
+    matched_quote_author = re.search('^([\S\n ]+)-\s*(.*?)$', text)
+    logging.info('matched_quote_author : %s', matched_quote_author)
 
     result = {}
-    if matched_str is not None:
-        result[0] = postprocess(matched_str.group(1))
-        result[1] = postprocess(matched_str.group(2))
+    if matched_quote_author is not None:
+        result['quote'] = postprocess(matched_quote_author.group(1))
+        result['author'] = postprocess(matched_quote_author.group(2))
+    else:
+        matched_quote = re.search('^([\S\n ]+)$', text)
+        if matched_quote is not None:
+            result['quote'] = postprocess(matched_quote.group(1))
 
     logging.debug('result: %s', result)
     return result
@@ -260,12 +265,16 @@ def save_quote_from_twitter(twitter_config, url_quote_exists):
         logging.debug('twitter_id: %s', twitter_id)
         timeline = twitter_api.user_timeline(twitter_api.user_timeline, screen_name='@' + twitter_id)
         for status in timeline:
-            postprocess(status.text)
+            parsed_str = parse_quote(status.text)
+
             logging.debug('text : %s', status.text)
+            logging.debug('quote : %s', parsed_str['quote'])
+            logging.debug('quote : %s', parsed_str['author'])
         random_sleep(6)
         print('')
 
     # quote exists check하기
+
 
     # 없으면 quote save
     # 하나님, 하느님, 주님이 있는 경우 성경 tag 추가하기
