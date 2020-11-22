@@ -95,13 +95,18 @@ public class QuoteService {
         Author author = authorRepository.getAuthorByName(quoteRequestDto.getAuthorName()).orElse(new Author(quoteRequestDto.getAuthorName()));
         User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
-        List<Tag> dbTagsEntity = tagRepository.findByTagNameIn(quoteRequestDto.getTags());
-        List<String> dbTags = dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList());
-        List<Tag> diffTags = this.getDiffTags(quoteRequestDto.getTags(), dbTags);
-        tagRepository.saveAll(diffTags);
-        dbTagsEntity.addAll(diffTags);
+        //todo : script 저장을 위해 tags 없이도 저장 가능하도록 변경함
+        List<Tag> dbTagsEntity = null;
 
-        log.debug("[quotedebug] diffTags : {}", diffTags);
+        if (quoteRequestDto.getTags() != null) {
+            dbTagsEntity = tagRepository.findByTagNameIn(quoteRequestDto.getTags());
+            List<String> dbTags = dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList());
+            List<Tag> diffTags = this.getDiffTags(quoteRequestDto.getTags(), dbTags);
+            tagRepository.saveAll(diffTags);
+            dbTagsEntity.addAll(diffTags);
+
+            log.debug("[quotedebug] diffTags : {}", diffTags);
+        }
 
         Quote quote = Quote.builder()
                 .quoteText(quoteRequestDto.getQuoteText())
@@ -117,8 +122,10 @@ public class QuoteService {
 
         folderQuoteMappingRepository.save(new FolderQuoteMapping(folder, quote));
 
-        quoteTagMappingRepository.saveAll(dbTagsEntity.stream().map(tagEntity -> new QuoteTagMapping(quote, tagEntity)).collect(Collectors.toList()));
-        quoteResponseDto.setTags(dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList()));
+        if (quoteRequestDto.getTags() != null) {
+            quoteTagMappingRepository.saveAll(dbTagsEntity.stream().map(tagEntity -> new QuoteTagMapping(quote, tagEntity)).collect(Collectors.toList()));
+            quoteResponseDto.setTags(dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList()));
+        }
         return quoteResponseDto;
     }
 
