@@ -44,6 +44,7 @@ TWITTER_QUOTE_ACCOUNTS = ["munganbot",
                           # "Famoussay_bot", "nsw1223", "quotetodays", "goldensaying13", "majuwang",
                           # "famouSayingForU", "riverphilosophy", "saying__", "flipquotestudy"
                           ]
+TAGS_CHRISTIAN = ['하느님', '하나님', '주님']
 
 
 class PARSE_MODE(enum.Enum):
@@ -151,7 +152,7 @@ def post_quotes(hostname_url, username, password, folder_id, quote_list):
     for quote in quote_list:
         logging.debug('quote : %s', quote)
         response = requests.post(hostname_url + API_QUOTE_URL + '/' + folder_id, data=quote, headers=headers)
-        # print("response", response.json())
+        print("response", response.json())
 
 
 def send_bulk_quotes(url, quote_list):
@@ -202,12 +203,6 @@ def create_tweepy_api(twitter_config):
     return twitter_api
 
 
-################################################################################################
-# Main function
-#
-################################################################################################
-
-
 def postprocess(text):
     '''
     - munganbot에서 제외 목록
@@ -228,10 +223,12 @@ def postprocess(text):
 
     return result
 
+
 def random_sleep(max_sleep_time_in_secs):
     sleep_time = random.randrange(1, max_sleep_time_in_secs, 1)
     logging.info('sleep... %s', sleep_time)
     time.sleep(sleep_time)
+
 
 def parse_quote(text):
     '''
@@ -251,8 +248,18 @@ def parse_quote(text):
     logging.debug('result: %s', result)
     return result
 
-def save_quote_from_twitter(twitter_config, url_quote_exists):
-    logging.debug('save')
+
+def check_quote_exists(base_url, quote):
+    params = {
+        'quoteText': quote
+    }
+    res = requests.get(base_url + API_QUOTE_EXISTS_URL, params=params)
+    # logging.debug('res : %s', res.json())
+    return res.json()
+
+
+def save_quote_from_twitter(twitter_config, base_url, username, password, folder_id):
+    quote_list = []
     twitter_api = create_tweepy_api(twitter_config)
 
     # twitter에서 명언 가져오기
@@ -265,16 +272,34 @@ def save_quote_from_twitter(twitter_config, url_quote_exists):
             if 'quote' in parsed_str:
                 logging.debug('quote : %s', parsed_str['quote'])
                 logging.debug('author : %s', parsed_str['author'])
+                quote = {
+                    'quoteText': parsed_str['quote'],
+                    'authorName': parsed_str['author'],
+                    'useYn': 'Y'
+                }
+
+                is_christian_tags_exists = bool([ele for ele in TAGS_CHRISTIAN if (ele in parsed_str['quote'])])
+                if is_christian_tags_exists:
+                    quote['tags'] = '성경'
+                quote_list.append(quote)
             else:
                 logging.info('parse error : %s', status.text)
         random_sleep(6)
         print('')
 
-    # quote exists check하기
+    print('[FRANK] quote_list.size : ', len(quote_list))
+    count  = 0
+    for each_quote in quote_list:
+        count += 1
+        print('[FRANK] count : ', count)
+        if not check_quote_exists(base_url, each_quote['quoteText']):
+            post_quotes(base_url, username, password, folder_id, quote_list)
 
 
-    # 없으면 quote save
-    # 하나님, 하느님, 주님이 있는 경우 성경 tag 추가하기
+################################################################################################
+# Main function
+#
+################################################################################################
 
 
 def main():
@@ -303,11 +328,16 @@ def main():
     twitter_parser = subparsers.add_parser('twitter', help='twitter subcommand')
     twitter_parser.add_argument('-c', '--config', dest='config_file', metavar='PATH', default=None,
                                 type=str, help='config file (yaml)')
+
+    twitter_parser.add_argument("--folderid", action='store', help="set folderid", required=True)
+    twitter_parser.add_argument('-u', dest='username', type=str, required=True)
+    twitter_parser.add_argument('-p', dest='password', action=PasswordPromptAction, type=str, required=True)
+
     twitter_parser.add_argument("--server", action='store', choices=["local", "real"],
                                 help="set server information for the action to carry on",
                                 required=True)
 
-    twitter_parser.add_argument("-u", "--upload", action="store_true", help="send quote to twitter")
+    twitter_parser.add_argument("--upload", action="store_true", help="send quote to twitter")
     twitter_parser.add_argument("-s", "--save", action="store_true", help="save quote from twitter")
 
     args = parser.parse_args()
@@ -339,12 +369,12 @@ def main():
                 else:
                     send_quote_twitter(config.credentials, url_random_quote)
             elif args.save:
-                url_quote_exists = get_baseurl(args.server) + API_QUOTE_EXISTS_URL
+                base_url = get_baseurl(args.server)
                 if args.config_file:
                     local_file = confighelper.configure('quote', config_file=args.config_file)
-                    save_quote_from_twitter(local_file, url_quote_exists)
+                    save_quote_from_twitter(local_file, base_url, args.username, args.password, args.folderid)
                 else:
-                    save_quote_from_twitter(config.credentials, url_quote_exists)
+                    save_quote_from_twitter(config.credentials, base_url)
 
         elif args.subcommand == 'epub':
             if args.epub:
