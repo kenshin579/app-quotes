@@ -59,3 +59,7 @@ class QuotesTest(TestCase):
         result = quotes.parse_quote('quote text\n\n\n')
         self.assertEqual('quote text', result['quote'])
 
+    def test_str_contains_in_the_lists(self):
+        TAGS_CHRISTIAN = ['하느님', '하나님', '주님']
+        res = [ele for ele in TAGS_CHRISTIAN if (ele in '은 하느님')]
+        self.assertTrue(str(bool(res)))
