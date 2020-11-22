@@ -215,7 +215,7 @@ def postprocess(text):
     2.* 충고는 눈과 같아 조용히 내리면 내릴수록 마음에 오래 남고 가슴에 더욱 깊이 새겨진다.
 
     참고
-    - https://regex101.com/
+    - https://regex101.com/r/Nagr3R/1/
     - https://stackoverflow.com/questions/33889952/python-re-sub-multiline-on-string
 
     :param text:
@@ -224,10 +224,9 @@ def postprocess(text):
     if text in ['봇의특성상트윗이중복될수있습니다']:
         return ''
     result = re.sub('^[*\s]*(.*?)[.\s]*$', '\\1', text, flags=re.S)
-    logging.debug('result: %s', result)
+    # logging.debug('result: %s', result)
 
     return result
-
 
 def random_sleep(max_sleep_time_in_secs):
     sleep_time = random.randrange(1, max_sleep_time_in_secs, 1)
@@ -241,17 +240,13 @@ def parse_quote(text):
     :return:
     '''
 
-    matched_quote_author = re.search('^([\S\n ]+)-\s*(.*?)$', text)
-    logging.info('matched_quote_author : %s', matched_quote_author)
+    matched_quote_author = re.search('^([\w(),.\n ]+)[-\s]*([\w ]*)[-\s]*$', text)
 
     result = {}
     if matched_quote_author is not None:
         result['quote'] = postprocess(matched_quote_author.group(1))
-        result['author'] = postprocess(matched_quote_author.group(2))
-    else:
-        matched_quote = re.search('^([\S\n ]+)$', text)
-        if matched_quote is not None:
-            result['quote'] = postprocess(matched_quote.group(1))
+        if matched_quote_author.group(2) is not None:
+            result['author'] = postprocess(matched_quote_author.group(2))
 
     logging.debug('result: %s', result)
     return result
@@ -267,9 +262,11 @@ def save_quote_from_twitter(twitter_config, url_quote_exists):
         for status in timeline:
             parsed_str = parse_quote(status.text)
 
-            logging.debug('text : %s', status.text)
-            logging.debug('quote : %s', parsed_str['quote'])
-            logging.debug('quote : %s', parsed_str['author'])
+            if 'quote' in parsed_str:
+                logging.debug('quote : %s', parsed_str['quote'])
+                logging.debug('author : %s', parsed_str['author'])
+            else:
+                logging.info('parse error : %s', status.text)
         random_sleep(6)
         print('')
 

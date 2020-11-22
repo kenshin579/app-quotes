@@ -50,6 +50,11 @@ class QuotesTest(TestCase):
         self.assertEqual('사랑은 무엇보다도 \n 자신을 위한 선물이다', result['quote'])
         self.assertEqual('장 아누이', result['author'])
 
+    def test_parse_quote_author_two_dashes(self):
+        result = quotes.parse_quote('사랑은 무엇보다도 \n 자신을 위한 선물이다.\n\n\n- 장 아누이 -')
+        self.assertEqual('사랑은 무엇보다도 \n 자신을 위한 선물이다', result['quote'])
+        self.assertEqual('장 아누이', result['author'])
+
     def test_parse_quote_no_author(self):
         result = quotes.parse_quote('quote text\n\n\n')
         self.assertEqual('quote text', result['quote'])
