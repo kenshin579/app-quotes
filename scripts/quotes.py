@@ -326,19 +326,20 @@ def main():
 
     # twitter subcommand
     twitter_parser = subparsers.add_parser('twitter', help='twitter subcommand')
-    twitter_parser.add_argument('-c', '--config', dest='config_file', metavar='PATH', default=None,
+    required_twitter_group = twitter_parser.add_argument_group('required options')
+    required_twitter_group.add_argument('-c', '--config', dest='config_file', metavar='PATH', default=None,
                                 type=str, help='config file (yaml)')
 
-    twitter_parser.add_argument("--folderid", action='store', help="set folderid", required=True)
-    twitter_parser.add_argument('-u', dest='username', type=str, required=True)
-    twitter_parser.add_argument('-p', dest='password', action=PasswordPromptAction, type=str, required=True)
-
-    twitter_parser.add_argument("--server", action='store', choices=["local", "real"],
+    required_twitter_group.add_argument("--folderid", action='store', help="set folderid", required=True)
+    required_twitter_group.add_argument("--server", action='store', choices=["local", "real"],
                                 help="set server information for the action to carry on",
                                 required=True)
 
+    twitter_parser.add_argument('-u', dest='username', type=str)
+    twitter_parser.add_argument('-p', dest='password', action=PasswordPromptAction, type=str)
+
     twitter_parser.add_argument("--upload", action="store_true", help="send quote to twitter")
-    twitter_parser.add_argument("-s", "--save", action="store_true", help="save quote from twitter")
+    twitter_parser.add_argument("--save", action="store_true", help="save quote from twitter")
 
     args = parser.parse_args()
     logging.info('args: %s', args)
