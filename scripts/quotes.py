@@ -226,7 +226,7 @@ def postprocess(text):
 
 def random_sleep(max_sleep_time_in_secs):
     sleep_time = random.randrange(1, max_sleep_time_in_secs, 1)
-    logging.info('sleep... %s', sleep_time)
+    logging.debug('sleep... %s', sleep_time)
     time.sleep(sleep_time)
 
 
@@ -283,15 +283,15 @@ def save_quote_from_twitter(twitter_config, base_url, username, password, folder
                     quote['tags'] = '성경'
                 quote_list.append(quote)
             else:
-                logging.info('parse error : %s', status.text)
+                logging.warn('parse error : %s', status.text)
         random_sleep(6)
         print('')
 
-    print('[FRANK] quote_list.size : ', len(quote_list))
+    logging.info('quote_list.size : ', len(quote_list))
     count  = 0
     for each_quote in quote_list:
         count += 1
-        print('[FRANK] count : ', count)
+        logging.info('count : ', count)
         if not check_quote_exists(base_url, each_quote['quoteText']):
             post_quotes(base_url, username, password, folder_id, quote_list)
 
@@ -387,6 +387,6 @@ def main():
 
 if __name__ == "__main__":
     format = '[%(asctime)s,%(msecs)d] [%(levelname)-4s] %(filename)s:%(funcName)s:%(lineno)d %(message)s'
-    logging.basicConfig(format=format, level=logging.DEBUG,
+    logging.basicConfig(format=format, level=logging.INFO,
                         datefmt='%Y-%m-%d:%H:%M:%S')
     sys.exit(main())
