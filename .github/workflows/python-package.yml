@@ -21,6 +21,17 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         if [ -f scripts/requirements.txt ]; then pip install -r scripts/requirements.txt; fi
+    - name: Run quotes.py - crawling quotes from twitter
+        env:
+          CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+          CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          TOKEN_SECRET: ${{ secrets.TOKEN_SECRET }}
+          BEARER_TOKEN: ${{ secrets.BEARER_TOKEN }}
+          QUOTE_USERNAME: ${{ secrets.QUOTE_USERNAME }}
+          QUOTE_PASSWORD: ${{ secrets.QUOTE_PASSWORD }}
+        run: |
+          python scripts/quotes.py twitter --folderid 3 --server real --save
 #    - name: Run quotes.py - tweets a random quote
 #      env:
 #        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
