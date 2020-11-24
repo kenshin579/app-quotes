@@ -152,7 +152,7 @@ def post_quotes(hostname_url, username, password, folder_id, quote_list):
     for quote in quote_list:
         logging.debug('quote : %s', quote)
         response = requests.post(hostname_url + API_QUOTE_URL + '/' + folder_id, data=quote, headers=headers)
-        print("response", response.json())
+        logging.debug("response", response.json())
 
 
 def send_bulk_quotes(url, quote_list):
@@ -258,9 +258,13 @@ def check_quote_exists(base_url, quote):
     return res.json()
 
 
-def save_quote_from_twitter(twitter_config, base_url, username, password, folder_id):
+def save_quote_from_twitter(env_config, base_url, folder_id, username, password):
     quote_list = []
-    twitter_api = create_tweepy_api(twitter_config)
+    twitter_api = create_tweepy_api(env_config)
+    username = username or env_config['quote_username']
+    password = password or env_config['quote_password']
+
+    logging.info('username', username)
 
     # twitter에서 명언 가져오기
     for twitter_id in TWITTER_QUOTE_ACCOUNTS:
@@ -373,9 +377,9 @@ def main():
                 base_url = get_baseurl(args.server)
                 if args.config_file:
                     local_file = confighelper.configure('quote', config_file=args.config_file)
-                    save_quote_from_twitter(local_file, base_url, args.username, args.password, args.folderid)
+                    save_quote_from_twitter(local_file, base_url, args.folderid, args.username, args.password)
                 else:
-                    save_quote_from_twitter(config.credentials, base_url)
+                    save_quote_from_twitter(config.credentials, base_url, args.folderid)
 
         elif args.subcommand == 'epub':
             if args.epub:
