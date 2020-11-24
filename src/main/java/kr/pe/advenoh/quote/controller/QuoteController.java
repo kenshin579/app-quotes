@@ -1,5 +1,7 @@
 package kr.pe.advenoh.quote.controller;
 
+import kr.pe.advenoh.quote.exception.ApiException;
+import kr.pe.advenoh.quote.exception.QuoteExceptionCode;
 import kr.pe.advenoh.quote.model.dto.QuoteRequestDto;
 import kr.pe.advenoh.quote.model.dto.QuoteResponseDto;
 import kr.pe.advenoh.quote.service.QuoteLikeService;
@@ -96,23 +98,31 @@ public class QuoteController {
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
+    @GetMapping("/checkQuoteExists")
+    public ResponseEntity<?> checkQuoteExists(@RequestParam(value = "quoteText") String quoteText) {
+        if (quoteText.isEmpty()) {
+            throw new ApiException(QuoteExceptionCode.REQUEST_INVALID);
+        }
+        return new ResponseEntity<>(quoteService.doesQuoteExists(quoteText), HttpStatus.OK);
+    }
+
     //likes
     @PostMapping("/{quoteId}/likes")
-    public ResponseEntity<?> registerVodLike(
+    public ResponseEntity<?> registerQuoteLike(
             @PathVariable(value = "quoteId") Long quoteId, @CurrentUser Principal currentUser) {
         log.debug("[quotedebug] quoteId : {} currentUser : {}", quoteId, currentUser.getName());
         return new ResponseEntity<>(quoteLikeService.registerAndGetQuoteLikeInfo(quoteId, currentUser.getName()), HttpStatus.OK);
     }
 
     @GetMapping("/{quoteId}/likes")
-    public ResponseEntity<?> getVodLike(
+    public ResponseEntity<?> getQuoteLike(
             @PathVariable(value = "quoteId") Long quoteId, @CurrentUser Principal currentUser) {
         log.debug("[quotedebug] quoteId : {} currentUser : {}", quoteId, currentUser.getName());
         return new ResponseEntity<>(quoteLikeService.getRegisteredQuoteLikeInfo(quoteId, currentUser.getName()), HttpStatus.OK);
     }
 
     @DeleteMapping("/{quoteId}/likes")
-    public ResponseEntity<?> unregisterVodLike(
+    public ResponseEntity<?> unregisterQuoteLike(
             @PathVariable(value = "quoteId") Long quoteId, @CurrentUser Principal currentUser) {
         log.debug("[quotedebug] quoteId : {} currentUser : {}", quoteId, currentUser.getName());
         return new ResponseEntity<>(quoteLikeService.unregisterAndGetQuoteLikeInfo(quoteId, currentUser.getName()), HttpStatus.OK);
