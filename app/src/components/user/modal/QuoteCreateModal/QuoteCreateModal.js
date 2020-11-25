@@ -28,6 +28,7 @@ const QuoteCreateModal = ({visible, onCreate, onCancel}) => {
                 layout="vertical"
                 name="form_in_modal"
                 initialValues={{
+                    authorName: '',
                     useYn: 'Y',
                 }}>
                 <Form.Item name="quoteText"
