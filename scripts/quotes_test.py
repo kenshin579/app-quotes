@@ -55,6 +55,11 @@ class QuotesTest(TestCase):
         self.assertEqual('사랑은 무엇보다도 \n 자신을 위한 선물이다', result['quote'])
         self.assertEqual('장 아누이', result['author'])
 
+    def test_parse_quote_author_quote_with_question_mark(self):
+        result = quotes.parse_quote('성공한 사람이 될 수 있는데 왜 평범한 이에 머무르려 하는가?\n\n-베르톨트 브레히트')
+        self.assertEqual('성공한 사람이 될 수 있는데 왜 평범한 이에 머무르려 하는가?', result['quote'])
+        self.assertEqual('베르톨트 브레히트', result['author'])
+
     def test_parse_quote_no_author(self):
         result = quotes.parse_quote('quote text\n\n\n')
         self.assertEqual('quote text', result['quote'])
