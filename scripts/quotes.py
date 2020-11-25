@@ -258,7 +258,7 @@ def check_quote_exists(base_url, quote):
     return res.json()
 
 
-def save_quote_from_twitter(env_config, base_url, folder_id, username, password):
+def save_quote_from_twitter(env_config, base_url, folder_id, username=None, password=None):
     quote_list = []
     twitter_api = create_tweepy_api(env_config)
     username = username or env_config['quote_username']
@@ -292,7 +292,7 @@ def save_quote_from_twitter(env_config, base_url, folder_id, username, password)
         print('')
 
     logging.info('quote_list.size : ', len(quote_list))
-    count  = 0
+    count = 0
     for each_quote in quote_list:
         count += 1
         logging.info('count : ', count)
@@ -332,12 +332,12 @@ def main():
     twitter_parser = subparsers.add_parser('twitter', help='twitter subcommand')
     required_twitter_group = twitter_parser.add_argument_group('required options')
     required_twitter_group.add_argument('-c', '--config', dest='config_file', metavar='PATH', default=None,
-                                type=str, help='config file (yaml)')
+                                        type=str, help='config file (yaml)')
 
     required_twitter_group.add_argument("--folderid", action='store', help="set folderid", required=True)
     required_twitter_group.add_argument("--server", action='store', choices=["local", "real"],
-                                help="set server information for the action to carry on",
-                                required=True)
+                                        help="set server information for the action to carry on",
+                                        required=True)
 
     twitter_parser.add_argument('-u', dest='username', type=str)
     twitter_parser.add_argument('-p', dest='password', action=PasswordPromptAction, type=str)
