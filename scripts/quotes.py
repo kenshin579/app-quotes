@@ -237,7 +237,7 @@ def parse_quote(text):
     :return:
     '''
 
-    matched_quote_author = re.search('^([\w(),.\n ]+)[-\s]*([\w ]*)[-\s]*$', text)
+    matched_quote_author = re.search('^([\w(),.?\n ]+)[-\s]*([\w ]*)[-\s]*$', text)
 
     result = {}
     if matched_quote_author is not None:
@@ -287,15 +287,15 @@ def save_quote_from_twitter(env_config, base_url, folder_id, username=None, pass
                     quote['tags'] = '성경'
                 quote_list.append(quote)
             else:
-                logging.warn('parse error : %s', status.text)
+                logging.warning('parse error : %s', status.text)
         random_sleep(6)
         print('')
 
-    logging.info('quote_list.size : ', len(quote_list))
+    logging.info('quote_list.size : %s', len(quote_list))
     count = 0
     for each_quote in quote_list:
         count += 1
-        logging.info('count : ', count)
+        logging.info('count : %s', count)
         if not check_quote_exists(base_url, each_quote['quoteText']):
             post_quotes(base_url, username, password, folder_id, quote_list)
 
