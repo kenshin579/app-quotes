@@ -32,7 +32,7 @@ import tweepy
 
 DATA_DIR = 'data'
 HOSTNAME_LOCAL = 'http://localhost:8080'
-HOSTNAME_REAL = 'http://quote.advenoh.pe.kr'
+HOSTNAME_REAL = 'https://quote.advenoh.pe.kr'
 
 API_QUOTE_URL = '/api/quotes/folders'
 API_LOGIN_URL = '/api/auth/login'
