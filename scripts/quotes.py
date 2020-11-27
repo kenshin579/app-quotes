@@ -237,7 +237,7 @@ def parse_quote(text):
     :return:
     '''
 
-    matched_quote_author = re.search('^([\w(),.?\n ]+)[-\s]*([\w ]*)[-\s]*$', text)
+    matched_quote_author = re.search('^([\w()!\"%,*.?\n ]+)[-\s]*([\w ]*)[-\s]*$', text)
 
     result = {}
     if matched_quote_author is not None:
