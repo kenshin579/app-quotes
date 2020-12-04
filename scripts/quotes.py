@@ -44,7 +44,7 @@ TWITTER_QUOTE_ACCOUNTS = ["munganbot",
                           # "Famoussay_bot", "nsw1223", "quotetodays", "goldensaying13", "majuwang",
                           # "famouSayingForU", "riverphilosophy", "saying__", "flipquotestudy"
                           ]
-TAGS_CHRISTIAN = ['하느님', '하나님', '주님']
+TAGS_CHRISTIAN = ['하느님', '하나님', '주님', '주께서']
 
 
 class PARSE_MODE(enum.Enum):
