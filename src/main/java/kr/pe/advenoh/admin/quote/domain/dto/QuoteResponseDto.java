@@ -1,5 +1,6 @@
 package kr.pe.advenoh.admin.quote.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,8 @@ import java.util.List;
 public class QuoteResponseDto {
     private Long quoteId;
     private String quoteText;
+
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String authorName;
     private YN useYn;
 
