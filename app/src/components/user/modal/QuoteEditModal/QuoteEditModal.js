@@ -11,7 +11,7 @@ const QuoteEditModal = ({visible, quote, onEdit, onCancel}) => {
         form.setFieldsValue({
             quoteId: quote.quoteId,
             quoteText: quote.quoteText,
-            authorName: quote.authorName,
+            authorName: quote.authorName || '',
             tags: quote.tags,
             useYn: quote.useYn
         });
