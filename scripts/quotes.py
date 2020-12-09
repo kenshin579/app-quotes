@@ -264,7 +264,7 @@ def save_quote_from_twitter(env_config, base_url, folder_id, username=None, pass
     username = username or env_config['quote_username']
     password = password or env_config['quote_password']
 
-    logging.info('username', username)
+    logging.info('username : %s', username)
 
     # twitter에서 명언 가져오기
     for twitter_id in TWITTER_QUOTE_ACCOUNTS:
