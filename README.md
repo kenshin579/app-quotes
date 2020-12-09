@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/kenshin579/app-quotes.svg?branch=master)](https://travis-ci.org/kenshin579/app-quotes)
+[![Coverage Status](https://coveralls.io/repos/github/kenshin579/app-quotes/badge.svg?branch=master)](https://coveralls.io/github/kenshin579/app-quotes?branch=master)]
 ![.github/workflows/python-package.yml](https://github.com/kenshin579/app-quotes/workflows/.github/workflows/python-package.yml/badge.svg?branch=master)
 
 Quotes 검색 사이트 

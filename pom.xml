@@ -154,6 +154,38 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <configuration>
+                    <skipTests>${skipTests}</skipTests>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <forkCount>0</forkCount>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>4.3.0</version>
+                <configuration>
+                    <repoToken>gpJoZREE4dUqQlkLZH7usPbMmUdqtNCRQ</repoToken>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.6.201602180812</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -166,7 +198,7 @@
             </activation>
             <properties>
                 <environment>local</environment>
-                <maven.test.skip>true</maven.test.skip>
+                <!--?                <maven.test.skip>false</maven.test.skip>-->
             </properties>
         </profile>
         <profile>
