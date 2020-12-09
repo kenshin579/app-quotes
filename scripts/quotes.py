@@ -40,12 +40,9 @@ API_RANDOM_URL = '/api/quotes/random'
 API_QUOTE_EXISTS_URL = '/api/quotes/checkQuoteExists'
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
-TWITTER_QUOTE_ACCOUNTS = ["munganbot",
-                          # "Famoussay_bot", "nsw1223", "quotetodays", "goldensaying13", "majuwang",
-                          # "famouSayingForU", "riverphilosophy", "saying__", "flipquotestudy"
-                          ]
+TWITTER_QUOTE_ACCOUNTS = ["munganbot", "Famoussay_bot", "nsw1223", "majuwang"]
 TAGS_CHRISTIAN = ['하느님', '하나님', '주님', '주께서']
-
+MAX_SLEEP_TIME = 10
 
 class PARSE_MODE(enum.Enum):
     START = 1
@@ -237,15 +234,19 @@ def parse_quote(text):
     :return:
     '''
 
-    matched_quote_author = re.search('^([\w()!\"%,*.?\n ]+)[-\s]*([\w ]*)[-\s]*$', text)
+    pattern_list = [
+        '^[\s▶]*([\w()!\"%,*.?\n ]+)[-\s]*([\w ]*)[-\s#\w]*$'
+    ]
 
     result = {}
-    if matched_quote_author is not None:
-        result['quote'] = postprocess(matched_quote_author.group(1))
-        if matched_quote_author.group(2) is not None:
-            result['author'] = postprocess(matched_quote_author.group(2))
+    for pattern in pattern_list:
+        matched_quote_author = re.search(pattern, text)
+        if matched_quote_author is not None:
+            result['quote'] = postprocess(matched_quote_author.group(1))
+            if matched_quote_author.group(2) is not None:
+                result['author'] = postprocess(matched_quote_author.group(2))
 
-    logging.debug('result: %s', result)
+        logging.debug('result: %s', result)
     return result
 
 
@@ -264,7 +265,7 @@ def save_quote_from_twitter(env_config, base_url, folder_id, username=None, pass
     username = username or env_config['quote_username']
     password = password or env_config['quote_password']
 
-    logging.info('username', username)
+    logging.info('username : %s', username)
 
     # twitter에서 명언 가져오기
     for twitter_id in TWITTER_QUOTE_ACCOUNTS:
@@ -288,7 +289,7 @@ def save_quote_from_twitter(env_config, base_url, folder_id, username=None, pass
                 quote_list.append(quote)
             else:
                 logging.warning('parse error : %s', status.text)
-        random_sleep(6)
+        random_sleep(MAX_SLEEP_TIME)
         print('')
 
     logging.info('quote_list.size : %s', len(quote_list))
