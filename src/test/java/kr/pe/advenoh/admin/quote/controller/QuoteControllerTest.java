@@ -59,11 +59,12 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
 
     @BeforeEach
     void setUp() {
+        //todo : pre data를 어떻게 로딩할지는 더 고민해보기
         Role role = roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() ->
                 new ApiException(QuoteExceptionCode.ACCOUNT_ROLE_NOT_FOUND, RoleType.ROLE_USER.name()));
         user = initialDataLoader.createUserIfNotFound(username, email, name, password, Arrays.asList(role));
-        folderId = jdbcTemplate.queryForObject("SELECT folder_id FROM app_quotes.folders LIMIT 1", Long.class);
-        quoteId = jdbcTemplate.queryForObject("SELECT quote_id FROM app_quotes.quotes LIMIT 1", Long.class);
+        folderId = jdbcTemplate.queryForObject("SELECT folder_id FROM folders LIMIT 1", Long.class);
+        quoteId = jdbcTemplate.queryForObject("SELECT quote_id FROM quotes LIMIT 1", Long.class);
         log.debug("folderId : {} quoteId: {} user: {}", folderId, quoteId, user);
     }
 
