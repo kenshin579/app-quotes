@@ -25,6 +25,7 @@ class ProfileControllerTest {
     @Autowired
     private TestRestTemplate restTemplate;
 
+    //todo : 왜 fail 떨어지는데 다시 확인하기
     @Test
     void profile은_인증없이_호출된다() throws Exception {
         String expected = "local-db";
