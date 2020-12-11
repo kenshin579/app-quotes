@@ -4,6 +4,7 @@ import kr.pe.advenoh.admin.quote.domain.dto.QuoteResponseDto;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import kr.pe.advenoh.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,6 +41,7 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
 
     //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
+    @Disabled
     void quote_save() {
         Author saveAuthor = authorRepository.save(new Author("frank1"));
         Quote quote = Quote.builder()
@@ -59,6 +61,7 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
     }
 
     @Test
+    @Disabled
     void findAllByFolderId() {
         Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "createDt");
         Long folderId = 6L;
@@ -88,6 +91,7 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
 
     //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
+    @Disabled
     void findAllByQuoteId() {
         QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(60L).get();
         log.info("quoteResponseDto : {}", quoteResponseDto);
@@ -95,6 +99,7 @@ class QuoteRepositoryTest extends SpringBootTestSupport {
 
     //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
+    @Disabled
     void findAllByQuoteId_데이터가_없는_경우() {
         QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(Long.MAX_VALUE).get();
         log.info("quoteResponseDto : {}", quoteResponseDto);

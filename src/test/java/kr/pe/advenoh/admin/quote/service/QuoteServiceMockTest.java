@@ -17,6 +17,7 @@ import kr.pe.advenoh.util.MockitoTestSupport;
 import kr.pe.advenoh.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -77,6 +78,7 @@ class QuoteServiceMockTest extends MockitoTestSupport {
 
     //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
+    @Disabled
     void createQuote_tags_모두_새로운_태그인_경우() {
         //given
         List<String> tags = Arrays.asList(prefixStr + "1", prefixStr + "2", prefixStr + "3");
@@ -118,6 +120,7 @@ class QuoteServiceMockTest extends MockitoTestSupport {
 
     //todo : entity 수정시 다시 작업하는 걸로 함
     @Test
+    @Disabled
     void createQuote_tags_새로운_태그_2개_이미_존재하는_태그_1개_인_경우() {
         QuoteRequestDto quoteRequestDto = QuoteRequestDto.builder()
                 .authorName("Frank")
