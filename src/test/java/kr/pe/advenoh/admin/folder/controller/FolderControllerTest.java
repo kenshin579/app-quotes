@@ -1,11 +1,10 @@
 package kr.pe.advenoh.admin.folder.controller;
 
 import com.jayway.jsonpath.JsonPath;
-import kr.pe.advenoh.common.exception.ApiException;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
 import kr.pe.advenoh.spring.InitialDataLoader;
+import kr.pe.advenoh.user.domain.Privilege;
+import kr.pe.advenoh.user.domain.PrivilegeType;
 import kr.pe.advenoh.user.domain.Role;
-import kr.pe.advenoh.user.domain.RoleRepository;
 import kr.pe.advenoh.user.domain.RoleType;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.util.SpringMockMvcTestSupport;
@@ -20,9 +19,9 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import javax.transaction.Transactional;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -39,36 +38,50 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
     @Autowired
     private InitialDataLoader initialDataLoader;
 
-    @Autowired
-    private RoleRepository roleRepository;
-
     @BeforeEach
     void setUp() {
-        Role role = roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() ->
-                new ApiException(QuoteExceptionCode.ACCOUNT_ROLE_NOT_FOUND, RoleType.ROLE_USER.name()));
+        Privilege readPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.READ_PRIVILEGE);
+        Privilege passwordPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.CHANGE_PASSWORD_PRIVILEGE);
+
+        List<Privilege> userPrivileges = Arrays.asList(readPrivilege, passwordPrivilege);
+        Role role = initialDataLoader.createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
+
         user = initialDataLoader.createUserIfNotFound(username, email, name, password, Arrays.asList(role));
         folderName = TestUtils.generateRandomString(3);
         log.info("user: {} folderName : {}", user, folderName);
     }
 
     @Test
+    @Transactional
     @WithMockUser(username = username, authorities = {ROLE_USER})
-    void getFolders() throws Exception {
+    void createFolder_getFolder() throws Exception {
+        //create folder
+        MvcResult result = this.mockMvc.perform(post(BASE_URL)
+                .param("folderName", folderName)
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andReturn();
+
+        Integer folderId = JsonPath.parse(result.getResponse().getContentAsString()).read("$.folderId");
+        log.info("folderId : {}", folderId);
+
+        //get folder
         this.mockMvc.perform(get(BASE_URL)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.folderStatInfo.totalNumOfQuotes").exists())
                 .andExpect(jsonPath("$.folderStatInfo.totalNumOfLikes").exists())
-                .andExpect(jsonPath("$.folderList").isArray());
+                .andExpect(jsonPath("$.folderList").isArray())
+                .andExpect(jsonPath("$.folderList[0].folderId", is(folderId)));
     }
 
     @Test
     @Transactional
     @WithMockUser(username = username, authorities = {ROLE_USER})
-    void createFolder_renameFolder_deleteFolders() throws Exception {
+    void createFolder_renameFolder() throws Exception {
         //create folder
-
         MvcResult result = this.mockMvc.perform(post(BASE_URL)
                 .param("folderName", folderName)
                 .accept(MediaType.APPLICATION_JSON))
@@ -88,12 +101,13 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.succeed", is(true)));
 
-        //delete folder
-        this.mockMvc.perform(delete(BASE_URL)
-                .param("folderIds", folderId.toString())
+        //get folder
+        this.mockMvc.perform(get(BASE_URL)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.succeed", is(true)));
+                .andExpect(jsonPath("$.folderStatInfo.totalNumOfQuotes").exists())
+                .andExpect(jsonPath("$.folderStatInfo.totalNumOfLikes").exists())
+                .andExpect(jsonPath("$.folderList[0].folderName", is(newFolderName)));
     }
 }
