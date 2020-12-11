@@ -1,24 +1,25 @@
 package kr.pe.advenoh.admin.quote.controller;
 
 import com.jayway.jsonpath.JsonPath;
+import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMapping;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
-import kr.pe.advenoh.common.exception.ApiException;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
 import kr.pe.advenoh.spring.InitialDataLoader;
+import kr.pe.advenoh.user.domain.Privilege;
+import kr.pe.advenoh.user.domain.PrivilegeType;
 import kr.pe.advenoh.user.domain.Role;
-import kr.pe.advenoh.user.domain.RoleRepository;
 import kr.pe.advenoh.user.domain.RoleType;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.util.SpringMockMvcTestSupport;
+import kr.pe.advenoh.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MvcResult;
 
 import javax.transaction.Transactional;
@@ -37,46 +38,46 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
-@ActiveProfiles("jdbc")
 class QuoteControllerTest extends SpringMockMvcTestSupport {
     private final String BASE_PATH = "/api/quotes";
     private List<String> tags;
     private User user;
+    private String folderName;
     private Long folderId;
-    private Long quoteId;
 
     @Autowired
     private InitialDataLoader initialDataLoader;
 
     @Autowired
+    private FolderService folderService;
+
+    @Autowired
     private QuoteTagMappingRepository quoteTagMappingRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @BeforeEach
     void setUp() {
-        Role role = roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() ->
-                new ApiException(QuoteExceptionCode.ACCOUNT_ROLE_NOT_FOUND, RoleType.ROLE_USER.name()));
+        //todo : pre data를 어떻게 로딩할지는 더 고민해보기
+        Privilege readPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.READ_PRIVILEGE);
+        Privilege passwordPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.CHANGE_PASSWORD_PRIVILEGE);
+
+        List<Privilege> userPrivileges = Arrays.asList(readPrivilege, passwordPrivilege);
+        Role role = initialDataLoader.createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
+
         user = initialDataLoader.createUserIfNotFound(username, email, name, password, Arrays.asList(role));
-        folderId = jdbcTemplate.queryForObject("SELECT folder_id FROM app_quotes.folders LIMIT 1", Long.class);
-        quoteId = jdbcTemplate.queryForObject("SELECT quote_id FROM app_quotes.quotes LIMIT 1", Long.class);
-        log.debug("folderId : {} quoteId: {} user: {}", folderId, quoteId, user);
+        folderName = TestUtils.generateRandomString(3);
+        folderId = folderService.createFolder(folderName, username).getFolderId();
+
+        log.debug("folderId : {} user: {}", folderId, user);
     }
 
     @Test
-    @WithMockUser(username = username, authorities = {ROLE_USER})
     @Transactional
-    void createQuote_getQuote_updateQuote_deleteQuote_새로운_tags로만_생성함() throws Exception {
+    @WithMockUser(username = username, authorities = {ROLE_USER})
+    void createQuote_getQuote() throws Exception {
         //명언 생성
         tags = this.getRandomTags("first", 3);
-        log.info("tags : {}", tags);
+        log.debug("tags : {}", tags);
 
-        String quoteText = "quote text1";
-        String authorName = "test author";
         MvcResult mvcResult = this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
                 .param("quoteText", quoteText)
                 .param("authorName", authorName)
@@ -89,7 +90,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andReturn();
 
         Integer quoteId = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.quoteId");
-        log.info("quoteId : {}", quoteId);
+        log.debug("quoteId : {}", quoteId);
 
         //명언 조회
         this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
@@ -100,33 +101,79 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.useYn", is(YN.Y.name())))
                 .andExpect(jsonPath("$.authorName", is(authorName)))
                 .andExpect(jsonPath("$.tags", is(tags)));
+    }
 
-        //명언 업데이트
-        quoteText = "new quote text";
-        authorName = "new author";
-        tags.addAll(this.getRandomTags("second", 1));
-        log.info("new tags : {}", tags);
+    @Test
+    @Transactional
+    @WithMockUser(username = username, authorities = {ROLE_USER})
+    void updateQuote() throws Exception {
+        //명언 생성
+        tags = this.getRandomTags("first", 3);
+        log.debug("tags : {}", tags);
 
-        this.mockMvc.perform(post(BASE_PATH + "/{quoteId}", quoteId)
+        MvcResult mvcResult = this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
                 .param("quoteText", quoteText)
                 .param("authorName", authorName)
+                .param("useYn", YN.Y.name())
+                .param("tags", String.join(",", tags)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quoteText", is(quoteText)))
+                .andExpect(jsonPath("$.authorName", is(authorName)))
+                .andReturn();
+
+        Integer quoteId = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.quoteId");
+        log.debug("quoteId : {}", quoteId);
+
+        //명언 업데이트
+        String newQuoteText = "new quote text";
+        String newAuthorName = "new author";
+        tags.addAll(this.getRandomTags("second", 1));
+        log.debug("new tags : {}", tags);
+
+        this.mockMvc.perform(post(BASE_PATH + "/{quoteId}", quoteId)
+                .param("quoteText", newQuoteText)
+                .param("authorName", newAuthorName)
                 .param("useYn", YN.N.name())
                 .param("tags", String.join(",", tags)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteId", is(quoteId)))
-                .andExpect(jsonPath("$.quoteText", is(quoteText)))
-                .andExpect(jsonPath("$.authorName", is(authorName)));
+                .andExpect(jsonPath("$.quoteText", is(newQuoteText)))
+                .andExpect(jsonPath("$.authorName", is(newAuthorName)));
 
         //명언 조회
         this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteId", is(quoteId)))
-                .andExpect(jsonPath("$.quoteText", is(quoteText)))
+                .andExpect(jsonPath("$.quoteText", is(newQuoteText)))
                 .andExpect(jsonPath("$.useYn", is(YN.N.name())))
-                .andExpect(jsonPath("$.authorName", is(authorName)))
+                .andExpect(jsonPath("$.authorName", is(newAuthorName)))
                 .andExpect(jsonPath("$.tags", is(tags)));
+    }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = username, authorities = {ROLE_USER})
+    void deleteQuote() throws Exception {
+        //명언 생성
+        tags = this.getRandomTags("first", 3);
+        log.debug("tags : {}", tags);
+
+        MvcResult mvcResult = this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
+                .param("quoteText", quoteText)
+                .param("authorName", authorName)
+                .param("useYn", YN.Y.name())
+                .param("tags", String.join(",", tags)))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.quoteText", is(quoteText)))
+                .andExpect(jsonPath("$.authorName", is(authorName)))
+                .andReturn();
+
+        Integer quoteId = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.quoteId");
+        log.debug("quoteId : {}", quoteId);
 
         //mapping도 잘 되어 있는지 확인
         List<QuoteTagMapping> quoteTagMappings = quoteTagMappingRepository.findAllByQuoteIds(Arrays.asList(quoteId.longValue()));
@@ -141,9 +188,9 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     }
 
     @Test
-    @WithMockUser(username = username, authorities = {ROLE_USER})
     @Transactional
-    void createQuote_request_값이_없는_경우() throws Exception {
+    @WithMockUser(username = username, authorities = {ROLE_USER})
+    void createQuote_exception_request_값이_없는_경우() throws Exception {
         this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
                 .param("useYn", YN.Y.name()))
                 .andDo(print())
@@ -158,15 +205,6 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content").isArray());
-    }
-
-    @Test
-    @WithMockUser(username = username, authorities = {ROLE_USER})
-    void getQuote() throws Exception {
-        this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.quoteId", is(quoteId.intValue())));
     }
 
     @Test
@@ -189,6 +227,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     }
 
     @Test
+    @Disabled
     public void getRandomQuote() throws Exception {
         this.mockMvc.perform(get(BASE_PATH + "/random"))
                 .andDo(print())

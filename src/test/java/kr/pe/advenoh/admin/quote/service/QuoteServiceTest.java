@@ -5,6 +5,7 @@ import kr.pe.advenoh.admin.quote.domain.QuoteHistory;
 import kr.pe.advenoh.admin.quote.domain.QuoteHistoryRepository;
 import kr.pe.advenoh.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +23,7 @@ class QuoteServiceTest extends SpringBootTestSupport {
     private QuoteHistoryRepository quoteHistoryRepository;
 
     @Test
+    @Disabled
     @Transactional
     void deleteQuotes_quoteHistory에도_있어도_삭제되어야_한다() {
         //given

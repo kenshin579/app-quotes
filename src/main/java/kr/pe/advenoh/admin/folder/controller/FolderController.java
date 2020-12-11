@@ -43,14 +43,14 @@ public class FolderController {
     }
 
     @PostMapping
-    public ResponseEntity<?>  createFolder(
+    public ResponseEntity<?> createFolder(
             @RequestParam(value = "folderName") String folderName,
             @CurrentUser Principal currentUser) {
         return new ResponseEntity<>(folderService.createFolder(folderName, currentUser.getName()), HttpStatus.OK);
     }
 
     @PutMapping("/{folderId}/rename")
-    public ResponseEntity<?>  renameFolder(
+    public ResponseEntity<?> renameFolder(
             @PathVariable(name = "folderId") Long folderId,
             @RequestParam(value = "folderName") String folderName) {
         Map<String, Object> result = new HashMap<>();
@@ -60,7 +60,7 @@ public class FolderController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?>  deleteFolders(@RequestParam(value = "folderIds") List<Long> folderIds) {
+    public ResponseEntity<?> deleteFolders(@RequestParam(value = "folderIds") List<Long> folderIds) {
         Map<String, Object> result = new HashMap<>();
         result.put("succeed", folderIds.size() == folderService.deleteFolders(folderIds));
         return new ResponseEntity<>(result, HttpStatus.OK);
