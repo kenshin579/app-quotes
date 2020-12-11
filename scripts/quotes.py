@@ -41,7 +41,7 @@ API_QUOTE_EXISTS_URL = '/api/quotes/checkQuoteExists'
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
 TWITTER_QUOTE_ACCOUNTS = ["munganbot", "Famoussay_bot", "nsw1223", "majuwang"]
-TAGS_CHRISTIAN = ['하느님', '하나님', '주님', '주께서']
+TAGS_CHRISTIAN = ['하느님', '하나님', '주님', '주께서', "잠언"]
 MAX_SLEEP_TIME = 10
 
 class PARSE_MODE(enum.Enum):
@@ -235,7 +235,7 @@ def parse_quote(text):
     '''
 
     pattern_list = [
-        '^[\s▶]*([\w()!\"%,*.?\n ]+)[-\s]*([\w ]*)[-\s#\w]*$'
+        '^[\s▶]*([\w()!\"%,*.?\n ]+)[-\s]*([\w. ]*)[-\s#\w]*$'
     ]
 
     result = {}
