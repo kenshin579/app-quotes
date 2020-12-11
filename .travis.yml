@@ -66,7 +66,7 @@ deploy:
 #  - cat /home/travis/.npm/_logs/*.log
 
 after_success:
-  - CI=false ./mvnw test jacoco:report coveralls:report -DskipTests=false
+  - CI=false ./mvnw test jacoco:report coveralls:report -DskipTests=false -Dmaven.test.failure.ignore=true
 
 # CI 실행 완료시 메일로 알람
 notifications:
