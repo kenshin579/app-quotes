@@ -40,6 +40,7 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
 
     @BeforeEach
     void setUp() {
+        //todo : 초기 데이터를 로딩할 수 있는 방벙을 찾기
         Privilege readPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.READ_PRIVILEGE);
         Privilege passwordPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.CHANGE_PASSWORD_PRIVILEGE);
 

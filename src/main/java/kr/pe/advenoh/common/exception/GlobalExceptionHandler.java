@@ -17,6 +17,11 @@ import java.util.List;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
+    /*
+    todo : Request에 대한 validation 추가시 예외 처리 (MethodArgumentNotValidException)
+    여러 fields에 대한 오류는 errors: []로 넣어서 내려주기
+    https://github.com/cheese10yun/spring-jpa-best-practices/blob/master/doc/step-02.md
+     */
 
     @ExceptionHandler(BindException.class)
     @ResponseBody
