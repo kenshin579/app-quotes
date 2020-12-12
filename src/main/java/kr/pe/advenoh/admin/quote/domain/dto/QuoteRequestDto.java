@@ -12,7 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@NoArgsConstructor //todo : @NoArgsConstructor(access = AccessLevel.PROTECTED) 변경하고 builder로 교체하기
 @ToString
 public class QuoteRequestDto {
     @NotNull
