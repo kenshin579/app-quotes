@@ -5,7 +5,7 @@ import kr.pe.advenoh.admin.folder.domain.FolderQuoteMappingRepository;
 import kr.pe.advenoh.admin.folder.domain.FolderRepository;
 import kr.pe.advenoh.admin.folder.domain.FolderUserMapping;
 import kr.pe.advenoh.admin.folder.domain.FolderUserMappingRepository;
-import kr.pe.advenoh.admin.folder.domain.dto.FolderResponseDto;
+import kr.pe.advenoh.admin.folder.domain.dto.FolderDto;
 import kr.pe.advenoh.admin.quote.domain.QuoteHistoryRepository;
 import kr.pe.advenoh.admin.quote.domain.QuoteRepository;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
@@ -44,14 +44,14 @@ public class FolderService {
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
-    public List<FolderResponseDto> getFolders(String username) {
+    public List<FolderDto.FolderResponse> getFolders(String username) {
         log.info("[debug] username : {}", username);
         User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
         return folderRepository.findAllByUsername(user.getUsername());
     }
 
     @Transactional
-    public FolderResponseDto createFolder(String folderName, String username) {
+    public FolderDto.FolderResponse createFolder(String folderName, String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
         //todo: cascade는 다시 정리하는 걸로 함
@@ -59,7 +59,7 @@ public class FolderService {
         folderRepository.save(folder);
         FolderUserMapping folderUserMapping = new FolderUserMapping(folder, user);
         FolderUserMapping saveFolderUserMapping = folderUserMappingRepository.save(folderUserMapping);
-        return new FolderResponseDto(saveFolderUserMapping.getFolder().getId(), saveFolderUserMapping.getFolder().getFolderName(), 0L);
+        return new FolderDto.FolderResponse(saveFolderUserMapping.getFolder().getId(), saveFolderUserMapping.getFolder().getFolderName(), 0L);
     }
 
     @Transactional

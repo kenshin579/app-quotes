@@ -1,6 +1,6 @@
 package kr.pe.advenoh.user.service;
 
-import kr.pe.advenoh.admin.folder.domain.dto.FolderResponseDto;
+import kr.pe.advenoh.admin.folder.domain.dto.FolderDto;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.common.constants.AppConstants;
 import kr.pe.advenoh.common.exception.ApiException;
@@ -87,9 +87,9 @@ public class UserService implements IUserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
-        List<FolderResponseDto> folders = folderService.getFolders(user.getUsername());
+        List<FolderDto.FolderResponse> folders = folderService.getFolders(user.getUsername());
 
-        folderService.deleteFolders(folders.stream().map(FolderResponseDto::getFolderId).collect(Collectors.toList()));
+        folderService.deleteFolders(folders.stream().map(FolderDto.FolderResponse::getFolderId).collect(Collectors.toList()));
         userRepository.deleteById(user.getId());
     }
 }

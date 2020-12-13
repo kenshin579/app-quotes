@@ -9,8 +9,7 @@ import kr.pe.advenoh.admin.quote.domain.Quote;
 import kr.pe.advenoh.admin.quote.domain.QuoteRepository;
 import kr.pe.advenoh.admin.quote.domain.Tag;
 import kr.pe.advenoh.admin.quote.domain.TagRepository;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteRequestDto;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteResponseDto;
+import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
 import kr.pe.advenoh.util.MockitoTestSupport;
@@ -82,10 +81,9 @@ class QuoteServiceMockTest extends MockitoTestSupport {
     void createQuote_tags_모두_새로운_태그인_경우() {
         //given
         List<String> tags = Arrays.asList(prefixStr + "1", prefixStr + "2", prefixStr + "3");
-        QuoteRequestDto quoteRequestDto = QuoteRequestDto.builder()
+        QuoteDto.QuoteRequest quoteRequestDto = QuoteDto.QuoteRequest.builder()
                 .authorName(authorName)
                 .quoteText(quoteText)
-                .folderId(folderId)
                 .tags(tags)
                 .build();
 
@@ -99,7 +97,7 @@ class QuoteServiceMockTest extends MockitoTestSupport {
         when(folderQuoteMappingRepository.save(any())).thenReturn(null);
 
         //when
-        QuoteResponseDto quote = quoteService.createQuote(quoteRequestDto, principal);
+        QuoteDto.QuoteResponse quote = quoteService.createQuote(folderId, quoteRequestDto, principal);
         log.info("[quotedebug] quote : {}", quote);
 
         //then
@@ -122,14 +120,14 @@ class QuoteServiceMockTest extends MockitoTestSupport {
     @Test
     @Disabled
     void createQuote_tags_새로운_태그_2개_이미_존재하는_태그_1개_인_경우() {
-        QuoteRequestDto quoteRequestDto = QuoteRequestDto.builder()
+        QuoteDto.QuoteRequest quoteRequestDto = QuoteDto.QuoteRequest.builder()
                 .authorName("Frank")
                 .quoteText("quote1")
                 .tags(Arrays.asList("A", "B", "C"))
                 .build();
 
         Principal principal = () -> "testuser";
-        QuoteResponseDto quote = quoteService.createQuote(quoteRequestDto, principal);
+        QuoteDto.QuoteResponse quote = quoteService.createQuote(folderId, quoteRequestDto, principal);
         log.info("[quotedebug] quote : {}", quote);
 
         List<Quote> quotes = quoteRepository.findAll();
