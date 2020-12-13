@@ -1,3 +1,4 @@
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fkenshin579%2Fapp-quotes&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 [![Build Status](https://travis-ci.org/kenshin579/app-quotes.svg?branch=master)](https://travis-ci.org/kenshin579/app-quotes)
 [![Coverage Status](https://coveralls.io/repos/github/kenshin579/app-quotes/badge.svg?branch=master)](https://coveralls.io/github/kenshin579/app-quotes?branch=master)]
 ![.github/workflows/python-package.yml](https://github.com/kenshin579/app-quotes/workflows/.github/workflows/python-package.yml/badge.svg?branch=master)
