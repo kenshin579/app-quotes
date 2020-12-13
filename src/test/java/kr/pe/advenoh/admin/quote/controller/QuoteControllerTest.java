@@ -4,6 +4,7 @@ import com.jayway.jsonpath.JsonPath;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMapping;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
+import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
 import kr.pe.advenoh.spring.InitialDataLoader;
@@ -21,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -75,15 +77,9 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     @WithMockUser(username = username, authorities = {ROLE_USER})
     void createQuote_getQuote() throws Exception {
         //명언 생성
-        tags = this.getRandomTags("first", 3);
-        log.debug("tags : {}", tags);
+        QuoteDto.QuoteRequest quoteRequest = this.buildQuoteRequest();
 
-        MvcResult mvcResult = this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
-                .param("quoteText", quoteText)
-                .param("authorName", authorName)
-                .param("useYn", YN.Y.name())
-                .param("tags", String.join(",", tags)))
-                .andDo(print())
+        MvcResult mvcResult = requestCreateQuote(folderId, quoteRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteText", is(quoteText)))
                 .andExpect(jsonPath("$.authorName", is(authorName)))
@@ -93,14 +89,15 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
         log.debug("quoteId : {}", quoteId);
 
         //명언 조회
-        this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
-                .andDo(print())
+        ResultActions resultActions = requestGetQuoteById(quoteId);
+
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteId", is(quoteId)))
                 .andExpect(jsonPath("$.quoteText", is(quoteText)))
                 .andExpect(jsonPath("$.useYn", is(YN.Y.name())))
                 .andExpect(jsonPath("$.authorName", is(authorName)))
-                .andExpect(jsonPath("$.tags", is(tags)));
+                .andExpect(jsonPath("$.tags", is(quoteRequest.getTags())));
     }
 
     @Test
@@ -108,15 +105,9 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     @WithMockUser(username = username, authorities = {ROLE_USER})
     void updateQuote() throws Exception {
         //명언 생성
-        tags = this.getRandomTags("first", 3);
-        log.debug("tags : {}", tags);
+        QuoteDto.QuoteRequest quoteRequest = this.buildQuoteRequest();
 
-        MvcResult mvcResult = this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
-                .param("quoteText", quoteText)
-                .param("authorName", authorName)
-                .param("useYn", YN.Y.name())
-                .param("tags", String.join(",", tags)))
-                .andDo(print())
+        MvcResult mvcResult = requestCreateQuote(folderId, quoteRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteText", is(quoteText)))
                 .andExpect(jsonPath("$.authorName", is(authorName)))
@@ -143,8 +134,9 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.authorName", is(newAuthorName)));
 
         //명언 조회
-        this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
-                .andDo(print())
+        ResultActions resultActions = requestGetQuoteById(quoteId);
+
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteId", is(quoteId)))
                 .andExpect(jsonPath("$.quoteText", is(newQuoteText)))
@@ -158,15 +150,9 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     @WithMockUser(username = username, authorities = {ROLE_USER})
     void deleteQuote() throws Exception {
         //명언 생성
-        tags = this.getRandomTags("first", 3);
-        log.debug("tags : {}", tags);
+        QuoteDto.QuoteRequest quoteRequest = this.buildQuoteRequest();
 
-        MvcResult mvcResult = this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
-                .param("quoteText", quoteText)
-                .param("authorName", authorName)
-                .param("useYn", YN.Y.name())
-                .param("tags", String.join(",", tags)))
-                .andDo(print())
+        MvcResult mvcResult = requestCreateQuote(folderId, quoteRequest)
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteText", is(quoteText)))
                 .andExpect(jsonPath("$.authorName", is(authorName)))
@@ -210,8 +196,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     @Test
     @WithMockUser(username = username, authorities = {ROLE_USER})
     void getQuote_ApiException_발생시_response_포멧_확인() throws Exception {
-        this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", Integer.MAX_VALUE))
-                .andDo(print())
+        requestGetQuoteById(Integer.MAX_VALUE)
                 .andExpect(status().isServiceUnavailable())
                 .andExpect(jsonPath("$.message", is(QuoteExceptionCode.QUOTE_NOT_FOUND.getMessage())))
                 .andExpect(jsonPath("$.code", is(QuoteExceptionCode.QUOTE_NOT_FOUND.getCode())));
@@ -254,5 +239,28 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
         String randomStr = sb.toString();
 
         return randomStr;
+    }
+
+    private ResultActions requestCreateQuote(Long folderId, QuoteDto.QuoteRequest quoteRequest) throws Exception {
+        return this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
+                .param("quoteText", quoteRequest.getQuoteText())
+                .param("authorName", quoteRequest.getAuthorName())
+                .param("useYn", quoteRequest.getUseYn().name())
+                .param("tags", String.join(",", quoteRequest.getTags())))
+                .andDo(print());
+    }
+
+    private QuoteDto.QuoteRequest buildQuoteRequest() {
+        return QuoteDto.QuoteRequest.builder()
+                .quoteText(quoteText)
+                .authorName(authorName)
+                .tags(this.getRandomTags("first", 3))
+                .useYn(YN.Y)
+                .build();
+    }
+
+    private ResultActions requestGetQuoteById(Integer quoteId) throws Exception {
+        return this.mockMvc.perform(get(BASE_PATH + "/{quoteId}", quoteId))
+                .andDo(print());
     }
 }
