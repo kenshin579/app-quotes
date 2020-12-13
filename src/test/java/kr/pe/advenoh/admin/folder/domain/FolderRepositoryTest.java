@@ -1,6 +1,6 @@
 package kr.pe.advenoh.admin.folder.domain;
 
-import kr.pe.advenoh.admin.folder.domain.dto.FolderResponseDto;
+import kr.pe.advenoh.admin.folder.domain.dto.FolderDto;
 import kr.pe.advenoh.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,7 @@ class FolderRepositoryTest extends SpringBootTestSupport {
 
     @Test
     void findAllByUsername() {
-        List<FolderResponseDto> testuser = folderRepository.findAllByUsername("testuser");
+        List<FolderDto.FolderResponse> testuser = folderRepository.findAllByUsername("testuser");
         log.info("[quotedebug] testuser : {}", testuser);
     }
 }

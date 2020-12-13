@@ -3,6 +3,7 @@ package kr.pe.advenoh.admin.quote.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import kr.pe.advenoh.common.entity.audit.DateAudit;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,6 +38,7 @@ public class Author extends DateAudit {
     @OneToMany(mappedBy = "author")
     private List<Quote> quotes = new ArrayList<>();
 
+    @Builder
     public Author(String name) {
         this.name = name;
     }

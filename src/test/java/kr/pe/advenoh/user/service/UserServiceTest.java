@@ -1,6 +1,6 @@
 package kr.pe.advenoh.user.service;
 
-import kr.pe.advenoh.admin.folder.domain.dto.FolderResponseDto;
+import kr.pe.advenoh.admin.folder.domain.dto.FolderDto;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.common.constants.AppConstants;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
@@ -69,7 +69,7 @@ class UserServiceTest extends MockitoTestSupport {
 
         when(passwordEncoder.encode(anyString())).thenReturn(password);
         when(roleRepository.findByRoleType(RoleType.ROLE_USER)).thenReturn(Optional.of(new Role()));
-        when(folderService.createFolder(AppConstants.DEFAULT_FOLDER, signUpRequestDto.getUsername())).thenReturn(new FolderResponseDto());
+        when(folderService.createFolder(AppConstants.DEFAULT_FOLDER, signUpRequestDto.getUsername())).thenReturn(FolderDto.FolderResponse.builder().build());
         when(userRepository.save(any())).thenReturn(any());
 
         //when

@@ -1,7 +1,7 @@
 package kr.pe.advenoh.admin.quote.controller;
 
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteRequestDto;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteResponseDto;
+import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto;
+import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto.QuoteResponse;
 import kr.pe.advenoh.admin.quote.service.QuoteLikeService;
 import kr.pe.advenoh.admin.quote.service.QuoteService;
 import kr.pe.advenoh.common.constants.AppConstants;
@@ -59,17 +59,16 @@ public class QuoteController {
     @PostMapping("/folders/{folderId}")
     public ResponseEntity<?> createQuote(
             @PathVariable(name = "folderId") Long folderId,
-            @ModelAttribute @Valid QuoteRequestDto quoteRequestDto,
+            @ModelAttribute @Valid QuoteDto.QuoteRequest quoteRequestDto,
             @CurrentUser Principal currentUser) {
         log.info("[quotedebug] quoteRequestDto : {} currentUser : {}", quoteRequestDto, currentUser.getName());
-        quoteRequestDto.setFolderId(folderId);
-        return new ResponseEntity<>(quoteService.createQuote(quoteRequestDto, currentUser), HttpStatus.OK);
+        return new ResponseEntity<>(quoteService.createQuote(folderId, quoteRequestDto, currentUser), HttpStatus.OK);
     }
 
     @PostMapping("/{quoteId}")
     public ResponseEntity<?> updateQuote(
             @PathVariable(name = "quoteId") Long quoteId,
-            @ModelAttribute QuoteRequestDto quoteRequestDto
+            @ModelAttribute QuoteDto.QuoteRequest quoteRequestDto
     ) {
         if (quoteRequestDto.getQuoteText() == null) {
             throw new RuntimeException("need paramter!!!");
@@ -138,6 +137,6 @@ public class QuoteController {
     @CrossOrigin
     @GetMapping("/random")
     public ResponseEntity<?> getRandomQuote() {
-        return new ResponseEntity<>(modelMapper.map(quoteService.getRandomQuote(), QuoteResponseDto.class), HttpStatus.OK);
+        return new ResponseEntity<>(modelMapper.map(quoteService.getRandomQuote(), QuoteDto.QuoteResponse.class), HttpStatus.OK);
     }
 }
