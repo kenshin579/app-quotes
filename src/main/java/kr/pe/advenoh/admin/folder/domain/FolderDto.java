@@ -1,4 +1,4 @@
-package kr.pe.advenoh.admin.folder.domain.dto;
+package kr.pe.advenoh.admin.folder.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;

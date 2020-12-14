@@ -5,7 +5,7 @@ import kr.pe.advenoh.admin.folder.domain.FolderQuoteMappingRepository;
 import kr.pe.advenoh.admin.folder.domain.FolderRepository;
 import kr.pe.advenoh.admin.folder.domain.FolderUserMapping;
 import kr.pe.advenoh.admin.folder.domain.FolderUserMappingRepository;
-import kr.pe.advenoh.admin.folder.domain.dto.FolderDto;
+import kr.pe.advenoh.admin.folder.domain.FolderDto;
 import kr.pe.advenoh.admin.quote.domain.QuoteHistoryRepository;
 import kr.pe.advenoh.admin.quote.domain.QuoteRepository;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;

@@ -1,6 +1,6 @@
 package kr.pe.advenoh.user.service;
 
-import kr.pe.advenoh.admin.folder.domain.dto.FolderDto;
+import kr.pe.advenoh.admin.folder.domain.FolderDto;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.common.constants.AppConstants;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
