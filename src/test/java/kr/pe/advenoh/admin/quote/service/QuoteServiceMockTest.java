@@ -9,7 +9,7 @@ import kr.pe.advenoh.admin.quote.domain.Quote;
 import kr.pe.advenoh.admin.quote.domain.QuoteRepository;
 import kr.pe.advenoh.admin.quote.domain.Tag;
 import kr.pe.advenoh.admin.quote.domain.TagRepository;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto;
+import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
 import kr.pe.advenoh.util.MockitoTestSupport;

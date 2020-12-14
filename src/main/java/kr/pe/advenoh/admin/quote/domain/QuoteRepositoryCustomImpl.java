@@ -7,7 +7,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.pe.advenoh.admin.folder.domain.QFolder;
 import kr.pe.advenoh.admin.folder.domain.QFolderQuoteMapping;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

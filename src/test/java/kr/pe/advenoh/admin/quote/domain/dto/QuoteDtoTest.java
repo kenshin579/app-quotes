@@ -1,5 +1,6 @@
 package kr.pe.advenoh.admin.quote.domain.dto;
 
+import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

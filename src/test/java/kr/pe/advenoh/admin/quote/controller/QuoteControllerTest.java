@@ -4,7 +4,7 @@ import com.jayway.jsonpath.JsonPath;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMapping;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto;
+import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
 import kr.pe.advenoh.spring.InitialDataLoader;

@@ -1,6 +1,5 @@
 package kr.pe.advenoh.admin.quote.domain;
 
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import kr.pe.advenoh.util.SpringBootTestSupport;
 import lombok.extern.slf4j.Slf4j;

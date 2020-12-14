@@ -1,4 +1,4 @@
-package kr.pe.advenoh.admin.quote.domain.dto;
+package kr.pe.advenoh.admin.quote.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import kr.pe.advenoh.admin.quote.domain.Author;

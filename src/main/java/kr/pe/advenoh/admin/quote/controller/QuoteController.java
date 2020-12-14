@@ -1,7 +1,6 @@
 package kr.pe.advenoh.admin.quote.controller;
 
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteDto.QuoteResponse;
+import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.admin.quote.service.QuoteLikeService;
 import kr.pe.advenoh.admin.quote.service.QuoteService;
 import kr.pe.advenoh.common.constants.AppConstants;
