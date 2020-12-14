@@ -1,6 +1,6 @@
 package kr.pe.advenoh.user.controller;
 
-import kr.pe.advenoh.common.dto.ApiResponseDto;
+import kr.pe.advenoh.common.model.dto.ApiResponseDto;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
 import kr.pe.advenoh.spring.security.JwtTokenProvider;
 import kr.pe.advenoh.spring.security.UserPrincipal;
