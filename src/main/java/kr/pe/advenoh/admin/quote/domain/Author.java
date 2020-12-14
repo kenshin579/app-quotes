@@ -1,7 +1,7 @@
 package kr.pe.advenoh.admin.quote.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import kr.pe.advenoh.common.entity.audit.DateAudit;
+import kr.pe.advenoh.common.model.entity.DateAudit;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

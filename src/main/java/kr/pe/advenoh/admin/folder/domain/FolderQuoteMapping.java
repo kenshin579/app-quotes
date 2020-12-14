@@ -1,7 +1,7 @@
 package kr.pe.advenoh.admin.folder.domain;
 
 import kr.pe.advenoh.admin.quote.domain.Quote;
-import kr.pe.advenoh.common.entity.audit.DateAudit;
+import kr.pe.advenoh.common.model.entity.DateAudit;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

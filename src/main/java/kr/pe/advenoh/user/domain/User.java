@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import kr.pe.advenoh.admin.folder.domain.FolderUserMapping;
 import kr.pe.advenoh.admin.quote.domain.Like;
 import kr.pe.advenoh.admin.quote.domain.Quote;
-import kr.pe.advenoh.common.entity.audit.DateAudit;
+import kr.pe.advenoh.common.model.entity.DateAudit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
