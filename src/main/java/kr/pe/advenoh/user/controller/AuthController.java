@@ -1,13 +1,12 @@
 package kr.pe.advenoh.user.controller;
 
-import kr.pe.advenoh.common.model.dto.ApiResponseDto;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.model.dto.ApiResponseDto;
 import kr.pe.advenoh.spring.security.JwtTokenProvider;
 import kr.pe.advenoh.spring.security.UserPrincipal;
 import kr.pe.advenoh.user.domain.User;
-import kr.pe.advenoh.user.domain.dto.JwtAuthenticationResponseDto;
-import kr.pe.advenoh.user.domain.dto.LoginRequestDto;
-import kr.pe.advenoh.user.domain.dto.SignUpRequestDto;
+import kr.pe.advenoh.user.domain.AccountDto;
+import kr.pe.advenoh.user.domain.JwtAuthenticationResponseDto;
 import kr.pe.advenoh.user.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,7 @@ public class AuthController {
     private final JwtTokenProvider tokenProvider;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody @Valid SignUpRequestDto signUpRequestDto) {
+    public ResponseEntity<?> registerUser(@RequestBody @Valid AccountDto.SignUpRequestDto signUpRequestDto) {
         log.debug("[authdebug] registerUser :: signUpRequest : {}", signUpRequestDto);
         User registeredUser = userService.registerNewUserAccount(signUpRequestDto);
 
@@ -53,7 +52,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody @Valid LoginRequestDto loginRequestDto) {
+    public ResponseEntity<?> authenticateUser(@RequestBody @Valid AccountDto.LoginRequestDto loginRequestDto) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDto.getUsername(),

@@ -1,8 +1,7 @@
 package kr.pe.advenoh.user.controller;
 
 import kr.pe.advenoh.spring.security.UserPrincipal;
-import kr.pe.advenoh.user.domain.dto.UserProfileDto;
-import kr.pe.advenoh.user.domain.dto.UserResponseDto;
+import kr.pe.advenoh.user.domain.UserDto;
 import kr.pe.advenoh.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,21 +28,20 @@ public class UserController {
 
     @GetMapping("/me")
     @PreAuthorize("hasRole('USER')")
-    public UserResponseDto getCurrentUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-        return new UserResponseDto(userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getName());
+    public UserDto.UserResponseDto getCurrentUser(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+        return new UserDto.UserResponseDto(userPrincipal.getId(), userPrincipal.getUsername(), userPrincipal.getName());
     }
 
     @GetMapping("/{username}")
-    public UserProfileDto getUserProfile(@PathVariable(value = "username") String username) {
+    public UserDto.UserProfileDto getUserProfile(@PathVariable(value = "username") String username) {
         return userService.getUserProfile(username);
     }
 
     @PutMapping("/{username}")
-    public UserProfileDto changeUserProfile(
+    public UserDto.UserProfileDto changeUserProfile(
             @PathVariable(value = "username") String username,
-            @ModelAttribute UserProfileDto userProfileDto) {
-        userProfileDto.setUsername(username);
-        return userService.updateUserProfile(userProfileDto);
+            @ModelAttribute UserDto.UserProfileDto userProfileDto) {
+        return userService.updateUserProfile(username, userProfileDto);
     }
 
     @DeleteMapping("/{username}")

@@ -9,7 +9,7 @@ import kr.pe.advenoh.user.domain.RoleRepository;
 import kr.pe.advenoh.user.domain.RoleType;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
-import kr.pe.advenoh.user.domain.dto.SignUpRequestDto;
+import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.util.MockitoTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ class UserServiceTest extends MockitoTestSupport {
     @Test
     void registerNewUserAccount_저장() {
         //given
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+        AccountDto.SignUpRequestDto signUpRequestDto = AccountDto.SignUpRequestDto.builder()
                 .username(username)
                 .email(email)
                 .name(name)
@@ -84,7 +84,7 @@ class UserServiceTest extends MockitoTestSupport {
     @Test
     void registerNewUserAccount_username이_존재하는_경우() {
         //given
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+        AccountDto.SignUpRequestDto signUpRequestDto = AccountDto.SignUpRequestDto.builder()
                 .username(username)
                 .build();
 
@@ -100,7 +100,7 @@ class UserServiceTest extends MockitoTestSupport {
     @Test
     void registerNewUserAccount_email이_존재하는_경우() {
         //given
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+        AccountDto.SignUpRequestDto signUpRequestDto = AccountDto.SignUpRequestDto.builder()
                 .email(email)
                 .build();
 

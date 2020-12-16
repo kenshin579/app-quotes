@@ -1,10 +1,10 @@
 package kr.pe.advenoh.user.service;
 
 import kr.pe.advenoh.user.domain.User;
-import kr.pe.advenoh.user.domain.dto.SignUpRequestDto;
+import kr.pe.advenoh.user.domain.AccountDto;
 
 public interface IUserService {
-    User registerNewUserAccount(SignUpRequestDto signUpRequestDto);
+    User registerNewUserAccount(AccountDto.SignUpRequestDto signUpRequestDto);
 
     void deleteUser(String username);
 }

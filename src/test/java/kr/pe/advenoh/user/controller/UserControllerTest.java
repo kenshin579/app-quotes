@@ -8,7 +8,7 @@ import kr.pe.advenoh.user.domain.Role;
 import kr.pe.advenoh.user.domain.RoleRepository;
 import kr.pe.advenoh.user.domain.RoleType;
 import kr.pe.advenoh.user.domain.User;
-import kr.pe.advenoh.user.domain.dto.SignUpRequestDto;
+import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.util.SpringMockMvcTestSupport;
 import kr.pe.advenoh.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +65,7 @@ class UserControllerTest extends SpringMockMvcTestSupport {
         //user 생성
         this.mockMvc.perform(post("/api/auth/signup")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsBytes(SignUpRequestDto.builder()
+                .content(new ObjectMapper().writeValueAsBytes(AccountDto.SignUpRequestDto.builder()
                         .name(name)
                         .password(password)
                         .email(username + "@gmail.com")

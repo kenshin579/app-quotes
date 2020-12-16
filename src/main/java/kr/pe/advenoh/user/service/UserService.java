@@ -9,8 +9,8 @@ import kr.pe.advenoh.user.domain.RoleRepository;
 import kr.pe.advenoh.user.domain.RoleType;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
-import kr.pe.advenoh.user.domain.dto.SignUpRequestDto;
-import kr.pe.advenoh.user.domain.dto.UserProfileDto;
+import kr.pe.advenoh.user.domain.AccountDto;
+import kr.pe.advenoh.user.domain.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -39,7 +39,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public User registerNewUserAccount(SignUpRequestDto signUpRequestDto) {
+    public User registerNewUserAccount(AccountDto.SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByUsername(signUpRequestDto.getUsername())) {
             throw new ApiException(QuoteExceptionCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST);
         }
@@ -64,22 +64,21 @@ public class UserService implements IUserService {
     }
 
     @Transactional(readOnly = true)
-    public UserProfileDto getUserProfile(String username) {
+    public UserDto.UserProfileDto getUserProfile(String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
-        return modelMapper.map(user, UserProfileDto.class);
+        return modelMapper.map(user, UserDto.UserProfileDto.class);
     }
 
     @Transactional
-    public UserProfileDto updateUserProfile(UserProfileDto userProfileDto) {
-        String username = userProfileDto.getUsername();
+    public UserDto.UserProfileDto updateUserProfile(String username, UserDto.UserProfileDto userProfileDto) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
         Optional.ofNullable(userProfileDto.getName()).ifPresent(user::setName);
         Optional.ofNullable(userProfileDto.getEmail()).ifPresent(user::setEmail);
 
-        return modelMapper.map(user, UserProfileDto.class);
+        return modelMapper.map(user, UserDto.UserProfileDto.class);
     }
 
     @Transactional

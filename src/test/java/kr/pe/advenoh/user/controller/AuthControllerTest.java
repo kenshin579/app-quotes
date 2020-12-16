@@ -1,8 +1,7 @@
 package kr.pe.advenoh.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import kr.pe.advenoh.user.domain.dto.LoginRequestDto;
-import kr.pe.advenoh.user.domain.dto.SignUpRequestDto;
+import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.util.SpringMockMvcTestSupport;
 import kr.pe.advenoh.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +28,7 @@ class AuthControllerTest extends SpringMockMvcTestSupport {
         //user 생성
         this.mockMvc.perform(post(BASE_URL + "/signup")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsBytes(SignUpRequestDto.builder()
+                .content(new ObjectMapper().writeValueAsBytes(AccountDto.SignUpRequestDto.builder()
                         .name(name)
                         .password(password)
                         .email(username + "@gmail.com")
@@ -42,7 +41,7 @@ class AuthControllerTest extends SpringMockMvcTestSupport {
         //login
         this.mockMvc.perform(post(BASE_URL + "/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsBytes(LoginRequestDto.builder()
+                .content(new ObjectMapper().writeValueAsBytes(AccountDto.LoginRequestDto.builder()
                         .password(password)
                         .username(username)
                         .build())))
