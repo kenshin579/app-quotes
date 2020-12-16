@@ -17,6 +17,7 @@ import kr.pe.advenoh.admin.quote.domain.Tag;
 import kr.pe.advenoh.admin.quote.domain.TagRepository;
 import kr.pe.advenoh.common.exception.ApiException;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.model.dto.PageRequestDto;
 import kr.pe.advenoh.common.model.dto.PagedResponseDto;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
@@ -61,8 +62,8 @@ public class QuoteService {
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
-    public PagedResponseDto<QuoteDto.QuoteResponse> getQuotes(Long folderId, Integer pageIndex, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, Sort.Direction.DESC, "createDt");
+    public PagedResponseDto<QuoteDto.QuoteResponse> getQuotes(Long folderId, PageRequestDto pageRequestDto) {
+        Pageable pageable = pageRequestDto.of();
 
         Page<QuoteDto.QuoteResponse> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
 
@@ -71,10 +72,10 @@ public class QuoteService {
                     quotes.getSize(), quotes.getTotalElements(), quotes.getTotalPages(), quotes.isLast());
         }
 
-        List<QuoteDto.QuoteResponse> quoteResponseList = quotes.getContent().stream().map(it -> {
-            QuoteDto.QuoteResponse quoteResponseDto = modelMapper.map(it, QuoteDto.QuoteResponse.class);
-            return quoteResponseDto;
-        }).collect(Collectors.toList());
+        List<QuoteDto.QuoteResponse> quoteResponseList = quotes.getContent()
+                .stream()
+                .map(it -> modelMapper.map(it, QuoteDto.QuoteResponse.class))
+                .collect(Collectors.toList());
 
         return new PagedResponseDto<>(quoteResponseList, quotes.getNumber() + 1,
                 quotes.getSize(), quotes.getTotalElements(), quotes.getTotalPages(), quotes.isLast());
@@ -180,8 +181,10 @@ public class QuoteService {
     }
 
     @Transactional(readOnly = true)
-    public PagedResponseDto<QuoteDto.QuoteResponse> getTodayQuotes(Integer pageIndex, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, Sort.Direction.DESC, "createDt");
+    public PagedResponseDto<QuoteDto.QuoteResponse> getTodayQuotes(PageRequestDto pageRequestDto) {
+        pageRequestDto.setDirection(Sort.Direction.DESC);
+        Pageable pageable  = pageRequestDto.of();
+
         Page<QuoteHistory> quoteHistories = quoteHistoryRepository.findAll(pageable);
 
         log.info("[quotedebug] quoteHistories : {}", quoteHistories.getContent());
@@ -195,13 +198,11 @@ public class QuoteService {
         List<QuoteDto.QuoteResponse> quoteResponseList = quoteHistories.getContent().stream().map(quoteHistory -> {
             //todo : modelMapper으로 어떻게 하면 되는지 다시 확인하기
 //            QuoteDto.QuoteResponse quoteResponseDto = modelMapper.map(quoteHistory, QuoteDto.QuoteResponse.class);
-            QuoteDto.QuoteResponse quoteResponseDto = QuoteDto.QuoteResponse.builder()
+            return QuoteDto.QuoteResponse.builder()
                     .quoteId(quoteHistory.getQuote().getId())
                     .quoteText(quoteHistory.getQuote().getQuoteText())
                     .authorName(quoteHistory.getQuote().getAuthor().getName())
                     .build();
-
-            return quoteResponseDto;
         }).collect(Collectors.toList());
 
         return new PagedResponseDto<>(quoteResponseList, quoteHistories.getNumber() + 1,

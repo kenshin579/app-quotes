@@ -236,9 +236,8 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
             char c = chars[random.nextInt(chars.length)];
             sb.append(c);
         }
-        String randomStr = sb.toString();
 
-        return randomStr;
+        return sb.toString();
     }
 
     private ResultActions requestCreateQuote(Long folderId, QuoteDto.QuoteRequest quoteRequest) throws Exception {

@@ -3,9 +3,9 @@ package kr.pe.advenoh.admin.quote.controller;
 import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.admin.quote.service.QuoteLikeService;
 import kr.pe.advenoh.admin.quote.service.QuoteService;
-import kr.pe.advenoh.common.constants.AppConstants;
 import kr.pe.advenoh.common.exception.ApiException;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.model.dto.PageRequestDto;
 import kr.pe.advenoh.spring.security.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,9 +45,8 @@ public class QuoteController {
     @GetMapping("/folders/{folderId}")
     public ResponseEntity<?> getQuotes(
             @PathVariable(name = "folderId") Long folderId,
-            @RequestParam(value = "pageIndex", defaultValue = AppConstants.DEFAULT_PAGE_INDEX) Integer pageIndex,
-            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer pageSize) {
-        return new ResponseEntity<>(quoteService.getQuotes(folderId, pageIndex, pageSize), HttpStatus.OK);
+            final PageRequestDto pageRequestDto) {
+        return new ResponseEntity<>(quoteService.getQuotes(folderId, pageRequestDto), HttpStatus.OK);
     }
 
     //todo : 좋아요 정보를 같이 내려주는 게 좋아보임
@@ -129,9 +128,8 @@ public class QuoteController {
 
     @GetMapping("/today")
     public ResponseEntity<?> getTodayQuotes(
-            @RequestParam(value = "pageIndex", defaultValue = AppConstants.DEFAULT_PAGE_INDEX) Integer pageIndex,
-            @RequestParam(value = "pageSize", defaultValue = AppConstants.DEFAULT_PAGE_SIZE) Integer pageSize) {
-        return new ResponseEntity<>(quoteService.getTodayQuotes(pageIndex, pageSize), HttpStatus.OK);
+            PageRequestDto pageRequestDto) {
+        return new ResponseEntity<>(quoteService.getTodayQuotes(pageRequestDto), HttpStatus.OK);
     }
 
     @CrossOrigin
