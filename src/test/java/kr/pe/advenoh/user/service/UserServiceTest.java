@@ -4,12 +4,12 @@ import kr.pe.advenoh.admin.folder.domain.FolderDto;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.common.constants.AppConstants;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.Role;
 import kr.pe.advenoh.user.domain.RoleRepository;
 import kr.pe.advenoh.user.domain.RoleType;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
-import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.util.MockitoTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -67,7 +67,6 @@ class UserServiceTest extends MockitoTestSupport {
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
 
-        when(passwordEncoder.encode(anyString())).thenReturn(password);
         when(roleRepository.findByRoleType(RoleType.ROLE_USER)).thenReturn(Optional.of(new Role()));
         when(folderService.createFolder(AppConstants.DEFAULT_FOLDER, signUpRequestDto.getUsername())).thenReturn(FolderDto.FolderResponse.builder().build());
         when(userRepository.save(any())).thenReturn(any());

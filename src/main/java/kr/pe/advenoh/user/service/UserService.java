@@ -5,22 +5,20 @@ import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.common.constants.AppConstants;
 import kr.pe.advenoh.common.exception.ApiException;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.RoleRepository;
 import kr.pe.advenoh.user.domain.RoleType;
 import kr.pe.advenoh.user.domain.User;
-import kr.pe.advenoh.user.domain.UserRepository;
-import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.UserDto;
+import kr.pe.advenoh.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -32,8 +30,6 @@ public class UserService implements IUserService {
     private final RoleRepository roleRepository;
 
     private final FolderService folderService;
-
-    private final PasswordEncoder passwordEncoder;
 
     private final ModelMapper modelMapper;
 
@@ -49,10 +45,8 @@ public class UserService implements IUserService {
         }
 
         //새로운 사용자 생성
-        User user = modelMapper.map(signUpRequestDto, User.class);
-        user.setEnabled(true);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList(roleRepository.findByRoleType(RoleType.ROLE_USER)
+        User user = signUpRequestDto.toEntity();
+        user.addRoles(Arrays.asList(roleRepository.findByRoleType(RoleType.ROLE_USER)
                 .orElseThrow(() -> new ApiException(
                         QuoteExceptionCode.ACCOUNT_ROLE_NOT_FOUND,
                         RoleType.ROLE_USER.name()
@@ -75,9 +69,7 @@ public class UserService implements IUserService {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
-        Optional.ofNullable(userProfileDto.getName()).ifPresent(user::setName);
-        Optional.ofNullable(userProfileDto.getEmail()).ifPresent(user::setEmail);
-
+        user.updateUser(userProfileDto.getName(), userProfileDto.getEmail());
         return modelMapper.map(user, UserDto.UserProfileDto.class);
     }
 

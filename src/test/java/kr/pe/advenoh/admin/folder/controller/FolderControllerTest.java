@@ -2,6 +2,7 @@ package kr.pe.advenoh.admin.folder.controller;
 
 import com.jayway.jsonpath.JsonPath;
 import kr.pe.advenoh.spring.InitialDataLoader;
+import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.Privilege;
 import kr.pe.advenoh.user.domain.PrivilegeType;
 import kr.pe.advenoh.user.domain.Role;
@@ -47,7 +48,14 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
         List<Privilege> userPrivileges = Arrays.asList(readPrivilege, passwordPrivilege);
         Role role = initialDataLoader.createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
 
-        user = initialDataLoader.createUserIfNotFound(username, email, name, password, Arrays.asList(role));
+        AccountDto.SignUpRequestDto requestNewUser = AccountDto.SignUpRequestDto.builder()
+                .username(username)
+                .email(email)
+                .name(name)
+                .password(password)
+                .build();
+
+        user = initialDataLoader.createUserIfNotFound(requestNewUser, Arrays.asList(role));
         folderName = TestUtils.generateRandomString(3);
         log.info("user: {} folderName : {}", user, folderName);
     }

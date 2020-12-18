@@ -49,7 +49,7 @@ public class UserPrincipal implements UserDetails {
                 user.getName(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getPassword(),
+                user.getPassword().getValue(),
                 authorities
         );
     }

@@ -2,12 +2,13 @@ package kr.pe.advenoh.admin.quote.controller;
 
 import com.jayway.jsonpath.JsonPath;
 import kr.pe.advenoh.admin.folder.service.FolderService;
+import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMapping;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
-import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import kr.pe.advenoh.common.exception.QuoteExceptionCode;
 import kr.pe.advenoh.spring.InitialDataLoader;
+import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.Privilege;
 import kr.pe.advenoh.user.domain.PrivilegeType;
 import kr.pe.advenoh.user.domain.Role;
@@ -65,7 +66,14 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
         List<Privilege> userPrivileges = Arrays.asList(readPrivilege, passwordPrivilege);
         Role role = initialDataLoader.createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
 
-        user = initialDataLoader.createUserIfNotFound(username, email, name, password, Arrays.asList(role));
+        AccountDto.SignUpRequestDto requestNewUser = AccountDto.SignUpRequestDto.builder()
+                .username(username)
+                .email(email)
+                .name(name)
+                .password(password)
+                .build();
+
+        user = initialDataLoader.createUserIfNotFound(requestNewUser, Arrays.asList(role));
         folderName = TestUtils.generateRandomString(3);
         folderId = folderService.createFolder(folderName, username).getFolderId();
 
