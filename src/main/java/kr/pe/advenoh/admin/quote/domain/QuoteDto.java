@@ -1,14 +1,11 @@
 package kr.pe.advenoh.admin.quote.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import kr.pe.advenoh.admin.quote.domain.Author;
-import kr.pe.advenoh.admin.quote.domain.Quote;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
@@ -37,10 +34,10 @@ public class QuoteDto {
             this.tags = tags;
         }
 
+        @Deprecated
         public Quote toEntity() {
             return Quote.builder()
                     .quoteText(this.quoteText)
-                    .author(Author.builder().name(authorName).build())
                     .useYn(useYn)
                     .build();
         }

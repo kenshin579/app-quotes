@@ -1,9 +1,9 @@
 package kr.pe.advenoh.admin.quote.domain;
 
 import kr.pe.advenoh.user.domain.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -19,7 +19,6 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -30,12 +29,6 @@ public class Like {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "quote_like_id", unique = true, nullable = false)
     private Long id;
-
-//    @Column(name = "quote_id")
-//    private Long quoteId;
-//
-//    @Column(name = "username")
-//    private String username;
 
     @ManyToOne
     @JoinColumn(name = "quote_id")
@@ -49,6 +42,7 @@ public class Like {
     @Column(name = "create_dt", nullable = false, updatable = false)
     private Date createDt;
 
+    @Builder
     public Like(Quote quote, User user) {
         this.quote = quote;
         this.user = user;
