@@ -41,7 +41,6 @@ public class QuoteController {
 
     private final ModelMapper modelMapper;
 
-    //todo : PageRequestDto로 변경하기
     @GetMapping("/folders/{folderId}")
     public ResponseEntity<?> getQuotes(
             @PathVariable(name = "folderId") Long folderId,
