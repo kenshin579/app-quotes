@@ -43,7 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 class QuoteControllerTest extends SpringMockMvcTestSupport {
     private final String BASE_PATH = "/api/quotes";
-    private List<String> tags;
     private User user;
     private String folderName;
     private Long folderId;
@@ -127,14 +126,14 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
         //명언 업데이트
         String newQuoteText = "new quote text";
         String newAuthorName = "new author";
-        tags.addAll(this.getRandomTags("second", 1));
+        List<String> tags = this.getRandomTags("second", 1);
         log.debug("new tags : {}", tags);
 
         this.mockMvc.perform(post(BASE_PATH + "/{quoteId}", quoteId)
                 .param("quoteText", newQuoteText)
                 .param("authorName", newAuthorName)
                 .param("useYn", YN.N.name())
-                .param("tags", String.join(",", tags)))
+                .param("tags", tags.toArray(new String[0])))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.quoteId", is(quoteId)))
@@ -171,7 +170,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
 
         //mapping도 잘 되어 있는지 확인
         List<QuoteTagMapping> quoteTagMappings = quoteTagMappingRepository.findAllByQuoteIds(Arrays.asList(quoteId.longValue()));
-        assertThat(quoteTagMappings.size()).isEqualTo(tags.size());
+        assertThat(quoteTagMappings.size()).isEqualTo(quoteRequest.getTags().size());
 
         //명언 삭제
         this.mockMvc.perform(delete(BASE_PATH)
@@ -253,7 +252,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .param("quoteText", quoteRequest.getQuoteText())
                 .param("authorName", quoteRequest.getAuthorName())
                 .param("useYn", quoteRequest.getUseYn().name())
-                .param("tags", String.join(",", quoteRequest.getTags())))
+                .param("tags", quoteRequest.getTags().toArray(new String[0])))
                 .andDo(print());
     }
 

@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
@@ -44,7 +45,9 @@ public class QuoteDto {
     }
 
     @Getter
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @Setter
+//    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     @ToString
     public static class QuoteResponse {
         private Long quoteId;
