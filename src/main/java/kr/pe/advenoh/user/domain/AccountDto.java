@@ -41,6 +41,8 @@ public class AccountDto {
         @Size(min = 6, max = 20)
         private String password;
 
+        private boolean enabled = true;
+
         @Builder
         public SignUpRequestDto(String name, String username, String email, String password) {
             this.name = name;
@@ -48,5 +50,16 @@ public class AccountDto {
             this.email = email;
             this.password = password;
         }
+
+        public User toEntity() {
+            return User.builder()
+                    .name(name)
+                    .username(username)
+                    .email(email)
+                    .enabled(enabled)
+                    .password(Password.builder().value(password).build())
+                    .build();
+        }
+
     }
 }
