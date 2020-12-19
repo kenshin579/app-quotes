@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import kr.pe.advenoh.admin.folder.domain.FolderUserMapping;
 import kr.pe.advenoh.admin.quote.domain.Like;
 import kr.pe.advenoh.admin.quote.domain.Quote;
-import kr.pe.advenoh.common.entity.audit.DateAudit;
+import kr.pe.advenoh.common.model.entity.DateAudit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @Entity
 @ToString(exclude = {"password", "roles", "quotes", "likes", "folderUserMappingList"})
 @NoArgsConstructor
@@ -42,7 +41,8 @@ public class User extends DateAudit {
 
     private String name;
 
-    private String password;
+    @Embedded
+    private Password password;
 
     private boolean enabled;
 
@@ -52,13 +52,6 @@ public class User extends DateAudit {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
-
-//    @ManyToMany(fetch = FetchType.LAZY)
-//    @JoinTable(name = "quotes_tags",
-//            joinColumns = @JoinColumn(name = "quote_id"),
-//            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-//    private Set<Tag> tags = new HashSet<>();
-//
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
@@ -73,10 +66,21 @@ public class User extends DateAudit {
     private List<FolderUserMapping> folderUserMappingList = new ArrayList<>();
 
     @Builder
-    public User(String username, String email, String name, String password) {
+    public User(String username, String email, String name, Password password, boolean enabled) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.enabled = enabled;
+    }
+
+    public void updateUser(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    public void addRoles(List<Role> roles) {
+//        this.roles.addAll(roles);
+        this.roles = roles;
     }
 }

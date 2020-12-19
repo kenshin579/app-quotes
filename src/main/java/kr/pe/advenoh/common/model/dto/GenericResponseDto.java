@@ -1,4 +1,4 @@
-package kr.pe.advenoh.common.dto;
+package kr.pe.advenoh.common.model.dto;
 
 import lombok.Getter;
 import lombok.Setter;

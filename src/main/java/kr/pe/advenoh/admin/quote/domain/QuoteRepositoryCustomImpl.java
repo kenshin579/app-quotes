@@ -7,7 +7,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.pe.advenoh.admin.folder.domain.QFolder;
 import kr.pe.advenoh.admin.folder.domain.QFolderQuoteMapping;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,7 +36,7 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
      * @return
      */
     @Override
-    public Page<QuoteResponseDto> findAllByFolderId(Long folderId, Pageable pageable) {
+    public Page<QuoteDto.QuoteResponse> findAllByFolderId(Long folderId, Pageable pageable) {
         QQuote qQuote = QQuote.quote;
         QTag qTag = QTag.tag;
         QAuthor qAuthor = QAuthor.author;
@@ -45,7 +44,7 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
         QFolderQuoteMapping qFolderQuoteMapping = QFolderQuoteMapping.folderQuoteMapping;
         QQuoteTagMapping qQuoteTagMapping = QQuoteTagMapping.quoteTagMapping;
 
-        QueryResults<QuoteResponseDto> queryResults = queryFactory.select(Projections.fields(QuoteResponseDto.class,
+        QueryResults<QuoteDto.QuoteResponse> queryResults = queryFactory.select(Projections.fields(QuoteDto.QuoteResponse.class,
                 qQuote.id.as("quoteId"), qQuote.quoteText, qQuote.author.name.as("authorName"), qQuote.useYn))
                 .from(qQuote)
                 .innerJoin(qFolder).on(qFolder.id.eq(folderId))
@@ -57,7 +56,7 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
                 .orderBy(new OrderSpecifier(Order.DESC, qQuote.id))
                 .fetchResults();
 
-        List<QuoteResponseDto> quoteResponseDtos = queryResults.getResults().stream()
+        List<QuoteDto.QuoteResponse> quoteResponseDtos = queryResults.getResults().stream()
                 .map(it -> {
                     List<Tag> tags = queryFactory.select(Projections.constructor(Tag.class, qTag.tagName))
                             .from(qTag)
@@ -80,7 +79,7 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
      * @return
      */
     @Override
-    public Optional<QuoteResponseDto> findAllByQuoteId(Long quoteId) {
+    public Optional<QuoteDto.QuoteResponse> findAllByQuoteId(Long quoteId) {
         QQuote qQuote = QQuote.quote;
         QTag qTag = QTag.tag;
         QQuoteTagMapping qQuoteTagMapping = QQuoteTagMapping.quoteTagMapping;
@@ -91,7 +90,7 @@ public class QuoteRepositoryCustomImpl extends QuerydslRepositorySupport impleme
                 .where(qQuoteTagMapping.quote.id.eq(quoteId))
                 .fetch();
 
-        QuoteResponseDto result = queryFactory.select(Projections.fields(QuoteResponseDto.class,
+        QuoteDto.QuoteResponse result = queryFactory.select(Projections.fields(QuoteDto.QuoteResponse.class,
                 qQuote.id.as("quoteId"), qQuote.quoteText, qQuote.author.name.as("authorName"), qQuote.useYn))
                 .from(qQuote)
 //                .leftJoin(qQuoteTagMapping).on(qQuote.id.eq(qQuoteTagMapping.quote.id))

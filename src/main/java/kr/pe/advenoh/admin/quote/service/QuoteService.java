@@ -7,6 +7,7 @@ import kr.pe.advenoh.admin.folder.domain.FolderRepository;
 import kr.pe.advenoh.admin.quote.domain.Author;
 import kr.pe.advenoh.admin.quote.domain.AuthorRepository;
 import kr.pe.advenoh.admin.quote.domain.Quote;
+import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.admin.quote.domain.QuoteHistory;
 import kr.pe.advenoh.admin.quote.domain.QuoteHistoryRepository;
 import kr.pe.advenoh.admin.quote.domain.QuoteRepository;
@@ -14,18 +15,16 @@ import kr.pe.advenoh.admin.quote.domain.QuoteTagMapping;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
 import kr.pe.advenoh.admin.quote.domain.Tag;
 import kr.pe.advenoh.admin.quote.domain.TagRepository;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteRequestDto;
-import kr.pe.advenoh.admin.quote.domain.dto.QuoteResponseDto;
-import kr.pe.advenoh.common.dto.PagedResponseDto;
 import kr.pe.advenoh.common.exception.ApiException;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
+import kr.pe.advenoh.common.model.dto.PageRequestDto;
+import kr.pe.advenoh.common.model.dto.PagedResponseDto;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -35,7 +34,6 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -62,20 +60,20 @@ public class QuoteService {
     private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
-    public PagedResponseDto<QuoteResponseDto> getQuotes(Long folderId, Integer pageIndex, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, Sort.Direction.DESC, "createDt");
+    public PagedResponseDto<QuoteDto.QuoteResponse> getQuotes(Long folderId, PageRequestDto pageRequestDto) {
+        Pageable pageable = pageRequestDto.of();
 
-        Page<QuoteResponseDto> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
+        Page<QuoteDto.QuoteResponse> quotes = quoteRepository.findAllByFolderId(folderId, pageable);
 
         if (quotes.getNumberOfElements() == 0) {
             return new PagedResponseDto<>(Collections.emptyList(), quotes.getNumber() + 1,
                     quotes.getSize(), quotes.getTotalElements(), quotes.getTotalPages(), quotes.isLast());
         }
 
-        List<QuoteResponseDto> quoteResponseList = quotes.getContent().stream().map(it -> {
-            QuoteResponseDto quoteResponseDto = modelMapper.map(it, QuoteResponseDto.class);
-            return quoteResponseDto;
-        }).collect(Collectors.toList());
+        List<QuoteDto.QuoteResponse> quoteResponseList = quotes.getContent()
+                .stream()
+                .map(it -> modelMapper.map(it, QuoteDto.QuoteResponse.class))
+                .collect(Collectors.toList());
 
         return new PagedResponseDto<>(quoteResponseList, quotes.getNumber() + 1,
                 quotes.getSize(), quotes.getTotalElements(), quotes.getTotalPages(), quotes.isLast());
@@ -83,21 +81,24 @@ public class QuoteService {
 
     //todo : 좋아요 & 공유수에 대한 정보도 내려주면 좋을 듯함
     @Transactional(readOnly = true)
-    public QuoteResponseDto getQuote(Long quoteId) {
+    public QuoteDto.QuoteResponse getQuote(Long quoteId) {
         //todo: httpStatu를 NOT_FOUND로 반환하는게 좋아보임
-        QuoteResponseDto quoteResponseDto = quoteRepository.findAllByQuoteId(quoteId).orElseThrow(() -> new ApiException(QuoteExceptionCode.QUOTE_NOT_FOUND));
-        return quoteResponseDto;
+        return quoteRepository.findAllByQuoteId(quoteId)
+                .orElseThrow(() -> new ApiException(ErrorCode.QUOTE_NOT_FOUND));
     }
 
     @Transactional
-    public QuoteResponseDto createQuote(QuoteRequestDto quoteRequestDto, Principal currentUser) {
+    public QuoteDto.QuoteResponse createQuote(Long folderId, QuoteDto.QuoteRequest quoteRequestDto, Principal currentUser) {
         log.info("[quotedebug] currentUser : {}", currentUser.getName());
-        Author author = authorRepository.getAuthorByName(quoteRequestDto.getAuthorName()).orElse(new Author(quoteRequestDto.getAuthorName()));
-        User user = userRepository.findByUsername(currentUser.getName()).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
 
-        //todo : script 저장을 위해 tags 없이도 저장 가능하도록 변경함
+        Author author = authorRepository.getAuthorByName(quoteRequestDto.getAuthorName())
+                .orElse(new Author(quoteRequestDto.getAuthorName()));
+        User user = userRepository.findByUsername(currentUser.getName())
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
+
         List<Tag> dbTagsEntity = null;
 
+        //script 저장을 위해 tags 없어도 저장 가능하도록 변경함
         if (quoteRequestDto.getTags() != null) {
             dbTagsEntity = tagRepository.findByTagNameIn(quoteRequestDto.getTags());
             List<String> dbTags = dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList());
@@ -116,28 +117,33 @@ public class QuoteService {
                 .build();
 
         quoteRepository.save(quote);
-        QuoteResponseDto quoteResponseDto = modelMapper.map(quote, QuoteResponseDto.class);
+        QuoteDto.QuoteResponse quoteResponseDto = modelMapper.map(quote, QuoteDto.QuoteResponse.class);
 
-        Folder folder = folderRepository.findById(quoteRequestDto.getFolderId()).orElseThrow(() -> new ApiException(QuoteExceptionCode.FOLDER_NOT_FOUND));
+        Folder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new ApiException(ErrorCode.FOLDER_NOT_FOUND));
 
         folderQuoteMappingRepository.save(new FolderQuoteMapping(folder, quote));
 
         if (quoteRequestDto.getTags() != null) {
-            quoteTagMappingRepository.saveAll(dbTagsEntity.stream().map(tagEntity -> new QuoteTagMapping(quote, tagEntity)).collect(Collectors.toList()));
-            quoteResponseDto.setTags(dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList()));
+            quoteTagMappingRepository.saveAll(dbTagsEntity.stream()
+                    .map(tagEntity -> new QuoteTagMapping(quote, tagEntity))
+                    .collect(Collectors.toList()));
+            quoteResponseDto.setTags(dbTagsEntity.stream()
+                    .map(Tag::getTagName)
+                    .collect(Collectors.toList()));
         }
         return quoteResponseDto;
     }
 
     @Transactional
-    public QuoteResponseDto updateQuote(Long quoteId, QuoteRequestDto quoteRequestDto) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new ApiException(QuoteExceptionCode.QUOTE_NOT_FOUND));
+    public QuoteDto.QuoteResponse updateQuote(Long quoteId, QuoteDto.QuoteRequest quoteRequestDto) {
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new ApiException(ErrorCode.QUOTE_NOT_FOUND));
+        Author author = authorRepository.getAuthorByName(quoteRequestDto.getAuthorName())
+                .orElse(new Author(quoteRequestDto.getAuthorName()));
 
-        Optional.ofNullable(quoteRequestDto.getQuoteText()).ifPresent(quote::setQuoteText);
-        Optional.ofNullable(quoteRequestDto.getUseYn()).ifPresent(quote::setUseYn);
-
-        Author author = authorRepository.getAuthorByName(quoteRequestDto.getAuthorName()).orElse(new Author(quoteRequestDto.getAuthorName()));
-        quote.setAuthor(author);
+        quote.updateQuote(quoteRequestDto.getQuoteText(),
+                quoteRequestDto.getUseYn(),
+                author);
 
         List<Tag> dbTagsEntity = tagRepository.findByTagNameIn(quoteRequestDto.getTags());
         List<String> dbTags = dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList());
@@ -148,13 +154,17 @@ public class QuoteService {
 
         quoteRepository.save(quote);
 
-        QuoteResponseDto quoteResponseDto = modelMapper.map(quote, QuoteResponseDto.class);
+        QuoteDto.QuoteResponse quoteResponseDto = modelMapper.map(quote, QuoteDto.QuoteResponse.class);
 
         //todo: 기존 매핑을 삭제해야 함
         quoteTagMappingRepository.deleteAllByQuoteIds(Arrays.asList(quote.getId()));
 
-        quoteTagMappingRepository.saveAll(dbTagsEntity.stream().map(tagEntity -> new QuoteTagMapping(quote, tagEntity)).collect(Collectors.toList()));
-        quoteResponseDto.setTags(dbTagsEntity.stream().map(Tag::getTagName).collect(Collectors.toList()));
+        quoteTagMappingRepository.saveAll(dbTagsEntity.stream()
+                .map(tagEntity -> new QuoteTagMapping(quote, tagEntity))
+                .collect(Collectors.toList()));
+        quoteResponseDto.setTags(dbTagsEntity.stream()
+                .map(Tag::getTagName)
+                .collect(Collectors.toList()));
         return quoteResponseDto;
     }
 
@@ -170,7 +180,7 @@ public class QuoteService {
 
     @Transactional
     public boolean moveQuotes(List<Long> quoteIds, Long folderId) {
-        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new ApiException(QuoteExceptionCode.FOLDER_NOT_FOUND));
+        Folder folder = folderRepository.findById(folderId).orElseThrow(() -> new ApiException(ErrorCode.FOLDER_NOT_FOUND));
 
         List<FolderQuoteMapping> folderQuoteMappings = folderQuoteMappingRepository.findAllById(quoteIds);
         folderQuoteMappings.forEach(it -> it.setFolder(folder));
@@ -178,8 +188,10 @@ public class QuoteService {
     }
 
     @Transactional(readOnly = true)
-    public PagedResponseDto<QuoteResponseDto> getTodayQuotes(Integer pageIndex, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageIndex - 1, pageSize, Sort.Direction.DESC, "createDt");
+    public PagedResponseDto<QuoteDto.QuoteResponse> getTodayQuotes(PageRequestDto pageRequestDto) {
+        pageRequestDto.setDirection(Sort.Direction.DESC);
+        Pageable pageable = pageRequestDto.of();
+
         Page<QuoteHistory> quoteHistories = quoteHistoryRepository.findAll(pageable);
 
         log.info("[quotedebug] quoteHistories : {}", quoteHistories.getContent());
@@ -190,16 +202,14 @@ public class QuoteService {
         }
 
         //todo : 이거 QuoteMain 페이지 작업할 때 다시 하는 걸로 함 (quote 삭제할 때 이슈가 있음)
-        List<QuoteResponseDto> quoteResponseList = quoteHistories.getContent().stream().map(quoteHistory -> {
+        List<QuoteDto.QuoteResponse> quoteResponseList = quoteHistories.getContent().stream().map(quoteHistory -> {
             //todo : modelMapper으로 어떻게 하면 되는지 다시 확인하기
-//            QuoteResponseDto quoteResponseDto = modelMapper.map(quoteHistory, QuoteResponseDto.class);
-            QuoteResponseDto quoteResponseDto = QuoteResponseDto.builder()
+//            QuoteDto.QuoteResponse quoteResponseDto = modelMapper.map(quoteHistory, QuoteDto.QuoteResponse.class);
+            return QuoteDto.QuoteResponse.builder()
                     .quoteId(quoteHistory.getQuote().getId())
                     .quoteText(quoteHistory.getQuote().getQuoteText())
                     .authorName(quoteHistory.getQuote().getAuthor().getName())
                     .build();
-
-            return quoteResponseDto;
         }).collect(Collectors.toList());
 
         return new PagedResponseDto<>(quoteResponseList, quoteHistories.getNumber() + 1,
@@ -238,7 +248,7 @@ public class QuoteService {
      * allTags - dbTags의 태그를 반환함
      *
      * @param allTags the allTags
-     * @param dbTags the dbTags
+     * @param dbTags  the dbTags
      * @return List
      */
     public List<Tag> getDiffTags(List<String> allTags, List<String> dbTags) {

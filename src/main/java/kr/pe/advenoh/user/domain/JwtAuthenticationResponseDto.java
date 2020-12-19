@@ -1,4 +1,4 @@
-package kr.pe.advenoh.user.domain.dto;
+package kr.pe.advenoh.user.domain;
 
 
 import lombok.Getter;

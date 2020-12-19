@@ -4,7 +4,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import kr.pe.advenoh.admin.folder.domain.dto.FolderResponseDto;
 import kr.pe.advenoh.user.domain.QUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -21,7 +20,7 @@ public class FolderRepositoryCustomImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public List<FolderResponseDto> findAllByUsername(String username) {
+    public List<FolderDto.FolderResponse> findAllByUsername(String username) {
         QFolder qFolder = QFolder.folder;
         QFolderUserMapping qFolderUserMapping = QFolderUserMapping.folderUserMapping;
         QFolderQuoteMapping qFolderQuoteMapping = QFolderQuoteMapping.folderQuoteMapping;
@@ -29,8 +28,8 @@ public class FolderRepositoryCustomImpl extends QuerydslRepositorySupport implem
 
         NumberPath<Long> aliasNumOfQuotes = Expressions.numberPath(Long.class, "numOfQuotes");
 
-        List<FolderResponseDto> result = queryFactory
-                .select(Projections.constructor(FolderResponseDto.class,
+        List<FolderDto.FolderResponse> result = queryFactory
+                .select(Projections.constructor(FolderDto.FolderResponse.class,
                         qFolder.id, qFolder.folderName, qFolder.id.count().as(aliasNumOfQuotes)))
                 .from(qFolder)
                 .innerJoin(qFolderUserMapping).on(qFolder.id.eq(qFolderUserMapping.folder.id))

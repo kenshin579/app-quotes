@@ -1,7 +1,6 @@
 package kr.pe.advenoh.admin.folder.controller;
 
-import kr.pe.advenoh.admin.folder.domain.dto.FolderResponseDto;
-import kr.pe.advenoh.admin.folder.domain.dto.FolderStatsResponseDto;
+import kr.pe.advenoh.admin.folder.domain.FolderDto;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.spring.security.CurrentUser;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +31,9 @@ public class FolderController {
     @GetMapping
     public ResponseEntity<?> getFolders(@CurrentUser Principal currentUser) {
         Map<String, Object> result = new HashMap<>();
-        List<FolderResponseDto> folders = folderService.getFolders(currentUser.getName());
-        FolderStatsResponseDto folderStatsResponseDto = FolderStatsResponseDto.builder()
-                .totalNumOfQuotes(folders.stream().mapToLong(FolderResponseDto::getNumOfQuotes).sum())
+        List<FolderDto.FolderResponse> folders = folderService.getFolders(currentUser.getName());
+        FolderDto.FolderStatsResponse folderStatsResponseDto = FolderDto.FolderStatsResponse.builder()
+                .totalNumOfQuotes(folders.stream().mapToLong(FolderDto.FolderResponse::getNumOfQuotes).sum())
                 .totalNumOfLikes(0L)
                 .build();
         result.put("folderStatInfo", folderStatsResponseDto);

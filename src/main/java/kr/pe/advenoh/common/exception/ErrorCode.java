@@ -3,7 +3,7 @@ package kr.pe.advenoh.common.exception;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public enum QuoteExceptionCode implements ExceptionCode {
+public enum ErrorCode {
     /*
     account : 10000
     quote   : 20000
@@ -31,12 +31,10 @@ public enum QuoteExceptionCode implements ExceptionCode {
     private String code;
     private String message;
 
-    @Override
     public String getCode() {
         return this.code;
     }
 
-    @Override
     public String getMessage(String... args) {
         return String.format(this.message, args);
     }

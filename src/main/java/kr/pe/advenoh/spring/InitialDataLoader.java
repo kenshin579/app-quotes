@@ -1,5 +1,6 @@
 package kr.pe.advenoh.spring;
 
+import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.Privilege;
 import kr.pe.advenoh.user.domain.PrivilegeRepository;
 import kr.pe.advenoh.user.domain.PrivilegeType;
@@ -52,11 +53,10 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
     }
 
     @Transactional
-    public User createUserIfNotFound(String username, String email, String name, String password, List<Role> roles) {
-        return userRepository.findByUsername(username).orElseGet(() -> {
-            User user = new User(username, email, name, passwordEncoder.encode(password));
-            user.setEnabled(true);
-            user.setRoles(roles);
+    public User createUserIfNotFound(AccountDto.SignUpRequestDto requestNewUser, List<Role> roles) {
+        return userRepository.findByUsername(requestNewUser.getUsername()).orElseGet(() -> {
+            User user = requestNewUser.toEntity();
+            user.addRoles(roles);
             return userRepository.save(user);
         });
     }
@@ -65,7 +65,7 @@ public class InitialDataLoader implements ApplicationListener<ContextRefreshedEv
     public Role createRoleIfNotFound(RoleType roleType, List<Privilege> privileges) {
         return roleRepository.findByRoleType(roleType).orElseGet(() -> {
             Role role = new Role(roleType);
-            role.setPrivileges(privileges);
+            role.addPrivilege(privileges);
             return roleRepository.save(role);
         });
     }

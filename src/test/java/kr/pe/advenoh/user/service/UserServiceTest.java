@@ -1,15 +1,15 @@
 package kr.pe.advenoh.user.service;
 
-import kr.pe.advenoh.admin.folder.domain.dto.FolderResponseDto;
+import kr.pe.advenoh.admin.folder.domain.FolderDto;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.common.constants.AppConstants;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
+import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.Role;
 import kr.pe.advenoh.user.domain.RoleRepository;
 import kr.pe.advenoh.user.domain.RoleType;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
-import kr.pe.advenoh.user.domain.dto.SignUpRequestDto;
 import kr.pe.advenoh.util.MockitoTestSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ class UserServiceTest extends MockitoTestSupport {
     @Test
     void registerNewUserAccount_저장() {
         //given
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+        AccountDto.SignUpRequestDto signUpRequestDto = AccountDto.SignUpRequestDto.builder()
                 .username(username)
                 .email(email)
                 .name(name)
@@ -67,9 +67,8 @@ class UserServiceTest extends MockitoTestSupport {
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
 
-        when(passwordEncoder.encode(anyString())).thenReturn(password);
         when(roleRepository.findByRoleType(RoleType.ROLE_USER)).thenReturn(Optional.of(new Role()));
-        when(folderService.createFolder(AppConstants.DEFAULT_FOLDER, signUpRequestDto.getUsername())).thenReturn(new FolderResponseDto());
+        when(folderService.createFolder(AppConstants.DEFAULT_FOLDER, signUpRequestDto.getUsername())).thenReturn(FolderDto.FolderResponse.builder().build());
         when(userRepository.save(any())).thenReturn(any());
 
         //when
@@ -84,7 +83,7 @@ class UserServiceTest extends MockitoTestSupport {
     @Test
     void registerNewUserAccount_username이_존재하는_경우() {
         //given
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+        AccountDto.SignUpRequestDto signUpRequestDto = AccountDto.SignUpRequestDto.builder()
                 .username(username)
                 .build();
 
@@ -93,14 +92,14 @@ class UserServiceTest extends MockitoTestSupport {
         //when
         //then
         assertThatThrownBy(() -> userService.registerNewUserAccount(signUpRequestDto))
-                .hasMessageContaining(QuoteExceptionCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST.getMessage());
+                .hasMessageContaining(ErrorCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST.getMessage());
 
     }
 
     @Test
     void registerNewUserAccount_email이_존재하는_경우() {
         //given
-        SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+        AccountDto.SignUpRequestDto signUpRequestDto = AccountDto.SignUpRequestDto.builder()
                 .email(email)
                 .build();
 
@@ -109,7 +108,7 @@ class UserServiceTest extends MockitoTestSupport {
         //when
         //then
         assertThatThrownBy(() -> userService.registerNewUserAccount(signUpRequestDto))
-                .hasMessageContaining(QuoteExceptionCode.ACCOUNT_EMAIL_IS_ALREADY_EXIST.getMessage());
+                .hasMessageContaining(ErrorCode.ACCOUNT_EMAIL_IS_ALREADY_EXIST.getMessage());
     }
 
 

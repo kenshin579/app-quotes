@@ -1,10 +1,9 @@
 package kr.pe.advenoh.admin.quote.domain;
 
-import kr.pe.advenoh.common.entity.audit.DateAudit;
+import kr.pe.advenoh.common.model.entity.DateAudit;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.Column;
@@ -17,7 +16,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity

@@ -1,4 +1,4 @@
-package kr.pe.advenoh.common.entity.audit;
+package kr.pe.advenoh.common.model.entity;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,12 +1,11 @@
 package kr.pe.advenoh.admin.quote.domain;
 
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
-import kr.pe.advenoh.common.entity.audit.DateAudit;
+import kr.pe.advenoh.common.model.entity.DateAudit;
 import kr.pe.advenoh.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.CascadeType;
@@ -21,9 +20,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Optional;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @ToString
 @Entity
@@ -48,23 +47,18 @@ public class Quote extends DateAudit {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "quote")
-//    private List<Like> likes = new ArrayList<>();
-
-//    @ManyToMany(mappedBy = "quotes")
-//    private Collection<Folder> folders;
-
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "tag")
-//    private Set<QuoteTagMapping> quoteTagMappings = new HashSet<>();
-
     @Builder
     public Quote(String quoteText, Author author, User user, YN useYn) {
         this.quoteText = quoteText;
         this.author = author;
         this.user = user;
         this.useYn = useYn;
+    }
+
+    public void updateQuote(String quoteText, YN useYn, Author author) {
+        Optional.ofNullable(quoteText).ifPresent(it -> this.quoteText = it);
+        Optional.ofNullable(useYn).ifPresent(it -> this.useYn = it);
+        this.author = author;
     }
 
     //todo : 편의 메서드 추가

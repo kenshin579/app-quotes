@@ -6,7 +6,7 @@ import kr.pe.advenoh.admin.quote.domain.Quote;
 import kr.pe.advenoh.admin.quote.domain.QuoteRepository;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import kr.pe.advenoh.common.exception.ApiException;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +28,9 @@ public class QuoteLikeService {
 
     @Transactional
     public YN registerAndGetQuoteLikeInfo(Long quoteId, String username) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new ApiException(QuoteExceptionCode.QUOTE_NOT_FOUND));
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new ApiException(ErrorCode.QUOTE_NOT_FOUND));
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         likeRepository.save(new Like(quote, user));
         return this.getRegisteredQuoteLikeInfo(quoteId, username);
@@ -38,9 +38,9 @@ public class QuoteLikeService {
 
     @Transactional(readOnly = true)
     public YN getRegisteredQuoteLikeInfo(Long quoteId, String username) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new ApiException(QuoteExceptionCode.QUOTE_NOT_FOUND));
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new ApiException(ErrorCode.QUOTE_NOT_FOUND));
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         Optional<Like> quoteLikeOptional = likeRepository.findByQuoteAndUser(quote, user);
 
@@ -49,9 +49,9 @@ public class QuoteLikeService {
 
     @Transactional
     public YN unregisterAndGetQuoteLikeInfo(Long quoteId, String username) {
-        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new ApiException(QuoteExceptionCode.QUOTE_NOT_FOUND));
+        Quote quote = quoteRepository.findById(quoteId).orElseThrow(() -> new ApiException(ErrorCode.QUOTE_NOT_FOUND));
 
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         likeRepository.deleteLikeByQuoteAndUser(quote, user);
         return this.getRegisteredQuoteLikeInfo(quoteId, username);

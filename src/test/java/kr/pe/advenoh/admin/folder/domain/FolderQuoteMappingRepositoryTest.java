@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @Slf4j
 class FolderQuoteMappingRepositoryTest extends SpringBootTestSupport {
     @Autowired
@@ -15,7 +17,8 @@ class FolderQuoteMappingRepositoryTest extends SpringBootTestSupport {
 
     @Test
     void getAllQuoteIdsByFolderIds() {
-        List<Long> allQuoteIdsByFolderIds = folderQuoteMappingRepository.getAllQuoteIdsByFolderIds(Arrays.asList(10L, 12L));
+        List<Long> allQuoteIdsByFolderIds = folderQuoteMappingRepository.getAllQuoteIdsByFolderIds(Arrays.asList(1L));
         log.info("allQuoteIdsByFolderIds : {}", allQuoteIdsByFolderIds);
+        assertThat(allQuoteIdsByFolderIds.size()).isEqualTo(2);
     }
 }
