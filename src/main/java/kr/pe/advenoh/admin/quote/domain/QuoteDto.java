@@ -15,6 +15,7 @@ import java.util.List;
 public class QuoteDto {
 
     @Getter
+    @Setter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @ToString
     public static class QuoteRequest {
