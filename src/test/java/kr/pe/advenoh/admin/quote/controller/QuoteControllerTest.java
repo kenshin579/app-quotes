@@ -43,40 +43,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 class QuoteControllerTest extends SpringMockMvcTestSupport {
     private final String BASE_PATH = "/api/quotes";
-    private User user;
     private String folderName;
-    private Long folderId;
-
-    @Autowired
-    private InitialDataLoader initialDataLoader;
-
-    @Autowired
-    private FolderService folderService;
 
     @Autowired
     private QuoteTagMappingRepository quoteTagMappingRepository;
 
     @BeforeEach
     void setUp() {
-        //todo : pre data를 어떻게 로딩할지는 더 고민해보기
-        Privilege readPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.READ_PRIVILEGE);
-        Privilege passwordPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.CHANGE_PASSWORD_PRIVILEGE);
-
-        List<Privilege> userPrivileges = Arrays.asList(readPrivilege, passwordPrivilege);
-        Role role = initialDataLoader.createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
-
-        AccountDto.SignUpRequestDto requestNewUser = AccountDto.SignUpRequestDto.builder()
-                .username(username)
-                .email(email)
-                .name(name)
-                .password(password)
-                .build();
-
-        user = initialDataLoader.createUserIfNotFound(requestNewUser, Arrays.asList(role));
         folderName = TestUtils.generateRandomString(3);
-        folderId = folderService.createFolder(folderName, username).getFolderId();
-
-        log.debug("folderId : {} user: {}", folderId, user);
+        log.debug("folderId : {}", folderId);
     }
 
     @Test

@@ -33,31 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 class FolderControllerTest extends SpringMockMvcTestSupport {
     private final String BASE_URL = "/api/folders";
-    private User user;
     private String folderName;
-
-    @Autowired
-    private InitialDataLoader initialDataLoader;
 
     @BeforeEach
     void setUp() {
-        //todo : 초기 데이터를 로딩할 수 있는 방벙을 찾기
-        Privilege readPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.READ_PRIVILEGE);
-        Privilege passwordPrivilege = initialDataLoader.createPrivilegeIfNotFound(PrivilegeType.CHANGE_PASSWORD_PRIVILEGE);
-
-        List<Privilege> userPrivileges = Arrays.asList(readPrivilege, passwordPrivilege);
-        Role role = initialDataLoader.createRoleIfNotFound(RoleType.ROLE_USER, userPrivileges);
-
-        AccountDto.SignUpRequestDto requestNewUser = AccountDto.SignUpRequestDto.builder()
-                .username(username)
-                .email(email)
-                .name(name)
-                .password(password)
-                .build();
-
-        user = initialDataLoader.createUserIfNotFound(requestNewUser, Arrays.asList(role));
         folderName = TestUtils.generateRandomString(3);
-        log.info("user: {} folderName : {}", user, folderName);
     }
 
     @Test
@@ -77,7 +57,7 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.folderStatInfo.totalNumOfQuotes").exists())
                 .andExpect(jsonPath("$.folderStatInfo.totalNumOfLikes").exists())
                 .andExpect(jsonPath("$.folderList").isArray())
-                .andExpect(jsonPath("$.folderList[0].folderId", is(folderId)));
+                .andExpect(jsonPath("$.folderList[1].folderId", is(folderId)));
     }
 
     @Test
@@ -104,7 +84,7 @@ class FolderControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.folderStatInfo.totalNumOfQuotes").exists())
                 .andExpect(jsonPath("$.folderStatInfo.totalNumOfLikes").exists())
-                .andExpect(jsonPath("$.folderList[0].folderName", is(newFolderName)));
+                .andExpect(jsonPath("$.folderList[1].folderName", is(newFolderName)));
     }
 
     private ResultActions requestCreateFolder() throws Exception {
