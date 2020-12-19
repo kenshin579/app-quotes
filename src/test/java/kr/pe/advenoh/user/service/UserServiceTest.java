@@ -3,7 +3,7 @@ package kr.pe.advenoh.user.service;
 import kr.pe.advenoh.admin.folder.domain.FolderDto;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.common.constants.AppConstants;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
 import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.Role;
 import kr.pe.advenoh.user.domain.RoleRepository;
@@ -92,7 +92,7 @@ class UserServiceTest extends MockitoTestSupport {
         //when
         //then
         assertThatThrownBy(() -> userService.registerNewUserAccount(signUpRequestDto))
-                .hasMessageContaining(QuoteExceptionCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST.getMessage());
+                .hasMessageContaining(ErrorCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST.getMessage());
 
     }
 
@@ -108,7 +108,7 @@ class UserServiceTest extends MockitoTestSupport {
         //when
         //then
         assertThatThrownBy(() -> userService.registerNewUserAccount(signUpRequestDto))
-                .hasMessageContaining(QuoteExceptionCode.ACCOUNT_EMAIL_IS_ALREADY_EXIST.getMessage());
+                .hasMessageContaining(ErrorCode.ACCOUNT_EMAIL_IS_ALREADY_EXIST.getMessage());
     }
 
 

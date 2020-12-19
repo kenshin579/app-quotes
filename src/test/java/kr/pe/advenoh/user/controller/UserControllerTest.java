@@ -2,7 +2,7 @@ package kr.pe.advenoh.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.pe.advenoh.common.exception.ApiException;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
 import kr.pe.advenoh.spring.InitialDataLoader;
 import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.Role;
@@ -43,7 +43,7 @@ class UserControllerTest extends SpringMockMvcTestSupport {
     @BeforeEach
     void setUp() {
         Role role = roleRepository.findByRoleType(RoleType.ROLE_USER).orElseThrow(() ->
-                new ApiException(QuoteExceptionCode.ACCOUNT_ROLE_NOT_FOUND, RoleType.ROLE_USER.name()));
+                new ApiException(ErrorCode.ACCOUNT_ROLE_NOT_FOUND, RoleType.ROLE_USER.name()));
         AccountDto.SignUpRequestDto requestNewUser = AccountDto.SignUpRequestDto.builder()
                 .username(username)
                 .email(email)

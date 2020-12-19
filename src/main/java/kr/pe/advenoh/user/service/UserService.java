@@ -4,7 +4,7 @@ import kr.pe.advenoh.admin.folder.domain.FolderDto;
 import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.common.constants.AppConstants;
 import kr.pe.advenoh.common.exception.ApiException;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
 import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.RoleRepository;
 import kr.pe.advenoh.user.domain.RoleType;
@@ -37,18 +37,18 @@ public class UserService implements IUserService {
     @Transactional
     public User registerNewUserAccount(AccountDto.SignUpRequestDto signUpRequestDto) {
         if (userRepository.existsByUsername(signUpRequestDto.getUsername())) {
-            throw new ApiException(QuoteExceptionCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST);
+            throw new ApiException(ErrorCode.ACCOUNT_USERNAME_IS_ALREADY_EXIST);
         }
 
         if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
-            throw new ApiException(QuoteExceptionCode.ACCOUNT_EMAIL_IS_ALREADY_EXIST);
+            throw new ApiException(ErrorCode.ACCOUNT_EMAIL_IS_ALREADY_EXIST);
         }
 
         //새로운 사용자 생성
         User user = signUpRequestDto.toEntity();
         user.addRoles(Arrays.asList(roleRepository.findByRoleType(RoleType.ROLE_USER)
                 .orElseThrow(() -> new ApiException(
-                        QuoteExceptionCode.ACCOUNT_ROLE_NOT_FOUND,
+                        ErrorCode.ACCOUNT_ROLE_NOT_FOUND,
                         RoleType.ROLE_USER.name()
                 ))));
 
@@ -60,14 +60,14 @@ public class UserService implements IUserService {
     @Transactional(readOnly = true)
     public UserDto.UserProfileDto getUserProfile(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
         return modelMapper.map(user, UserDto.UserProfileDto.class);
     }
 
     @Transactional
     public UserDto.UserProfileDto updateUserProfile(String username, UserDto.UserProfileDto userProfileDto) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         user.updateUser(userProfileDto.getName(), userProfileDto.getEmail());
         return modelMapper.map(user, UserDto.UserProfileDto.class);
@@ -76,7 +76,7 @@ public class UserService implements IUserService {
     @Transactional
     public void deleteUser(String username) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         List<FolderDto.FolderResponse> folders = folderService.getFolders(user.getUsername());
 

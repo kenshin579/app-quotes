@@ -6,7 +6,7 @@ import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMapping;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
 import kr.pe.advenoh.spring.InitialDataLoader;
 import kr.pe.advenoh.user.domain.AccountDto;
 import kr.pe.advenoh.user.domain.Privilege;
@@ -183,12 +183,12 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
     @Test
     @Transactional
     @WithMockUser(username = username, authorities = {ROLE_USER})
-    void createQuote_exception_request_값이_없는_경우() throws Exception {
+    void createQuote_exception_request_값이_없는_경우_Exception이_발생한다() throws Exception {
         this.mockMvc.perform(post(BASE_PATH + "/folders/{folderId}", folderId)
                 .param("useYn", YN.Y.name()))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.message", is(QuoteExceptionCode.REQUEST_INVALID.getMessage())));
+                .andExpect(jsonPath("$.message", is(ErrorCode.REQUEST_INVALID.getMessage())));
     }
 
     @Test
@@ -202,11 +202,11 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
 
     @Test
     @WithMockUser(username = username, authorities = {ROLE_USER})
-    void getQuote_ApiException_발생시_response_포멧_확인() throws Exception {
+    void getQuote_존재하지_않는_quote가_있는_경우_Exception이_발생한다() throws Exception {
         requestGetQuoteById(Integer.MAX_VALUE)
                 .andExpect(status().isServiceUnavailable())
-                .andExpect(jsonPath("$.message", is(QuoteExceptionCode.QUOTE_NOT_FOUND.getMessage())))
-                .andExpect(jsonPath("$.code", is(QuoteExceptionCode.QUOTE_NOT_FOUND.getCode())));
+                .andExpect(jsonPath("$.message", is(ErrorCode.QUOTE_NOT_FOUND.getMessage())))
+                .andExpect(jsonPath("$.code", is(ErrorCode.QUOTE_NOT_FOUND.getCode())));
     }
 
     @Test

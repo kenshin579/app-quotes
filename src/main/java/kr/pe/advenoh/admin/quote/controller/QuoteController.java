@@ -4,7 +4,7 @@ import kr.pe.advenoh.admin.quote.domain.QuoteDto;
 import kr.pe.advenoh.admin.quote.service.QuoteLikeService;
 import kr.pe.advenoh.admin.quote.service.QuoteService;
 import kr.pe.advenoh.common.exception.ApiException;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
 import kr.pe.advenoh.common.model.dto.PageRequestDto;
 import kr.pe.advenoh.spring.security.CurrentUser;
 import lombok.RequiredArgsConstructor;
@@ -98,7 +98,7 @@ public class QuoteController {
     @GetMapping("/checkQuoteExists")
     public ResponseEntity<?> checkQuoteExists(@RequestParam(value = "quoteText") String quoteText) {
         if (quoteText.isEmpty()) {
-            throw new ApiException(QuoteExceptionCode.REQUEST_INVALID);
+            throw new ApiException(ErrorCode.REQUEST_INVALID);
         }
         return new ResponseEntity<>(quoteService.doesQuoteExists(quoteText), HttpStatus.OK);
     }

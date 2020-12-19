@@ -1,6 +1,6 @@
 package kr.pe.advenoh.user.controller;
 
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
 import kr.pe.advenoh.common.model.dto.ApiResponseDto;
 import kr.pe.advenoh.spring.security.JwtTokenProvider;
 import kr.pe.advenoh.spring.security.UserPrincipal;
@@ -48,7 +48,7 @@ public class AuthController {
                 .buildAndExpand(registeredUser.getUsername()).toUri();
 
         log.info("[authdebug] location : {}", location);
-        return ResponseEntity.created(location).body(new ApiResponseDto(true, QuoteExceptionCode.ACCOUNT_USER_REGISTERED_SUCCESS.getMessage()));
+        return ResponseEntity.created(location).body(new ApiResponseDto(true, ErrorCode.ACCOUNT_USER_REGISTERED_SUCCESS.getMessage()));
     }
 
     @PostMapping("/login")

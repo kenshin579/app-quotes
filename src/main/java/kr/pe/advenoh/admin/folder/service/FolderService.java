@@ -10,7 +10,7 @@ import kr.pe.advenoh.admin.quote.domain.QuoteHistoryRepository;
 import kr.pe.advenoh.admin.quote.domain.QuoteRepository;
 import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
 import kr.pe.advenoh.common.exception.ApiException;
-import kr.pe.advenoh.common.exception.QuoteExceptionCode;
+import kr.pe.advenoh.common.exception.ErrorCode;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,13 +46,13 @@ public class FolderService {
     @Transactional(readOnly = true)
     public List<FolderDto.FolderResponse> getFolders(String username) {
         log.info("[debug] username : {}", username);
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
         return folderRepository.findAllByUsername(user.getUsername());
     }
 
     @Transactional
     public FolderDto.FolderResponse createFolder(String folderName, String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(QuoteExceptionCode.USER_NOT_FOUND));
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
 
         //todo: cascade는 다시 정리하는 걸로 함
         Folder folder = new Folder(folderName);
