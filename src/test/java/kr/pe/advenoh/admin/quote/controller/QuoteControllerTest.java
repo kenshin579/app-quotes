@@ -201,6 +201,15 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    void getTodayQuotes() throws Exception {
+        this.mockMvc.perform(get(BASE_PATH + "/today"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray())
+                .andExpect(jsonPath("$.last").isBoolean());
+    }
+
     private List<String> getRandomTags(String prefix, int max) {
         List<String> tags = new ArrayList<>();
         for (int i = 0; i < max; i++) {

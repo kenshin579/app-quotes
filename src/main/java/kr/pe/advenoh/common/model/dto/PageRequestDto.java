@@ -23,6 +23,6 @@ public final class PageRequestDto {
     }
 
     public org.springframework.data.domain.PageRequest of() {
-        return org.springframework.data.domain.PageRequest.of(pageIndex - 1, pageSize, direction, "createdAt");
+        return org.springframework.data.domain.PageRequest.of(pageIndex - 1, pageSize, direction, "createDt");
     }
 }
