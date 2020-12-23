@@ -1,6 +1,8 @@
 package kr.pe.advenoh.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,8 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@NoArgsConstructor
 @Table(name = "roles")
 public class Role {
     @Id
@@ -38,6 +40,7 @@ public class Role {
             inverseJoinColumns = @JoinColumn(name = "privilege_id"))
     private List<Privilege> privileges = new ArrayList<>();
 
+    @Builder
     public Role(RoleType roleType) {
         this.roleType = roleType;
     }

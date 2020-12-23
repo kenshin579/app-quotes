@@ -5,6 +5,7 @@ import kr.pe.advenoh.admin.folder.domain.FolderUserMapping;
 import kr.pe.advenoh.admin.quote.domain.Like;
 import kr.pe.advenoh.admin.quote.domain.Quote;
 import kr.pe.advenoh.common.model.entity.DateAudit;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @ToString(exclude = {"password", "roles", "quotes", "likes", "folderUserMappingList"})
-@NoArgsConstructor
 @Table(name = "users")
 public class User extends DateAudit {
     @Id

@@ -1,6 +1,8 @@
 package kr.pe.advenoh.admin.quote.domain;
 
 import kr.pe.advenoh.common.model.entity.DateAudit;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,7 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Entity
 @Table(name = "tags")
@@ -26,6 +28,7 @@ public class Tag extends DateAudit {
 
     private String tagName;
 
+    @Builder
     public Tag(String tagName) {
         this.tagName = tagName;
     }
