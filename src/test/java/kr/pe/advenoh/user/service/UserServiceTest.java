@@ -67,7 +67,7 @@ class UserServiceTest extends MockitoTestSupport {
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.existsByEmail(anyString())).thenReturn(false);
 
-        when(roleRepository.findByRoleType(RoleType.ROLE_USER)).thenReturn(Optional.of(new Role()));
+        when(roleRepository.findByRoleType(RoleType.ROLE_USER)).thenReturn(Optional.of(Role.builder().build()));
         when(folderService.createFolder(AppConstants.DEFAULT_FOLDER, signUpRequestDto.getUsername())).thenReturn(FolderDto.FolderResponse.builder().build());
         when(userRepository.save(any())).thenReturn(any());
 

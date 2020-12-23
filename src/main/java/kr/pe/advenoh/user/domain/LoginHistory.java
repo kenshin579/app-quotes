@@ -1,5 +1,7 @@
 package kr.pe.advenoh.user.domain;
 
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,8 +16,9 @@ import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Deprecated
 @Entity
-@NoArgsConstructor
 @Table(name = "login_history")
 public class LoginHistory {
     @Id
@@ -32,4 +35,10 @@ public class LoginHistory {
 
 //    @Column(name = "user_id")
 //    private Long user_id;
+
+    @Builder
+    public LoginHistory(String deviceDetail, Date lastLoggedIn) {
+        this.deviceDetail = deviceDetail;
+        this.lastLoggedIn = lastLoggedIn;
+    }
 }
