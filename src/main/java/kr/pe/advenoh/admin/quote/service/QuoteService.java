@@ -124,6 +124,7 @@ public class QuoteService {
 
         folderQuoteMappingRepository.save(new FolderQuoteMapping(folder, quote));
 
+        //todo : quoteTagMapping을 없애보자
         if (quoteRequestDto.getTags() != null) {
             quoteTagMappingRepository.saveAll(dbTagsEntity.stream()
                     .map(tagEntity -> new QuoteTagMapping(quote, tagEntity))
@@ -156,7 +157,7 @@ public class QuoteService {
 
         QuoteDto.QuoteResponse quoteResponseDto = modelMapper.map(quote, QuoteDto.QuoteResponse.class);
 
-        //todo: 기존 매핑을 삭제해야 함
+        //기존 매핑을 삭제해야 함
         quoteTagMappingRepository.deleteAllByQuoteIds(Arrays.asList(quote.getId()));
 
         quoteTagMappingRepository.saveAll(dbTagsEntity.stream()
@@ -245,7 +246,7 @@ public class QuoteService {
     }
 
     /**
-     * allTags - dbTags의 태그를 반환함
+     * (allTags - dbTags) 태그를 반환한다
      *
      * @param allTags the allTags
      * @param dbTags  the dbTags
