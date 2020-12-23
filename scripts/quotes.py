@@ -41,7 +41,7 @@ API_QUOTE_EXISTS_URL = '/api/quotes/checkQuoteExists'
 DEFAULT_LANG = "kr"
 TMP_DIR = '/tmp'
 TWITTER_QUOTE_ACCOUNTS = ["munganbot", "Famoussay_bot", "nsw1223", "majuwang"]
-TAGS_CHRISTIAN = ['하느님', '하나님', '주님', '주께서', "잠언"]
+TAGS_CHRISTIAN = ['하느님', '하나님', '주님', '주께서', "잠언", "데살로니가"]
 MAX_SLEEP_TIME = 10
 
 class PARSE_MODE(enum.Enum):
@@ -207,7 +207,7 @@ def postprocess(text):
     2.* 충고는 눈과 같아 조용히 내리면 내릴수록 마음에 오래 남고 가슴에 더욱 깊이 새겨진다.
 
     참고
-    - https://regex101.com/r/Nagr3R/1/
+    - https://regex101.com/r/Nagr3R/8
     - https://stackoverflow.com/questions/33889952/python-re-sub-multiline-on-string
 
     :param text:
@@ -235,7 +235,7 @@ def parse_quote(text):
     '''
 
     pattern_list = [
-        '^[\s▶]*([\w()!\"%,*\'.?\n ]+)[-\s]*([\w『』\"(). ]*)[-\s#\w]*$'
+        '^[\s▶]*([\w()!「」\"%,*\'.?\n ]+)[-\s]*([\w『』:\"(). ]*)[-\s#\w]*$'
     ]
 
     result = {}
