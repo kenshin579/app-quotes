@@ -1,37 +1,25 @@
 package kr.pe.advenoh.admin.quote.controller;
 
 import com.jayway.jsonpath.JsonPath;
-import kr.pe.advenoh.admin.folder.service.FolderService;
 import kr.pe.advenoh.admin.quote.domain.QuoteDto;
-import kr.pe.advenoh.admin.quote.domain.QuoteTagMapping;
-import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
 import kr.pe.advenoh.admin.quote.domain.enums.YN;
 import kr.pe.advenoh.common.exception.ErrorCode;
-import kr.pe.advenoh.spring.InitialDataLoader;
-import kr.pe.advenoh.user.domain.AccountDto;
-import kr.pe.advenoh.user.domain.Privilege;
-import kr.pe.advenoh.user.domain.PrivilegeType;
-import kr.pe.advenoh.user.domain.Role;
-import kr.pe.advenoh.user.domain.RoleType;
-import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.util.SpringMockMvcTestSupport;
 import kr.pe.advenoh.util.TestUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -43,14 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 class QuoteControllerTest extends SpringMockMvcTestSupport {
     private final String BASE_PATH = "/api/quotes";
-    private String folderName;
-
-    @Autowired
-    private QuoteTagMappingRepository quoteTagMappingRepository;
 
     @BeforeEach
     void setUp() {
-        folderName = TestUtils.generateRandomString(3);
         log.debug("folderId : {}", folderId);
     }
 
@@ -79,7 +62,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.quoteText", is(quoteText)))
                 .andExpect(jsonPath("$.useYn", is(YN.Y.name())))
                 .andExpect(jsonPath("$.authorName", is(authorName)))
-                .andExpect(jsonPath("$.tags", is(quoteRequest.getTags())));
+                .andExpect(jsonPath("$.tags").value(containsInAnyOrder(quoteRequest.getTags().toArray())));
     }
 
     @Test
@@ -101,7 +84,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
         //명언 업데이트
         String newQuoteText = "new quote text";
         String newAuthorName = "new author";
-        List<String> tags = this.getRandomTags("second", 1);
+        Set<String> tags = this.getRandomTags("second", 1);
         log.debug("new tags : {}", tags);
 
         this.mockMvc.perform(post(BASE_PATH + "/{quoteId}", quoteId)
@@ -124,7 +107,7 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.quoteText", is(newQuoteText)))
                 .andExpect(jsonPath("$.useYn", is(YN.N.name())))
                 .andExpect(jsonPath("$.authorName", is(newAuthorName)))
-                .andExpect(jsonPath("$.tags", is(tags)));
+                .andExpect(jsonPath("$.tags").value(containsInAnyOrder(tags.toArray())));
     }
 
     @Test
@@ -142,10 +125,6 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
 
         Integer quoteId = JsonPath.parse(mvcResult.getResponse().getContentAsString()).read("$.quoteId");
         log.debug("quoteId : {}", quoteId);
-
-        //mapping도 잘 되어 있는지 확인
-        List<QuoteTagMapping> quoteTagMappings = quoteTagMappingRepository.findAllByQuoteIds(Arrays.asList(quoteId.longValue()));
-        assertThat(quoteTagMappings.size()).isEqualTo(quoteRequest.getTags().size());
 
         //명언 삭제
         this.mockMvc.perform(delete(BASE_PATH)
@@ -210,8 +189,8 @@ class QuoteControllerTest extends SpringMockMvcTestSupport {
                 .andExpect(jsonPath("$.last").isBoolean());
     }
 
-    private List<String> getRandomTags(String prefix, int max) {
-        List<String> tags = new ArrayList<>();
+    private Set<String> getRandomTags(String prefix, int max) {
+        Set<String> tags = new HashSet<>();
         for (int i = 0; i < max; i++) {
             tags.add(prefix + "_" + this.getRandomStr(10));
         }
