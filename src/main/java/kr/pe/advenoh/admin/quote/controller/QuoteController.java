@@ -63,14 +63,18 @@ public class QuoteController {
         return new ResponseEntity<>(quoteService.createQuote(folderId, quoteRequestDto, currentUser), HttpStatus.OK);
     }
 
+    /**
+     * 명언 수정시에는 데이터 전체를 보내줌
+     *
+     * @param quoteId         the quoteId
+     * @param quoteRequestDto the quoteRequestDto
+     * @return ResponseEntity
+     */
     @PostMapping("/{quoteId}")
     public ResponseEntity<?> updateQuote(
             @PathVariable(name = "quoteId") Long quoteId,
             @ModelAttribute QuoteDto.QuoteRequest quoteRequestDto
     ) {
-        if (quoteRequestDto.getQuoteText() == null) {
-            throw new RuntimeException("need paramter!!!");
-        }
         return new ResponseEntity<>(quoteService.updateQuote(quoteId, quoteRequestDto), HttpStatus.OK);
     }
 
