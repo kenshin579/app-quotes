@@ -43,7 +43,12 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public ResponseEntity<?> handleException(HttpServletRequest request, HttpServletResponse response, Exception ex) {
         log.error("[exception] uri : {} {} msg : {} {}", request.getRequestURI(), request.getMethod(), ex.getMessage(), ex.getClass(), ex);
+        //todo : 조금 더 좋드 더 담을 수 있도록 수정하기
         final ErrorResponse errorResponse = new ErrorResponse(HttpStatus.SERVICE_UNAVAILABLE, ex.getMessage());
+
+        log.error("handleException error :: uri -> {} msg -> {} class -> {} e -> {}",
+                new Object[]{request.getRequestURI(), ex.getMessage(), ex.getClass(), ex});
+
         return new ResponseEntity<Object>(errorResponse, new HttpHeaders(), errorResponse.getStatus());
     }
 
