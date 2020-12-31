@@ -1,21 +1,18 @@
 package kr.pe.advenoh.admin.folder.service;
 
 import kr.pe.advenoh.admin.folder.domain.Folder;
+import kr.pe.advenoh.admin.folder.domain.FolderDto;
 import kr.pe.advenoh.admin.folder.domain.FolderQuoteMappingRepository;
 import kr.pe.advenoh.admin.folder.domain.FolderRepository;
 import kr.pe.advenoh.admin.folder.domain.FolderUserMapping;
 import kr.pe.advenoh.admin.folder.domain.FolderUserMappingRepository;
-import kr.pe.advenoh.admin.folder.domain.FolderDto;
-import kr.pe.advenoh.admin.quote.domain.QuoteHistoryRepository;
-import kr.pe.advenoh.admin.quote.domain.QuoteRepository;
-import kr.pe.advenoh.admin.quote.domain.QuoteTagMappingRepository;
+import kr.pe.advenoh.admin.quote.service.QuoteService;
 import kr.pe.advenoh.common.exception.ApiException;
 import kr.pe.advenoh.common.exception.ErrorCode;
 import kr.pe.advenoh.user.domain.User;
 import kr.pe.advenoh.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,13 +32,7 @@ public class FolderService {
 
     private final FolderQuoteMappingRepository folderQuoteMappingRepository;
 
-    private final QuoteRepository quoteRepository;
-
-    private final QuoteTagMappingRepository quoteTagMappingRepository;
-
-    private final QuoteHistoryRepository quoteHistoryRepository;
-
-    private final ModelMapper modelMapper;
+    private final QuoteService quoteService;
 
     @Transactional(readOnly = true)
     public List<FolderDto.FolderResponse> getFolders(String username) {
@@ -76,17 +67,10 @@ public class FolderService {
      */
     @Transactional
     public Integer deleteFolders(List<Long> folderIds) {
-//        quoteRepository.deleteAllByIdInQuery(folderIds);
-        //todo: quotes_tags에 있는 것도 삭제해야 함
-        //todo: quotes도 삭제해야 함
-
         List<Long> quoteIds = folderQuoteMappingRepository.getAllQuoteIdsByFolderIds(folderIds);
-        log.info("quoteIds : {}", quoteIds);
         folderQuoteMappingRepository.deleteAllByFolderIds(folderIds);
-        if (quoteIds.size() > 0) {
-            quoteTagMappingRepository.deleteAllByQuoteIds(quoteIds);
-            quoteHistoryRepository.deleteAllByQuoteIds(quoteIds);
-            quoteRepository.deleteAllByQuoteIds(quoteIds);
+        if (!quoteIds.isEmpty()) {
+            quoteService.deleteQuotes(quoteIds);
         }
         folderUserMappingRepository.deleteAllByFolderIds(folderIds);
         return folderRepository.deleteAllByFolderIds(folderIds);
