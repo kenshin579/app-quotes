@@ -21,13 +21,9 @@ spec:
         ports:
           - name: http
             containerPort: 8080 # The port that the container exposes
-#        resources:
-#          limits:
-#            cpu: 0.2
-#            memory: "200Mi"
         envFrom:
           - secretRef:
-              name: polling-mysql-secret
+              name: app-quotes-mysql-secret
 ---
 apiVersion: v1                # API version
 kind: Service                 # Type of the kubernetes resource
