@@ -1,0 +1,90 @@
+apiVersion: v1
+kind: PersistentVolume            # Create a PersistentVolume
+metadata:
+  name: mysql-pv
+  labels:
+    type: local
+    app: app-quotes-mysql
+spec:
+  storageClassName: manual      # Storage class. A PV Claim requesting the same storageClass can be bound to this volume.
+  capacity:
+    storage: 250Mi
+  accessModes:
+    - ReadWriteMany
+  hostPath:                       # hostPath PersistentVolume is used for development and testing. It uses a file/directory on the Node to emulate network-attached storage
+    path: "/mnt/polling-app"
+  persistentVolumeReclaimPolicy: Retain  # Retain the PersistentVolume even after PersistentVolumeClaim is deleted. The volume is considered “released”. But it is not yet available for another claim because the previous claimant’s data remains on the volume. 
+---    
+apiVersion: v1
+kind: PersistentVolumeClaim        # Create a PersistentVolumeClaim to request a PersistentVolume storage
+metadata:                          # Claim name and labels
+  name: mysql-pv-claim
+  labels:
+    app: app-quotes-mysql
+spec:                              # Access mode and resource limits
+  storageClassName: manual       # Request a certain storage class
+  accessModes:
+    - ReadWriteMany                # ReadWriteOnce means the volume can be mounted as read-write by a single Node
+  resources:
+    requests:
+      storage: 250Mi
+---
+apiVersion: apps/v1
+kind: Deployment                    # Type of the kubernetes resource
+metadata:
+  name: app-quotes-mysql           # Name of the deployment
+  labels:                           # Labels applied to this deployment 
+    app: app-quotes-mysql
+spec:
+  selector:
+    matchLabels:                    # This deployment applies to the Pods matching the specified labels
+      app: app-quotes-mysql
+      tier: mysql
+  strategy:
+    type: Recreate
+  template:                         # Template for the Pods in this deployment
+    metadata:
+      labels:                       # Labels to be applied to the Pods in this deployment
+        app: app-quotes-mysql
+        tier: mysql
+    spec:                           # The spec for the containers that will be run inside the Pods in this deployment
+      containers:
+      - image: mariadb:10.3
+        name: mysql
+        environment:
+          - MYSQL_ROOT_PASSWORD=password
+          - MYSQL_DATABASE=app_quotes
+          - MYSQL_USER=mybatis
+          - MYSQL_PASSWORD=mybatis$$
+          - TZ=Asia/Seoul
+        command:
+          - "mysqld"
+          - "--character-set-server=utf8mb4"
+          - "--collation-server=utf8mb4_unicode_ci"
+        envFrom: # Environment variables passed to the container
+          - secretRef: # Read environment variables from kubernetes secrets
+              name: polling-mysql-secret
+        ports:
+        - containerPort: 3306        # The port that the container exposes       
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage  # This name should match the name specified in `volumes.name`
+          mountPath: /var/lib/mysql
+      volumes:                       # A PersistentVolume is mounted as a volume to the Pod  
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql-pv-claim
+---
+apiVersion: v1                    # API version
+kind: Service                     # Type of kubernetes resource
+metadata:
+  name: app-quotes-mysql         # Name of the resource
+  labels:                         # Labels that will be applied to the resource
+    app: app-quotes-mysql
+spec:
+  type: NodePort
+  ports:
+    - port: 3306
+  selector:                       # Selects any Pod with labels `app=polling-app,tier=mysql`
+    app: app-quotes-mysql
+    tier: mysql
