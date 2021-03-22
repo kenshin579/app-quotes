@@ -51,16 +51,6 @@ spec:
       containers:
       - image: mariadb:10.3
         name: mysql
-        environment:
-          - MYSQL_ROOT_PASSWORD=password
-          - MYSQL_DATABASE=app_quotes
-          - MYSQL_USER=mybatis
-          - MYSQL_PASSWORD=mybatis$$
-          - TZ=Asia/Seoul
-        command:
-          - "mysqld"
-          - "--character-set-server=utf8mb4"
-          - "--collation-server=utf8mb4_unicode_ci"
         envFrom: # Environment variables passed to the container
           - secretRef: # Read environment variables from kubernetes secrets
               name: app-quotes-mysql-secret
