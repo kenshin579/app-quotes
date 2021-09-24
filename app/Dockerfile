@@ -1,6 +1,6 @@
 #### Stage 1: Build the react application
-FROM node:12.4.0-alpine as build
-#FROM balenalib/raspberry-pi-alpine-node as build
+#FROM node:12.4.0-alpine as build
+FROM balenalib/raspberry-pi-alpine-node as build
 
 # Configure the main working directory inside the docker image. 
 # This is the base directory used in any further RUN, COPY, and ENTRYPOINT 
@@ -25,8 +25,8 @@ COPY . ./
 RUN npm run build
 
 #### Stage 2: Serve the React application from Nginx 
-FROM nginx:1.19.0
-#FROM tobi312/rpi-nginx
+#FROM nginx:1.19.0
+FROM balenalib/raspberry-pi-alpine-node
 
 # Copy the react build from Stage 1
 #COPY --from=build /app/build /var/www

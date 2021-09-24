@@ -1,15 +1,13 @@
 REGISTRY 	:= kenshin579
-APP    		:= advenoh
-# APP    		:= rasberrypi
+#APP    		:= advenoh
+ APP    		:= rasberrypi
 TAG         := app-quotes-client
 IMAGE       := $(REGISTRY)/$(APP):$(TAG)
 
-# rasberry
-#	--platform linux/amd64,linux/arm/v7,linux/arm/v6
 .PHONY: docker-push-rasberrypi
 docker-push-rasberrypi:
 	@docker buildx build \
-	--platform linux/arm/v7 \
+	--platform linux/arm/v7,linux/arm/v6 \
 	-t $(IMAGE) --push -f Dockerfile .
 
 .PHONY: docker-build
