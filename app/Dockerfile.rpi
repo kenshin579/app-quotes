@@ -30,7 +30,7 @@ COPY . ./
 RUN npm run build
 
 #### Stage 2: Serve the React application from Nginx 
-FROM balenalib/raspberry-pi-alpine-node
+FROM tobi312/rpi-nginx
 
 # Copy the react build from Stage 1
 #COPY --from=build /app/build /var/www

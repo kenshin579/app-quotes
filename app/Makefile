@@ -16,7 +16,7 @@ IMAGE_RPI       := $(ID)/$(REPOSITORY):$(TAG_RPI)
 docker-push-rpi:
 	@docker login --username $(DOCKER_USERNAME) --password $(DOCKER_PASSWORD) $(REGISTRY)
 	@docker buildx build \
-	--platform linux/arm/v7,linux/arm/v6 \
+	--platform linux/arm/v7 \
     -t $(IMAGE_RPI) --push -f Dockerfile.rpi .
 
 .PHONY: docker-build
