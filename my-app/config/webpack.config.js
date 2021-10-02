@@ -27,6 +27,7 @@ const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpack
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 
+const theme = require('../package.json').theme;
 const postcssNormalize = require('postcss-normalize');
 
 const appPackageJson = require(paths.appPackageJson);
@@ -495,6 +496,26 @@ module.exports = function (webpackEnv) {
                   getLocalIdent: getCSSModuleLocalIdent,
                 },
               }),
+            },
+            {
+              test: /\.less$/,
+              use: [
+                {
+                  loader: 'style-loader' // creates style nodes from JS strings
+                },
+                {
+                  loader: 'css-loader', // translates CSS into CommonJs
+                },
+                {
+                  loader: 'less-loader', // compiles Less to CSS
+                  options: {
+                    lessOptions: {
+                      modifyVars: theme,
+                      javascriptEnabled: true
+                    },
+                  }
+                }
+              ]
             },
             // Opt-in support for SASS (using .scss or .sass extensions).
             // By default we support SASS Modules with the

@@ -1,5 +1,5 @@
 #### Stage 1: Build the react application
-FROM balenalib/raspberry-pi-alpine-node as build
+FROM balenalib/raspberry-pi-alpine-node:14.16-latest as build
 
 # Configure the main working directory inside the docker image. 
 # This is the base directory used in any further RUN, COPY, and ENTRYPOINT 
@@ -13,7 +13,7 @@ WORKDIR /app
 COPY package.json ./
 
 # python install
-#RUN apk add --no-cache --virtual .gyp python2 make g++
+RUN apk add --no-cache --virtual .gyp python2 make g++
 
 RUN npm install
 

@@ -1,0 +1,23 @@
+.folder-item {
+  .num-quotes {
+    font-size: 10px;
+    line-height: 2.5;
+    color: #4a4747;
+  }
+
+  .folder {
+    font-size: 14px;
+    font-weight: bold;
+    //line-height: 2;
+    color: #707070;
+    float: left;
+  }
+
+  .vertical-dots {
+    &:after {
+      content: '\2807';
+      font-size: 20px;
+      float: right;
+    }
+  }
+}
