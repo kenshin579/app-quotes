@@ -14,7 +14,7 @@ spec:
     spec:                       # Spec for the containers that will run inside the Pods
       containers:
       - name: app-quotes-client
-        image: kenshin579/advenoh:app-quotes-client-0.0.1-rpi-10022325
+        image: kenshin579/advenoh:app-quotes-client-0.0.1-rpi-10030025
         imagePullPolicy: Always
         ports:
           - name: http
