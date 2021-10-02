@@ -14,8 +14,6 @@ COPY package.json ./
 
 RUN npm install
 
-RUN apk del .gyp
-
 # Copy the main application
 COPY . ./
 
