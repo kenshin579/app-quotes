@@ -7,7 +7,7 @@ IMAGE       := $(REGISTRY)/$(APP):$(TAG)
 .PHONY: docker-push-rpi
 docker-push-rpi:
 	@docker buildx build \
-	--platform linux/arm/v7 \
+	--platform linux/arm/v7,linux/arm/v6 \
 	-t $(IMAGE) --push -f Dockerfile.rpi .
 
 .PHONY: docker-build
