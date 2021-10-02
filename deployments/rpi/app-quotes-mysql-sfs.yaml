@@ -1,41 +1,12 @@
-apiVersion: v1
-kind: PersistentVolume            # Create a PersistentVolume
-metadata:
-  name: mysql-pv
-  labels:
-    type: local
-    app: app-quotes-mysql
-spec:
-  storageClassName: local-storage      # Storage class. A PV Claim requesting the same storageClass can be bound to this volume.
-  capacity:
-    storage: 250Mi
-  accessModes:
-    - ReadWriteOnce
-  hostPath: # hostPath PersistentVolume is used for development and testing. It uses a file/directory on the Node to emulate network-attached storage
-    path: "/mnt/app-quotes-mariadb1"
-  persistentVolumeReclaimPolicy: Retain  # Retain the PersistentVolume even after PersistentVolumeClaim is deleted. The volume is considered “released”. But it is not yet available for another claim because the previous claimant’s data remains on the volume. 
----
-apiVersion: v1
-kind: PersistentVolumeClaim        # Create a PersistentVolumeClaim to request a PersistentVolume storage
-metadata: # Claim name and labels
-  name: mysql-pv-claim
-  labels:
-    app: app-quotes-mysql
-spec: # Access mode and resource limits
-  storageClassName: local-storage       # Request a certain storage class
-  accessModes:
-    - ReadWriteOnce                # ReadWriteOnce means the volume can be mounted as read-write by a single Node
-  resources:
-    requests:
-      storage: 250Mi
----
 apiVersion: apps/v1
-kind: Deployment                    # Type of the kubernetes resource
+kind: StatefulSet                    # Type of the kubernetes resource
 metadata:
   name: app-quotes-mysql           # Name of the deployment
   labels: # Labels applied to this deployment
     app: app-quotes-mysql
 spec:
+  replicas: 1
+  revisionHistoryLimit: 0
   selector:
     matchLabels: # This deployment applies to the Pods matching the specified labels
       app: app-quotes-mysql
@@ -49,7 +20,7 @@ spec:
         tier: mysql
     spec: # The spec for the containers that will be run inside the Pods in this deployment
       containers:
-      - image: mariadb:10.3
+      - image: tobi312/rpi-mariadb:10.3-alpine
         name: mysql
         envFrom: # Environment variables passed to the container
           - secretRef: # Read environment variables from kubernetes secrets
