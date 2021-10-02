@@ -72,7 +72,7 @@ export default handleActions({
     ...pender({
         type: GET_CURRENT_USER,
         onSuccess: (state, action) => {
-            const {id, username, name} = action.payload;
+            const {username, name} = action.payload;
             return state.setIn(['user', 'username'], username)
                 .setIn(['user', 'name'], name)
                 .set('authenticated', true);
